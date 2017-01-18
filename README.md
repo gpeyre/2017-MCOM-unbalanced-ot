@@ -1,8 +1,10 @@
 This toolbox is a basic implementation of Sinkhorn-like algorithms to solve for OT-related problems.
 
+An overview of the toolbox is provided as a [Jupyter notebook](http://nbviewer.jupyter.org/github/gpeyre/2017-MCOM-unbalanced-ot/blob/master/matlab/unbalanced_transport.ipynb).
+
 The computational methods and relevant bibliography can be found in:
 
-L. Chizat, G. Peyre, B. Schmitzer, F-X. Vialard. _[Unbalanced optimal transport: Geometry and Kantorovich formulation](ttp://arxiv.org/abs/1607.05816)_. Preprint Arxiv:1508.05216, 2016.
+L. Chizat, G. Peyré, B. Schmitzer, F-X. Vialard. [Scaling Algorithms for Unbalanced Transport Problems](https://arxiv.org/abs/1607.05816). Preprint Arxiv:1607.05816, 2016.
 
 Comparison of balanced vs. unbalanced interpolation computed using barycenters with varying weights:
 
