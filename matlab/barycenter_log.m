@@ -93,5 +93,6 @@ for i=1:niter
     end
 end
 
+nu = exp(Lnu);
 
 end
