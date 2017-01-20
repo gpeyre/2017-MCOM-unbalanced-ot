@@ -1,0 +1,297 @@
+% !TEX root = ../DynamicToStatic.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% DYNAMIC
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{From Dynamic Models to Static Problems}
+\label{sec:DynamicToStatic}
+
+In this section we establish that a certain class of convex, positively homogeneous, optimization problems over the solutions of the continuity equation with source (informally introduced in \ref{eq:ContinuityEqInformal}) --- the dynamic problems --- admits unbalanced Kantorovich formulations that we introduced in Sect.\ \ref{sec : general static problem} --- the static problems.
+We prove an equivalence result between static and dynamic models for a large class of dynamic models.
+%It is however not the aim of this manuscript to exhaust the full class of dynamic problems that allow for a static reformulation.
+%As a direct application of this result, we obtain the equivalence for $\WF$ in section~\ref{sec:Examples}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Connexion between static and dynamic problems
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{A Family of Dynamic Problems}
+%\label{sec : proof static}
+
+Dynamic formulations of unbalanced transportation metrics correspond intuitively to the computation of geodesic distances according to a function 
+measuring the infinitesimal effort needed for ``acting'' on a mass $m$ at position $x$ according to the speed $v$ and rate of growth $\alpha$ (cf.~\eqref{eq:DynamicInformal}). This should be contrasted with the static formulation~\eqref{eq: static problem} that depends on a cost function $c(x_0,m_0,x_1,m_1)$ between pairs of positions and masses. 
+%\todo{Len: I modified the previous paragraph; to me $f$ only appears after a change of variables}
+
+The continuity equation, informally introduced in \eqref{eq:ContinuityEqInformal}, is a concept underlying all dynamical formulations of this article. It enforces a local mass preservation constraint for a density $\rho$, a flow field $v$ and a growth rate field $\alpha$.
+We now give a rigorous definition in terms of measures $(\rho,\omega,\zeta)$ where $\omega$ can informally be interpreted as momentum $\rho \cdot v$ of the flow field and $\zeta$ corresponds to $\rho \cdot \alpha$.
+%
+\begin{definition}[Continuity equation with source]
+\label{def:continuity equation}
+For $(a,b)\in \R^2$ and $\Omega \subset \R^d$ compact, denote by $\mathcal{CE}_a^b(\rho_0,\rho_1)$ the affine subset of $\mathcal{M}([a,b]\times \Omega)\times \mathcal{M}([a,b]\times \Omega)^d \times \mathcal{M}([a,b]\times \Omega)$ of triplets of measures $\mu=(\rho,\omega,\zeta)$ satisfying the continuity equation $\partial_t \rho + \nabla \cdot \omega = \zeta$ in the distribution sense, interpolating between $\rho_0$ and $\rho_1$ and satisfying homogeneous Neumann boundary conditions. More precisely we require
+\begin{equation}
+\label{eq:continuity weak}
+\int_a^b \int_{\Omega} \partial_t \varphi \ \d\rho + \int_a^b \int_{\Omega} \nabla \varphi \cdot \d\omega + \int_a^b \int_{\Omega} \varphi \ \d\zeta = \int_{\Omega} \varphi(b,\cdot)\d\rho_1 - \int_{\Omega} \varphi(a,\cdot)\d\rho_0
+\end{equation}
+for all $\varphi \in C^1_c([a,b]\times \R^d)$.
+\end{definition}
+%
+Below we collect without proof a few standard facts on this equation which will be useful for the following. The notation $B^d(0,r)$ denotes the open ball of radius $r$ in $\R^d$ centered at the origin.
+\begin{proposition}
+\label{prop:results on continuity equation}
+\hfill
+\begin{description}
+%\item[Glueing] Let $(a,b,c) \in \R^3$ satisfying $a<b<c$, $(\rho_a,\rho_b,\rho_c) \in \mathcal{M}_+(\Omega)^3$, $\mu_A \in \mathcal{CE}_a^b(\rho_a,\rho_b)$ and $\mu_B \in \mathcal{CE}_b^c(\rho_b,\rho_c)$. Then the measure $\mu$ defined as $\mu_A$ for $t\in [a,b[$ and $\mu_B$ for $t\in [b,c]$ belongs to $\mathcal{CE}_a^c(\rho_a,\rho_c)$.
+\item[Extension] Let $(a,b,c) \in \R^3$ satisfying $a<b<c$, $(\rho_a,\rho_b) \in \mathcal{M}_+(\Omega)^2$ and $\mu \in \mathcal{CE}_a^b(\rho_a,\rho_b)$. Then the measure $\tilde{\mu}$ obtained by extending $\mu$ as $(\rho_b , 0, 0)\otimes \d t$ on $]b,c]\times \Omega$ belongs to $\mathcal{CE}_a^c(\rho_a,\rho_b)$.
+%
+\item[Smoothing] Let $\veps>0$, let $r^x_{\veps}$, $r^t_\veps$ mollifiers supported on the open balls $B^d(0,\frac{\veps}{2})$ and $B^1(0,\frac{\veps}{2})$ respectively and $r_{\veps} : (t,x) \mapsto r_{\veps}^t(t)r_{\veps}^x(x)$. Let $\mu = (\rho,\omega,\zeta)$ be a triplet of measures supported on $\R\times \Omega$ such that $\mu \in \mathcal{CE}_0^1(\rho_0,\rho_1)$, $\mu = (\rho_0,0,0)\otimes \d t$ for $t<0$, and $\mu = (\rho_1,0,0)\otimes \d t$ for $t>1$. Then for all $a\leq-\veps/2$, and $b\geq1+\veps/2$, $\mu \ast r_\veps \in \mathcal{CE}_a^b(\rho_0 \ast r_\veps^x,\rho_1 \ast r_\veps^x)$ on $\Omega+ \bar{B}^d(0,\veps/2)$.
+%
+\item[Scaling] Let $\mu = (\rho,\omega,\zeta) \in \mathcal{CE}_a^b(\rho_a,\rho_b)$ with $a<b$ and $T : (t,x) \mapsto (T_t(t), T_x(x))$ be an affine scaling with multiplication factor $\alpha$ and $\beta$, respectively. Then $(\alpha \cdot T_\#\rho, \beta \cdot T_\# \omega,  T_\#\zeta) \in \mathcal{CE}_{T_t(a)}^{T_t(b)}((T_x)_\#(\rho_a),(T_x)_\#(\rho_b))$ on the domain $T_x(\Omega)$.
+\end{description}
+\end{proposition}
+
+
+%\todo{Gabriel: I think using $m$ in place of $\rho$ below would be more coherent}
+
+%
+Next, we introduce the admissible class of infinitesimal costs which generalizes the admissible Riemannian inner products defined in Section \ref{sec:AdmissibleMetrics}. Although a standard Lagrangian cost would be defined as a function of the speed $v$ and the growth rate $\alpha$, our infinitesimal cost has nicer analytical properties when defined in terms of the momentum $\omega$ and the source $\zeta$ variables. Indeed, it is then natural to require subadditivity (i.e. we expect that ``locally'', mass is not encouraged to split) and homogeneity in $(\rho,\omega,\zeta)$ (thus convexity). Finally, this change of variables allows interesting costs where $\omega$ or $\zeta$ do not necessarily admit a density w.r.t.\ $\rho$ (see Section \ref{sec:ExamplesPartial}).
+
+\begin{definition}[Infinitesimal cost]
+\label{def: infinitesimal cost}
+In the following, an infinitesimal cost is a lower semicontinuous function $f: \Omega \times \R \times \R^d \times \R \to \R_+ \cup \{+ \infty \}$ such that for all $x\in \Omega$, $f(x,\cdot,\cdot,\cdot)$ is convex, positively 1-homogeneous and satisfies
+\[
+f(x,\rho,\omega,\zeta) 
+\begin{cases}
+= 0 & \tn{if } (\omega,\zeta) = (0,0) \tn{ and } \rho \geq 0\\
+> 0 & \tn{if } | \omega | \tn{ or } |\zeta| > 0 \\
+= + \infty & \tn{if } \rho<0 \, .
+\end{cases}
+\]
+\end{definition}
+
+The dynamic formulation is now defined as the computation of a geodesic length for the infinitesimal cost $f$.
+
+\begin{definition}[Dynamic problem]
+\label{def:DynamicProblem}
+For $(\rho,\omega,\zeta) \in \mathcal{M}([0,1] \times \Omega)^{1+d+1}$, let
+\begin{align}
+	J_D(\rho,\omega,\zeta) & \eqdef \int_0^1 \int_{\Omega} f(x,\dens{\rho}{\lambda},\dens{\omega}{\lambda},\dens{\zeta}{\lambda})\, \d\lambda(t,x)
+%	J_D(\mu) & \eqdef \int_0^1 \int_{\Omega} f(x,\dens{\mu}{|\mu|})\, \d|\mu|(t,x)
+	\intertext{where $\lambda \in \mc{M}_+([0,1] \times \Omega)$ is such that $(\rho,\omega,\zeta) \ll \lambda$. Due to 1-homogeneity of $f$, this definition does not depend on the choice of $\lambda$. The dynamic problem is, for $\rho_0,\rho_1 \in \mathcal{M}_+(\Omega)$,}
+	\label{eq:dynamic problem}
+	C_D(\rho_0,\rho_1) & \eqdef \inf_{(\rho,\omega,\zeta) \in \mathcal{CE}_0^1(\rho_0,\rho_1)} J_D(\rho,\omega,\zeta)\,.
+\end{align}
+\end{definition}
+
+Similarly to the static case (Theorem~\ref{th: duality}), the dynamic setting also enjoys a dual formulation. 
+%For the definition of lower semicontinuity for set valued functions, see the preliminaries before Theorem \ref{th: duality}.
+
+% DUALITY
+\begin{proposition}[Duality]
+\label{prop: dynamic dual}
+Let $B(x)$ be the polar set of $f(x,\cdot,\cdot,\cdot)$ for all $x\in \Omega$. 
+%and assume it is a lower semicontinuous set-valued function. 
+Then the minimum of \eqref{eq:dynamic problem} is attained and it holds
+\begin{equation}
+\label{eq: dynamic primal problem}
+C_D (\rho_0,\rho_1) = \sup_{\varphi \in K} \int_\Omega \varphi(1,\cdot) \d \rho_1 - \int_\Omega \varphi(0,\cdot) \d \rho_0
+\end{equation}
+with 
+$
+K \eqdef \left\{ \varphi \in  C^1([0,1]\times \Omega) : (\partial_t \varphi, \nabla \varphi, \varphi)\in B(x), \, \forall (t,x)\in[0,1]\times \Omega \right\} \, .
+$
+\end{proposition}
+
+\begin{proof}
+\todo{check domain $\Omega$}
+Remark, that \eqref{eq: dynamic primal problem} can be written as 
+\[
+- \inf_{\varphi \in C^1([0,1] \times \Omega)} F(A\varphi) + G(\varphi)
+\]
+where
+$A : \varphi \mapsto (\partial_t \varphi, \nabla \varphi, \varphi)$, is a bounded linear operator from $C^1([0,1]\times \Omega)$ to $C([0,1]\times \Omega)^{d+2}$, and
+$F :(\alpha,\beta,\gamma) \mapsto \int_0^1 \int_{\Omega} \iota_{B(x)}(\alpha(t,x),\beta(t,x),\gamma(t,x)) \d x \d t $,
+$ G : \varphi \mapsto \int_{\Omega} \varphi(0,\cdot)\d\rho_0 - \int_{\Omega} \varphi(1,\cdot) \d\rho_1$ are convex, proper and lower-semicontinuous functionals, in particular because for all $x\in \Omega$, the set $B(x)$ is convex, closed and nonempty.
+%
+Since we assumed that $f(x,\rho,\omega,\zeta)>0$ if $|\omega|>0$ or $\zeta>0$ and $f$ is continuous as a function of $x$ on the compact $\Omega$, one can check that there exists $\veps>0$ such that $(-\veps,0,\theta \epsilon/2) \in \left( \tn{ int } \cap_{x\in \Omega} B(x)\right)$ for $\theta\in [-1,1]$ and thus there exists a function $\varphi : t \mapsto -\veps t +\veps/2$ such that $F(A\varphi) + G(\varphi)<+\infty$ and $F$ continuous at $A\varphi$. Then, by Fenchel-Rockafellar duality, \eqref{eq: dynamic primal problem} is equal to
+\[
+\min_{\mu \in \mathcal{M}([0,1]\times \Omega)^{d+2}}  G^*(-A^*\mu) + F^*(\mu) \, .
+\]
+By \cite[Theorem 6]{rockafellar1971integrals} and the lower-semicontinuity of $x\mapsto B(x)$ (which follows from \cite[Lemma A.2]{bouchitte1988integral}), we have $F^*=J_D$, and by direct computations, $G^*\circ (-A^*)$ is the convex indicator of $\mathcal{CE}_0^1(\rho_0,\rho_1)$. 
+%For a similar proof strategy with more details see also \cite[Theorem 2.1]{ChizatOTFR2015}.
+\end{proof}
+
+\subsection{Connection Between Static and Dynamic Problems}
+
+Theorem~\ref{th: continuous static general} is the main result of this section. It states that if the cost $c$ of the static problem is defined as the dynamic cost between Diracs, then the static and the dynamic formulations coincide. 
+%
+The cost $c$ of the static problem can alternatively be determined as a generalized action on the paths space as measured by an infinitesimal cost $f$ (see Proposition \ref{prop : alternative dynamic/static}).
+%
+In the Riemannian setting this means that $c$ is the squared geodesic distance on $\Cone(\Omega)$, see Sect.~\ref{sec:AdmissibleMetrics}.
+%
+Of course, there are static costs $c$ that do not arise from a dynamic cost $f$, just as there are dynamic problems beyond the framework of Definition \ref{def: infinitesimal cost} which cannot be cast into a static form.
+
+% The cost $c$ of the static problem is determined by the dynamic formulation \eqref{eq: dynamic primal problem} as a generalized action on the path space. In the case where $f$ gives rise to a Riemannian metric on $\Omega \times \R_+^*$, $c$ is simply the square of the distance associated with the metric. This is detailed in the following theorem.
+\begin{definition}
+The Dirac-based cost is
+\begin{align}
+	\label{eq:c between Diracs}
+	c_d : (x_0, m_0) , (x_1, m_1) \mapsto C_D(m_0 \delta_{x_0}, m_1 \delta_{x_1}) \, .
+\end{align}
+If $c_d$ is l.s.c. then it defines a \emph{cost function}. 
+\end{definition}
+\begin{definition}
+The path-based cost $c_s$ is defined by a minimization over smooth trajectories
+\begin{equation}\label{eq-pathspace}
+c_s(x_0,m_0,x_1,m_1) \eqdef \inf_{ (x(t),m(t))}  \int_0^1 f(x(t),m(t),m(t)\, x'(t),m'(t)) \, \d t\,
+\end{equation}
+for $(x(t),m(t)) \in C^1([0,1],\Omega \times [0,+\infty[)$ such that $(x(i),m(i)) = (x_i,m_i)$ for $i\in \{ 0,1\}$. In general, $c_s$ does not define a cost function in the sense of Definition \ref{def:CostFunction}.
+\end{definition}
+
+For the following Theorem, we introduce two hypothesis on the infinitesimal costs: 
+\begin{itemize}
+\item[(A)] multiplicative dependency on $x$: there exist continuous functions $\lambda_i : \Om \to ]0,+\infty[, \, i\in \{1,\dots , N\}$ such that 
+\begin{equation}\label{continuity assumption}
+f(x,\rho,\omega,\zeta) = \sum_{i=1}^N \lambda_i(x) \tilde{f}_i(\rho,\omega,\zeta)
+\end{equation}
+\todo{remove after checking:} where each $\tilde{f}_i$ satisfies an integrability condition: there exists $C_i>0$ such that $|\tilde{f}_i(\cdot)|\leq C_i \max_x f(x,\cdot)$
+%
+\item[(B)] doubling condition : there exists $C>0$ such that $f(x,\rho,\omega,2\zeta)\leq C \cdot f(x,\rho,\omega,\zeta)$, for all $(x,\rho,\omega,\zeta) \in \Omega \times \R \times \R^d \times \R$.
+ \end{itemize}
+ %
+For instance, any admissible Riemannian metric from Section 2 defines an infinitesimal cost function satisfying these conditions (by equation \eqref{GeneralFormOfMetric}). 
+%
+\begin{theorem}
+\label{th: continuous static general}
+Let $\Omega \subset \R^d$ be a compact which is star shaped w.r.t.\ a set of points with nonempty interior, and $c$ be a cost function satisfying $c_d \leq c \leq c_s$, where $c_d$ and $c_s$ are derived from an infinitesimal cost satisfying (A) and (B). If the associated static problem $C_K$ is weakly* continuous, it holds, for $\rho_0, \rho_1 \in \mathcal{M}_+(\Omega)$, $C_D(\rho_0, \rho_1) = C_K(\rho_0,\rho_1)\,$ and $c = c_d$.
+\end{theorem}
+
+%
+Sufficient conditions on $c$ for the weak* continuity of $C_K$ are given in Theorem \ref{th : continuity continuous static}. The assumptions on the domain include convex sets but also most star-shaped sets. It is however not our intention to look for the weakest assumptions on the domain for our result to hold.  In general, computing $c_d$ directly is not easy : the margin in the choice of $c$ in Theorem \ref{th: continuous static general} allows to obtain $c_d$ as a consequence of the Theorem, not as a requirement. A natural choice for $c$ is the convex regularization of the cost on the path space $c_s$, which is easier to compute than $c_d$. It can be nicely expressed as the optimal cost on the path space when allowing the Dirac to be split into two chunks:
+%
+\begin{proposition}
+\label{prop : alternative dynamic/static}
+The convex regularization of $c_s$ can be expressed as
+\begin{equation}\label{eq:c one or two diracs}
+c : (x_0,m_0) , (x_1,m_1 ) \mapsto \inf_{\substack{m_0^a+m_0^b=m_0\\m_1^a+m_1^b=m_1}} c_s(x_0,m_0^a,x_1,m_1^a)+ c_s(x_0,m_0^b,x_1,m_1^b)\, .
+\end{equation}
+It is convex, positively homogeneous in $(m_0,m_1)$, and satisfies $c_d\leq c \leq c_s$. %If $c$ is l.s.c.\ and if the corresponding static problem $C_K$ is weak* continuous, then $C_D=C_K$ and $c=c_d$.
+\end{proposition}
+
+\begin{proof}%[Proof of Corollary \ref{cor : alternative dynamic/static}]
+The fact that \eqref{eq:c one or two diracs} is the convex regularization of $c_s$ is a consequence of Carath\'eodory's Theorem (see \cite[Corollary 17.1.6]{rockafellar2015convex}). By imposing $m_0^b = m_1^b = 0$ in the infimum, one notices that $c \leq c_s$ because $c_s(x_0,0,x_1,0)=0$ from the properties of the infinitesimal cost. Finally $c_d\leq c$ because $\gamma_1 = \delta_{(x_0,x_1)}$.
+\end{proof}
+
+Note that in general, $c_d\neq c_s$, since, as opposed to the dynamic problem $C_D$, the problem defining $c_s$ is not allowed to split mass. For instance, the cut distance is $\pi/2$ for the $\WF$ metric (see Section \ref{sec:equivalence WF}) while it is $\pi$ for the Riemannian metric on the cone (see Proposition \ref{RiemannianMetric}). We now proceed to the proof of Theorem \ref{th: continuous static general}.
+
+%
+\begin{proof}[Proof of Theorem \ref{th: continuous static general}]
+It is clear that $c_d\leq c_s$ because for any candidate path $(x(t),m(t))$ in \eqref{eq-pathspace}, $m(t)\delta_{x(t)} \otimes \d t \in \mathcal{CE}_0^1(m_0 \delta_{x_0}, m_1 \delta_{x_1})$, and thus the assumption $c_d \leq c \leq c_s$ is not void. The proof is divided into four steps: in Step 1, we show that for marginals which are atomic measures, it holds $C_K\geq C_D$. By integrating characteristics (an argument similar to the original proof of the Benamou-Brenier formula \cite{benamou2000computational}), we show in Step 2 that for absolutely continuous marginals, $C_K$ is upper bounded by the dynamic minimization problem restricted to smooth fields. In Step 3, a regularization argument (inspired by \cite[Theorem 8.1]{cedric2003topics}) then extends this result to general measures and for the actual problem $C_D$. This is were the weak* continuity of $C_K$ intervenes. The conclusion, in Step 4, follows by a density argument.
+
+\paragraph{Step 1.}
+Let $\rho_0, \rho_1 \in \mathcal{M}^{at}_+(\Omega)$. 
+For the static problem $C_K$, there exists a minimizer in the set $\Gamma(\rho_0,\rho_1)\cap \mathcal{M}_+^{at}(\Omega^2)^2$. Indeed, an atom assigned to another atom is represented by an atom in $\Om^2$, and the same can be forced to hold for an atom assigned to the apex, because for all $x\in \Omega$, $c(x,1,\cdot,0)$ attains its minimum in $\Omega$. Let $(\gamma_0,\gamma_1)$ be such a minimizer, it can be written $\gamma_k = \sum_{i,j} m^k_{i,j} \delta_{(x_i,x_j)}$, for $k=0,1$. Since $c\geq c_d$, it holds
+\begin{align*}
+C_K(\rho_0,\rho_1) 
+&= \sum_{i,j} c(x_i,m^0_{i,j},x_j,m^1_{i,j})\\
+&\geq \sum_{i,j} C_D ( m^0_{i,j} \delta_{x_i} , m^1_{i,j} \delta_{x_j})\\
+& \geq C_D \big(\sum_{i,j} m^0_{i,j} \delta_{x_i} , \sum_{i,j} m^1_{i,j} \delta_{x_i}\big) = C_D(\rho_0,\rho_1)
+\end{align*}
+where the last inequality is due to the sub-additivity of $C_D$, inherited from $J_D$.
+
+\paragraph{Step 2.} Let $\rho_0,\, \rho_1 \in  \mathcal{M}_+^{ac}(\Omega)$ be marginals with positive mass and let
+\[
+(\rho,\omega,\zeta) \in \left\{ (\rho,\omega,\zeta)\in \mathcal{CE}_0^1(\rho_0,\rho_1) : \dens{\omega}{\rho}, \dens{\zeta}{\rho}\in C^1([0,1]\times \Omega) \right\} \, .
+\]
+%and define $C_D^{sm} \eqdef \inf_{\mathcal{CE}_{sm}(\rho_0,\rho_1)} J_D(\rho,\omega, \zeta)$.
+%
+%
+One can take the Lagrangian coordinates $(\varphi_t(x),\lambda_t(x))$ which are given by the flow of $(v\eqdef \omega/\rho, \alpha\eqdef \zeta/\rho)$ defined as in Proposition \ref{CauchyLipschitz}:
+\begin{align*}
+\partial_t \varphi_t(x) = v_t(\varphi_t(x)) \quad \tn{and} \quad
+\partial_t  \lambda_t(x) = \alpha_t(\varphi_t(x))\lambda_t(x) \, ,
+\end{align*}
+with the initial condition $(\varphi_0(x), \lambda_0(x)) = (x,1)$. Recall that $(\varphi_t(x),\lambda_t(x))$ describes the position and the relative increase of mass at time $t$ of a particle initially at position $x$ and that one has $\rho_t = (\varphi_t)_{*} (\lambda_t \cdot \rho_0)$.
+%
+It follows,
+\begin{align*}
+J_D(\rho,\omega, \zeta) 
+&= \int_{[0,1] \times \Omega} f\big(x,1,v_t(x),\alpha_t(x)\big) \d[(\varphi_t)_{*} \big(\lambda_t \rho_0 \big)](x) \d t \\
+&\overset{(1)}{=} \int_{\Omega} \left[ \int_0^1 f\big(\varphi_t(x),1, \partial_t \varphi_t(x), \partial_t \lambda_t(x)/\lambda_t(x) \big) \lambda_t(x) \d t \right] \d \rho_0(x) \\
+&\overset{(2)}{=}  \int_{\Omega} \left[ \int_0^1 f\big(\varphi_t(x),\lambda_t(x), \lambda_t(x) (\partial_t \varphi_t(x)),\partial_t \lambda_t(x) \big) \d t \right] d \rho_0(x) \\
+&\overset{(3)}{\geq} \int_{\Omega} c(x,1, \varphi_1(x), \lambda_1(x)) d \rho_0(x) \\
+&\overset{(4)}{\geq}  C_K(\rho_0,\rho_1)
+\end{align*}
+where we used (1) the change of variables formula (2) homogeneity of $f$ (3) the assumption $c\leq c_s$ and (4) 
+the fact that  $\big( \pfwd{(\id, \varphi_1)} \rho_0, \pfwd{(\id, \varphi_1)} (\lambda_1 \rho_0)\big)\in \Gamma(\rho_0,\rho_1)$.
+%\end{proof}
+%
+%\begin{lemma}
+%\label{lemma : smoothing argument}
+\paragraph{Step 3.} 
+Let $\rho_0, \rho_1 \in \mathcal{M}_+(\Omega)$. We want to show, with the help of Step 2, that $C_K(\rho_0, \rho_1) \leq C_D(\rho_0, \rho_1)$.
+%\end{lemma}
+%\begin{proof}
+Let $(\rho,\omega,\zeta) \in \mathcal{CE}_0^1(\rho_0,\rho_1)$ and for $\delta \in ]0,1[$ let
+\[
+\tilde{\rho}^{\delta} = (1-\delta) \rho + \delta\, (\d x \otimes \d t), \quad \tilde{\omega}^{\delta} = (1-\delta) \omega, \quad \tilde{\zeta}^{\delta} = (1-\delta) \zeta
+\]
+so that $\tilde{\rho}^{\delta}$ is always positive on sets with nonempty interior and $(\tilde{\rho}^{\delta} ,  \tilde{\omega}^{\delta}, \tilde{\zeta}^{\delta} ) \in \mathcal{CE}_0^1(\tilde{\rho}_0^{\delta},\tilde{\rho}_1^{\delta})$. By convexity, 
+\[
+J_D(\tilde{\rho}^{\delta} ,  \tilde{\omega}^{\delta}, \tilde{\zeta}^{\delta} ) \leq J_D(\rho, \omega, \zeta)\, .
+\]
+Since $\tilde{\rho}_0^{\delta} \rightharpoonup^*\rho_0$ and $\tilde{\rho}_1^{\delta} \rightharpoonup^*\rho_1$ as $\delta \to 0$ and $C_K$ is continuous for the weak* topology, it is sufficient to prove
+$
+J_D(\tilde{\rho}^{\delta} ,  \tilde{\omega}^{\delta}, \tilde{\zeta}^{\delta} ) \geq C_K(\tilde{\rho}_0^{\delta} ,  \tilde{\rho}_1^{\delta} ) 
+$
+for proving $J_D(\rho, \omega, \zeta) \geq C_K(\rho_0,\rho_1)$.
+%
+%In the sequel, in order to deal with boundary conditions issues, we introduce an auxiliary problem on the sphere.  Let $\phi$ be a diffeomorphism which transforms $\Omega$ into $B_1$ (centered ball of radius $1$) and $f^\phi$ be the "transform" \todo{which?} of $f$: it is still convex \todo{probably} and positively homogeneous, but not under the form of \ref{continuity assumption} anymore.
+%
+
+In order to alleviate notations we shall now denote $\tilde{\rho}^{\delta} ,  \tilde{\omega}^{\delta}, \tilde{\zeta}^{\delta} $ by just $\rho, \omega, \zeta$. Also, we denote by $B^d(a,r)$ the open ball of radius $r$ centered at point $a$ in $\R^d$.
+%
+Up to a translation, we can assume that $0$ is in the interior of the set of points w.r.t. which $\Omega$ is star shaped. Then \cite[Theorem 5.3]{rubinov2013abstract} tells us that the Minkowski gauge $x \mapsto \inf \{ \lambda>0 : x \in \lambda \Omega \}$ is Lipschitz; let us denote by $k\in \R_+^*$ its Lipschitz constant.
+%
+We introduce the regularizing kernel
+$
+r_{\veps}(t,x) = \frac{1}{\veps^{d}}\, r_1\left( \frac{x}{\veps} \right) \frac{1}{\veps}\, r_2 \left( \frac{t}{\veps} \right) \, 
+$
+where $r_1 \in C_c^{\infty}(B^d(0,\frac{1}{2k}))$, $r_2 \in C_c^{\infty}(B^1(0,\frac{1}{2k}))$, $r_i \geq 0$, $\int r_i = 1$, $r_i$ even ($i=1,2$). Let $\bar{\mu}=((1+\veps)^{-1}\bar{\rho},(1+\veps)^{-1}\omega,\zeta)$ where $\bar{\rho}$ is a measure on $[-\veps,1+\veps]\times \Omega$ which is worth $\rho$ on $[0,1]\times \Om$,  $\rho_0 \otimes \d t$ on $[-\veps,0[\times \Om$ and $\rho_1 \otimes \d t$ on $]1,1+\veps]\times \Om$. By the glueing property in Proposition \ref{prop:results on continuity equation}, $(\bar{\rho},\omega,\zeta)$ still satisfies the continuity equation. Then define
+\[
+\mu^\veps \eqdef T_{\#} (\bar{\mu} \ast r_\veps)\vert_{[0,1]\times \Omega},
+\]
+where $T:(t,x) \mapsto ((1+\veps)^{-1}(t+ \veps/2),(1+\veps)^{-1}x)$ is built in such a way that the image of the time segment $[-\veps/2,1+\veps/2]$ is $[0,1]$. Furthermore, since the Minkowski gauge of $\Omega$ is $k$-Lipschitz, the image of $\Omega^\veps \eqdef \Omega + B^d(0,\veps/k)$ by $T$ is included in $\Omega$. Now, by the smoothing and scaling properties in Proposition \ref{prop:results on continuity equation}, it holds $\mu^{\veps} \in \mathcal{CE}_0^1(\rho^{\veps}_0,\rho^{\veps}_1)$,  in particular because we took care of multiplying $\rho$ and $\omega$ by a factor $(1+\veps)^{-1}$ in the definition of $\bar{\mu}$. Notice that $\rho^{\veps}_0 \rightharpoonup^* \rho_0$ and $\rho^{\veps}_1 \rightharpoonup^* \rho_1$ when $\veps \to 0$ since they are the evaluations of $\bar{\mu}\ast r_\veps$ at time $-\veps/2$ and $1+\veps/2$, respectively (also contracted in space by a factor $1+\veps$). Moreover, the vector fields $\omega_t^{\veps}/ \rho_t^{\veps}$ and $\zeta_t^{\veps}/ \rho_t^{\veps}$ are well-defined, smooth, bounded functions on $[0,1]\times \Omega$. Therefore, by Step 2,
+\[
+J_D(\mu^{\veps}) \geq C_K(\rho_0^{\veps}, \rho_1^{\veps}).
+\]
+On the other hand, for any $\veps'>0$, one has
+\begin{align*}
+J_D(\mu^{\veps}) 
+& =  \int_0^1 \int_{\Omega} f(y, \dens{\mu^{\veps}}{|\mu^{\veps}|}) \d |\mu^{\veps}|(s,y)  \\
+& \overset{(1)}{=}  \int_{-\veps/2}^{1+\veps/2} \int_{\Omega^\veps} f((1-\veps)y, \dens{\bar{\mu} \ast r_{\veps}}{|\bar{\mu} \ast r_{\veps}|}) \d |\bar{\mu}\ast r_{\veps}|(s,y) \\
+& \overset{(2)}{\leq}  \int_{-\veps/2}^{1+\veps/2} \int_{\Omega^\veps} \d |\bar{\mu}|(t,x) \int_{\R^{1+d}} \!\!\! \d s \d y f((1-\veps)y, \dens{\bar{\mu}}{|\bar{\mu}|}(t,x)) \cdot r_{\veps}(s-t,y-x)  \\
+&  \overset{(3)}{=}  \sum_i \int_{0}^{1} \int_{\Omega} \d |\bar{\mu}|(t,x) \int_{\R^{1+d}} \!\!\! \d s \d y \tilde{f}_i(\dens{\bar{\mu}}{|\bar{\mu}|}(t,x))   \lambda_i((1-\veps)y) r_{\veps}(s-t,y-x)  \\
+& \overset{(4)}{\leq} \int_0^{1} \int_{\Omega} (1+\veps')f(x, \dens{\bar{\mu}}{|\bar{\mu}|})  \d |\bar{\mu}|(t,x) 
+\end{align*}
+where were used (1) the change of variable formula, (2) the convexity and homogeneity of $f$, (3) the multiplicative dependance in $x$ (with the integrability conditions) assumed on $f$ and (4) the continuity of the strictly positive factors $(\lambda_i)_i$, where $\veps$, chosen small enough, depends on $\veps'$. Therefore $ J_D(\bar{\mu}) \geq J_D(\mu^\veps)(1+\veps')^{-1}$. But by convexity and homogeneity, $J_D(\bar{\mu})\leq (1+\veps)^{-1} ((1-\veps)J_D(\rho,\omega,\zeta) + \veps J_D(\rho,\omega,2\zeta))$. The term $J_D(\rho,\omega,2\zeta)$ is finite if $J_D(\rho,\omega,\zeta)$ is finite (by our assumption on $f$) and one has
+\[
+C_K(\rho_0^{\veps}, \rho_1^{\veps}) \leq \frac{1+\veps'}{1+\veps}((1-\veps)J_D(\rho,\omega,\zeta) + \veps J_D(\rho,\omega,2\zeta))\, .
+\]
+%
+Letting $\veps'$ and $\veps$ go to $0$, using the continuity of $C_K$ under weak* convergence and taking the infimum, one recovers in the end $C_K(\rho_0,\rho_1) \leq C_D(\rho,\omega,\zeta)$ as desired.
+%\end{proof}
+
+\paragraph{Step 4.}
+
+We have proven in Step 1 that if  $\rho_0, \rho_1 \in \mathcal{M}_+^{at}(\Omega)$, then
+\[
+C_D(\rho_0, \rho_1) \leq C_K (\rho_0, \rho_1)\, .
+\]
+Moreover, by Step 3, for all $\rho_0, \rho_1 \in \mathcal{M}_+(\Omega)$ on has
+\[
+C_D (\rho_0, \rho_1)\geq C_K(\rho_0, \rho_1) \, .
+\]
+and thus $C_D=C_K$ for atomic measures.  But $C_D$ is weakly* l.s.c since $J_D$ is l.s.c.\ by Reshetnyak lower-semicontinuity (which requires to integrate on an open set, but one can bring ourselves back to that case as in Proposition \ref{prop:KMinimizers}). Finally, by density of $\mathcal{M}_+^{at}(\Omega)$ in $\mathcal{M}_+(\Omega)$, for $\rho_0, \rho_1 \in \mathcal{M}_+(\Om)$, $C_D(\rho_0, \rho_1)\leq C_K(\rho_0, \rho_1)$. The equality $c=c_d$ is direct by computing $C_K$ between Dirac measures, and because $c$ is subadditive.
+\end{proof}

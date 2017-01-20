@@ -1,0 +1,105 @@
+% !TEX root = ../DynamicToStatic.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDIX
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+%
+%\begin{appendix}
+\section{Wasserstein-Fisher-Rao as a Weak Metric}\label{WFRasWeak}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+In this appendix, we show that the Wasserstein-Fisher-Rao is a weak metric in a Sobolev setting but does not admit a Levi-Civita connection. Similar results certainly hold for the Wasserstein metric. 
+
+We will work in a smooth Sobolev setting, namely on $\Dens^s(\Omega)$ the space of $C^1$ positive functions on $\Omega$ that are in $H^s(\Omega,\R)$ for $s>d/2+1$ where $d $ is the dimension of the ambient space of $\Omega$. It is an open subset of $H^s(\Omega,\R)$. 
+Note that the same results probably hold for the Wasserstein metric.
+
+\begin{proposition}
+The $\WF$ metric is a weak Riemannian metric on $\Dens^s(\Omega)$.
+\end{proposition}
+
+\begin{proof}
+We use the fact that $\Dens^s(\Omega)$ is an open subset of the Hilbert space $H^s(\Omega,\R)$ to work in this coordinate system.
+The tangent space of $\Dens^s(\Omega)$ is $\Dens^s(\Omega) \times H^s(\Omega,\R)$. 
+Let $X \in H^s(\Omega,\R)$ be a function that will be seen as a tangent vector at any density $\rho \in \Dens^s(\Omega)$. We denote by $\WF(\rho)(X,X)$ the $\WF$ metric evaluated at the point $\rho$ on the tangent vector $X$. We have to prove that the map from $\Dens^s(\Omega) \times H^s(\Omega)$ into $\R$ defined by
+$$ (\rho,X) \mapsto \WF(\rho)(X,X)$$ is smooth.
+Recall that, using the formulation \eqref{HorizontalLiftFormulation}, $\WF(\rho)(X,X)$ is given by
+\begin{equation}
+\WF(\rho)(X,X) = \frac12 \langle L(\rho)^{-1}(X),X \rangle_{L^2(\Omega)}\,.
+\end{equation}
+where $L(\rho): H^{s+1}(\Omega) \mapsto H^{s-1}(\Omega)$ is the elliptic operator defined by 
+\begin{equation}
+L(\rho)(\phi) = -\nabla \cdot (\rho \nabla \phi) + \rho  \, \phi \,.
+\end{equation} 
+Therefore the smoothness of $\WF(\rho)(X,X) $ reduces to the smoothness of $L(\rho)^{-1}$ (defined with homogeneous Neumann boundary conditions) as an operator from $H^{s-1}$ into $H^{s+1}$ with respect to $\rho$. Since $L(\rho)$ is linear in $\rho$ and using the inverse function theorem on Hilbert manifolds, we get the result for the $H^{s-1}$ topology in the second variable $X$, which is even stronger than the desired result.
+\end{proof}
+
+Following \cite{SobolevMetricsCurvature}, we show the non existence of the Levi-Civita connection for the $\WF$ metric in the Sobolev setting.
+
+
+\begin{proposition}\label{th:NonExistenceLC}
+The Levi-Civita connection associated with the $\WF$ metric does not exist on $\Dens^s(\Omega)$.
+\end{proposition}
+
+\begin{proof}
+From \cite[page 8]{SobolevMetricsCurvature}, there exists a Levi-Civita associated with a weak Riemannian metric if and only if the metric itself admits gradients with respect to itself in both variables.
+Let $(\rho, X) \in \Dens^s(\Omega) \times H^s(\Omega)$ be an element of the tangent space.
+The differentiation with respect to $\rho$ of $\WF(\rho)(X,X)$ gives the following $L^2$ gradient in the direction $Y \in H^s(\Omega,\R)$:
+\begin{equation}
+\partial_\rho \WF(\rho)(X,X)(Y) = \frac 12 \langle  |\phi|^2 + | \nabla \phi |^2 , Y \rangle_{L^2(\Omega)}\,,
+\end{equation}
+where $\phi = L(\rho)^{-1}(X)$. 
+
+The gradient with respect to the $\WF$ metric is then defined as $L(\rho)(Z)$ where $Z\eqdef \frac12 (|\phi|^2 + | \nabla \phi |^2)$.
+However, $Z \in H^s(\Omega)$ and therefore $L(\rho)(Z) \in H^{s-2}$. Thus, the gradient with respect to $\rho$ does not belong in general to $H^s$. Thus, the Levi-Civita does not exist.
+\end{proof}
+Note that the key point lies in the loss of smoothness when applying the elliptic operator.
+This negative result only means that \textbf{in this $H^s$ topology}, the weak Riemannian metric $\WF$ does not admit a Levi-Civita connection. However, this result does not preclude the existence of a topology for which the Levi-Civita connection exists. 
+%\begin{lemma}
+%\label{lemma : continuity of WF}
+%The distance $\WF$ is continuous for the weak* topology on $\mathcal{M}_+(\Omega)$.
+%\end{lemma}
+%
+%\begin{proof}
+%By the triangle inequality, we only need to show that if $\rho_n \rightharpoonup^* \rho$ then $\WF(\rho_n,\rho) \to 0$.
+%If $\rho = 0$, then $\WF(\rho, \rho_n) = \sqrt{2 \rho_n(\Omega)} \to 0$. Now assume $\rho \neq 0$ and also $\rho_n \neq 0$ (since it is true eventually).
+%We have 
+%\[
+%\WF(\rho, \rho_n) \leq \WF(\rho_n, \mnorm (\rho_{n})) + \WF(\rho,\mnorm (\rho_{n}))
+%\]
+%where $\mnorm (\rho_{n})$ is such that there exists $\alpha_n \in [0, + \infty[$, $\mnorm (\rho_{n})= \alpha_n \rho_{n}$ and $\mnorm (\rho_{n})(\Omega)=\rho(\Omega)$. Note that, by weak* convergence, we have that $\alpha_n \to 1$ and $W_2(\mnorm (\rho_{n}),\rho) \to 0$. But $\WF$ is upper bounded by Fisher-Rao and by $(1/2)W_2$, since those two metrics are obtained by taking the infimum of the same functional by adding the constraint $\omega=0$ and $\zeta=0$, respectively. Thus,
+%\[
+%\WF(\rho, \rho_{n}) \leq \delta|\sqrt{\alpha_n}-1|\sqrt{2 \rho_{n}(\Omega)} + (1/2) W_2(\mnorm (\rho_{n}),\rho) \to 0 \, . 
+%\]
+%\end{proof}
+
+\section{Proof of Proposition \ref{th:ClassificationOfMetrics}}\label{sec:ProofOfClassificationOfMetrics}
+\begin{proof}
+For given positive functions $a, \lambda$ on $\Omega$, one has
+\begin{equation}
+\Phi^*(mg +  \frac{c(x)}{ m} \d m^2) = m (g + c (\d \lambda)^2) + 2c \lambda \d \lambda  \d m + \frac{c}{m} \lambda^2 \d m^2\,.
+\end{equation}
+Using that
+$h(x,m) = m h(x) + a(x) \d m + b(x) \frac{\d m^2}{m}$,
+then, the result is satisfied if and only if the following system  has a solution
+\begin{equation}\label{System}
+\begin{cases}
+c  \,\d (\lambda^2)= a \\
+c \lambda^2 =  b \,.
+\end{cases}
+\end{equation} 
+Therefore, since $c, \lambda,b$ are positive functions, dividing the first equation by the second gives:
+$$ \frac{\d (\lambda^2)}{\lambda^2} = \frac{a}{b}\,\cdot$$ 
+This equation has a solution if and only if  $\frac{a}{b}$ is exact. Then, $c$ can then be deduced using the second equation of the system.
+
+The last point consists in proving that $g \eqdef h - c (\d \lambda)^2 $ is a metric on $\Omega$. Using the relation in system \eqref{System}, we get 
+$c  (\d \lambda)^2 = \frac{a^2}{4b}$. Let us consider $(v_x,v_m) \in T_{(x,m)}(M \times \R_+^*)$ for a non-zero vector $v_x$, then $mh(x)(v_x,v_x) + a(x)(v_x)v_m + \frac{b(x)}{m}v_m^2$ is a polynomial function in $v_m$ whose discriminant is necessarily strictly negative since $(v_x,v_m) \neq 0$ for all $v_m$. Therefore, we obtain 
+\begin{equation}
+a(x)(v_x)^2 < 4 b(x)h(x)(v_x,v_x)
+\end{equation}
+which gives $h(x)(v_x,v_x) - c(x) \d \lambda(x)(v_x)^2 > 0$.
+\end{proof}
+
+
+

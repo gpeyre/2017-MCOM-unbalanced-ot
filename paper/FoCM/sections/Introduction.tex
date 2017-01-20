@@ -1,0 +1,299 @@
+% !TEX root = ../InterpolatingOTFR.tex
+
+
+%\todo{Gabriel: Dans l'article, les notations $(x,t)$ et $(t,x)$ alternent. Lenaic, peux tu faire un choix et tout corriger ? DONE}
+
+\section{Introduction}
+
+Optimal transport is an optimization problem which gives rise to a popular class of metrics between probability distributions. We refer to the monograph of Villani~\cite{cedric2003topics} for a detailed overview of optimal transport. We now describe in an informal way various formulations of transportation-like distances, and expose also our new metric. A mathematically rigorous treatment can be found in Section~\ref{sec:theory}. 
+
+
+%%%%
+\subsection{Static and dynamic optimal transport}
+
+In its original formulation by Monge, optimal transport takes into account a ground cost that measures the amount of work needed to transfer a measure towards another one.  This formulation was later relaxed by Kantorovich~\cite{Kantorovich42} as a convex linear program, often referred to as a ``static formulation''. 
+%
+Given a \emph{ground cost} $c : \Om^2 \mapsto \R$, $\Om \subset \R^d$ and two probability measures $\rho_0$ and $\rho_1$ on $\Om$, the central problem is that of minimizing
+\begin{equation}
+\int_{\Om \times \Om} c(x,y) \,\d\gamma (x,y)
+\label{optimal transport problem}
+\end{equation}
+over the set $\Gamma_{(\rho_0,\rho_1)}$ of coupling measures, that contains non-negative measures $\gamma$ on $\Om^2$ admitting $\rho_0$ and $\rho_1$ as first and second marginals. More explicitly, for every measurable set $A \subset \Om$, $\gamma(A,\Om)=\rho_0(A)$ and $\gamma(\Om,A)=\rho_1(A)$. When the \emph{ground cost} is the distance $|x-y|^p$, the minimum induces a metric on the space of probability measures which is often referred to as the p-Wasserstein distance, denoted by $W_p$. 
+
+
+In a seminal paper, Benamou and Brenier~\cite{benamou2000computational} showed that this static formulation is equivalent to a ``dynamical'' formulation, where one seeks for a ``geodesic path'' $\rho(t,x)$ between the two densities which has a convex formulation. More precisely, they showed that the squared 2-Wasserstein is obtained by minimizing the kinetic energy
+\[
+\int_0^1 \int_{\Omega} |v(t,x)|^2 \rho(t,x) \d x \d t
+\]
+where $\rho$ interpolates between $\rho_0$ and $\rho_1$ and $v$ is a velocity field which advects the mass distribution $\rho$. They introduced the key change of variables via the momentum from classical mechanics, $(\rho,v) \mapsto (\rho,\M)\defeq (\rho,\rho v)$, this amounts to minimizing the convex functional
+\begin{equation}\label{eq-dynamic}
+ 	\int_0^1 \int_{\Omega} \frac{|\omega(t,x)|^2}{\rho(t,x)} \,\d x \d t
+\end{equation}
+over the couples $(\rho,\omega)$ satisfying the continuity equation 
+\begin{equation}\label{eq-continuity}
+	\partial_t \rho + \nabla \cdot \omega =0, \quad \rho(0,\cdot) = \rho_0, \quad \rho(1,\cdot) = \rho_1\,.
+\end{equation}
+In particular, their paper emphasized the Riemannian interpretation of this metric and paved the way for efficient numerical solvers.
+
+The geometric nature of optimal transport makes this tool interesting to perform shape interpolation, especially in medical image analysis~\cite{haker2004optimal}. Even though the resulting interpolation is somewhat simplistic compared to methods based on diffeomorphic flows such as LDDMM~\cite{beg2005computing}, the fact that the problem is convex is interesting for numerical purposes and large scale applications. 
+%
+A notable restriction of optimal transport is however that it is only defined between measures having the same mass. This might be an issue for applications in medical imaging, where measures need not be normalized, and biophysical phenomena at stake typically involve some sort of mass creation or destruction.
+% 
+To date, several generalizations of optimal transport have been proposed, with various goals in mind (see Section~\ref{previous works}). However, there is currently no formulation for which geodesics can be interpreted as a joint  displacement and modification of mass. In this article, we propose to tackle this issue by interpolating between the Wasserstein and the Fisher-Rao metric, which can be achieved using a convex dynamical formulation.
+
+
+In the remainder of this section, we introduce our model and describe related work which generalizes optimal transport to unbalanced measures (nonnegative measures whose total mass may differ). In addition, we introduce in an informal manner a family of distances which shows the similarity between \emph{a priori} unrelated models of transport between unbalanced measures. 
+%
+In Section~\ref{sec:theory}, we prove the existence of geodesics and exhibit optimality conditions. 
+%
+Section~\ref{sec-interpolation} is devoted to the study of the effect of varying the interpolation factor and to the limit models. 
+%
+We detail in Section~\ref{sec-explicit-geod} explicit geodesics between atomic measures satisfying suitable properties. 
+%
+Finally, we describe a numerical scheme in Section~\ref{sec-numerics} and use the distance for image interpolation experiments.
+
+
+
+
+
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+\subsection{Presentation of the model and contributions}
+
+The dynamical formulation~\eqref{eq-dynamic} suggests a natural way to relax the equality of mass constraint by introducing a source term $\zeta$ in the continuity equation~\eqref{eq-continuity} as follows
+\[
+	\D_t \rho + \nabla \cdot \M = \zeta, \quad 
+	\rho(0,\cdot) = \rho_0, \quad \rho(1,\cdot) = \rho_1, 
+\]
+and adding a term penalizing $\zeta$ in the Benamou-Brenier functional, in the spirit of metamorphoses introduced in imaging in \cite{Metamorphosis2005}. 
+As for the penalization on $\Z$, we think it is natural to look for a Lagrangian which behaves like a Riemannian metric. Riemannian metrics are natural for interpolation purposes and for applications to imaging. Moreover, the standard notion of curvature is available in a Riemannian setting and provides important information on the underlying geometry, even in the case of infinite dimensional spaces.
+%We think it is natural to require the following two properties for the penalization on $\Z$:
+%\begin{enumerate}
+%	\item \textit{Reparametrization invariance.} As the geometrical aspect of the problem is taken care of by the optimal transport part, it is important for the penalty defined on $\zeta$ not to be sensitive to deformations of the objects.
+%	\item \textit{Relation with  a Riemannian metric.} Riemannian metrics are natural for interpolation purposes and for applications to imaging. Moreover, the standard notion of curvature is available in a Riemannian setting and give important information on the underlying geometry, even in the case of infinite dimensional spaces.
+%	% as they guarantee local unicity of the interpolation.
+%\end{enumerate}
+
+To this end, we will use a direct extension of the Fisher-Rao Riemannian metric. This metric was introduced in 1945 by C.\ R.\ Rao, who applied for the first time differential geometry in the field of statistics~\cite{radhakrishna1945information}. More precisely, at a given probability density $\rho$ and tangent vector $\delta \rho$, the Fisher-Rao metric tensor is $\operatorname{FR}(\rho)(\delta \rho,\delta \rho) = \int_\Omega \frac{(\delta \rho)^2}{\rho} \d x$. Note that $\delta \rho$ is a tangent vector at $\rho$ to the space of probability densities and, therefore, its integral is zero. Usually in statistics, one often deals with parametric densities. Let us consider $\Theta : \R^n  \to \operatorname{Prob}(\Omega)$ be a map from a space of parameters ($\R^n$) to the space of probability densities on $\Omega$. The Fisher-Rao Riemannian metric on the space of parameters is $\Theta^*\operatorname{FR}$, the pull-back of the Riemannian metric $\operatorname{FR}$ by $\Theta$. 
+It is of interest to note that, on the space of probability densities, the Fisher-Rao metric has recently been proven to be the unique reparametrization invariant Riemannian metric, independently in \cite{2012arXiv1207.6736A} and \cite{Bauer:2014aa}.
+Note that other extensions to the space of densities could have been considered by penalizing the total volume variation independently (see for instance \cite{Bauer:2014aa}).
+
+In this article, we will consider the metric tensor $\operatorname{FR}$ on the space of densities (of finite volume) but which do not integrate to $1$, thus removing the constraint $\int_\Omega \delta \rho \, \d x = 0$. We will still call this metric tensor the Fisher-Rao (Riemannian) metric.
+
+The distance induced by this tensor over all positive densities is called the Hellinger distance. More precisely, the name refers to the restriction of this induced distance to the space of probability densities, but analogously to the Fisher-Rao tensor, we decide to use the name for the distance over the full space of positive densities.
+It turns out to be simply the $L^2$ distance between the square roots of the densities.
+Indeed, between two smooth positive densities $\rho_0$ and $\rho_1$, this distance is defined as the minimum of
+\[
+ \int_0^1 \int_{\Om} \frac{\Z(t,x)^2}{\rho(t,x)}\, \d x \d t 
+\]
+over the couples $(\rho,\Z)$ such that $\D_t \rho = \Z$, $\rho(0,\cdot)=\rho_0$ and $\rho(1,\cdot)=\rho_1$. Its geodesics are explicit and given by $\rho(t,x) = \left[ t\sqrt{\rho_1(x)}+(1-t)\sqrt{\rho_0(x)}\right]^2$.
+
+
+
+
+
+In this article, we propose to define a metric tensor on the space of all densities that interpolates between the Fisher-Rao tensor and the Wasserstein tensor. More precisely, we define the new metric tensor as the infimal convolution of the two metric tensors.
+Since this new metric is defined from a Riemannian point of view, we chose the name Fisher-Rao over Hellinger.
+%Note that this metric can be rigorously defined on the space of non-negative measures (see~\thref{def FR}).
+Therefore, this new metric can be written as the minimization of
+\begin{equation}
+ \int_0^1 \left[ \int_{\Om} \frac{|\M(t,x)|^2}{2\rho(t,x)} \d x 
+ + \kappa^2 \int_{\Om} \frac{\Z(t,x)^2}{2\rho(t,x)} \d x\right] \d t
+\label{defsmooth}
+\end{equation}
+under the constraints  
+\begin{equation}
+ 	\D_t \rho + \nabla \cdot \M = \Z,  \quad \rho(0,\cdot)=\rho_0, \quad \rho(1,\cdot)=\rho_1, 
+ \label{continuity with source intro}
+\end{equation}
+where $\kappa>0$ is a parameter. 
+The metric defined by this infimum as well as the minimizers are the central objects of this paper. While formula \eqref{defsmooth} only makes sense for positive smooth densities, we rigorously extend this definition on the space of non-negative measures in Section \ref{sec:theory}. This extension is well behaved since the functional that is minimized is convex and positively 1-homogeneous, two key properties which allow to extend it readily as a lower semi-continuous (l.s.c.) functional over measures~\cite{bouchitte1990new}.
+
+Let us now give a physical interpretation of this model: just as the first term in the functional measures the kinetic energy of the interpolation $\Vert v \Vert^2_{L^2(\rho)} $ where $v$ is the velocity field, the second term measures an energy of growth $\Vert g \Vert^2_{L^2(\rho)} $ where $g$ denotes the rate of growth $\Z/\rho$ which is a scalar field depending on $t$ and $x$. In this way, our problem can be rewritten as the minimization of
+\[
+\frac12 \int_0^1 \left[ \int_{\Omega} |v(t,x)|^2 \rho(t,x) \d x  + \kappa^2 \int_{\Omega} |g(t,x)|^2 \rho(t,x) \d x \right] \d t
+\]
+under the constraints
+\[
+\D_t \rho = g\rho - \nabla \cdot (\rho v) , \quad \rho(0,\cdot) = \rho_0 , \quad  \rho(1,\cdot) = \rho_1\, .
+\]
+This formulation emphasizes the geometric nature of this model. 
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+\subsection{Previous works and connections}
+\label{previous works}
+
+The idea of extending optimal transport to unbalanced measures is far from being new, and was already suggested by Kantorovitch in 1942 (see~\cite{guittet2002extended}) where he allows mass to be thrown away out of the (compact) domain. The geometry of the domain also plays a role in the more recent models of~\cite{figalli2010new} where the boundary of the domain is taken as an infinite reserve of mass. In the past few years, some authors combined generalizations of optimal transport with numerical algorithms in order to tackle practical applications. In~\cite{benamou2003numerical}, the problem is formulated from an optimal control point of view where the \emph{matching} term is the $L^2$ distance between densities. The dynamic problem remains convex and is solved numerically with an augmented Lagrangian algorithm.
+A quadratic penalization is also suggested in~\cite{OTmaasrumpf} but based, this time, on the dynamic formulation, with the model of metamorphoses \cite{Metamorphosis2005} in mind: they use constraint  \eqref{continuity with source intro} and add the term $\iint \Z^2 \d x \d t$ in the Benamou-Brenier functional (along with a viscous dissipation term). 
+From the perspective of computing image interpolations~\cite{lombardi2013eulerian} suggests, instead of penalizing $\Z$ in the dynamic functional, to fix it as a function of $\rho$, according to some \emph{a priori} growth model . Then, if the growth model is well chosen, minimizing the Benamou-Brenier functional gives rise to meaningful interpolations. Note that one of our limit models (see \thref{def gBB}) falls into this category.
+
+
+Now we introduce with more details the classes of distances introduced in \cite{piccoli2014generalized, piccoli2013properties}, along with partial optimal transport distances, as they share some similarities with our approach.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Partial transport and a dynamical formulation.}
+
+Partial optimal transport, introduced in~\cite{caffarelli2010free}, consists in transferring a fixed amount of mass between two measures $\rho_0$ and $\rho_1$ as cheaply as possible.
+Letting $\Gamma_{\leq(\rho_0,\rho_1)}$ be the set of nonnegative measures on $\Om \times \Om$ whose left and right marginals are dominated by $\rho_0$ and $\rho_1$ respectively, this amounts to minimizing \eqref{optimal transport problem} under the constraints $\gamma \in \Gamma_{\leq(\rho_0,\rho_1)}$ and $ \gamma (\Om \times \Om)=m$. 
+What happens is rather intuitive: the plan is divided between an active set, where classical optimal transport is performed, and an inactive set. A theoretical study of this model is done in~\cite{caffarelli2010free} and~\cite{figalli2010optimal}, where, for instance, results on the regularity of the boundary between the active and inactive sets are proved.
+%
+For the quadratic cost, the Lagrangian formulation of this problem reads
+\begin{equation}
+\inf_{\gamma \in \Gamma_{\leq(\rho_0,\rho_1)}} \int_{\Om \times \Om} \left( \vert x-y\vert^2 -\lambda \right) \d\gamma (x,y) \, .
+\label{PTdef}
+\end{equation}
+where $\lambda$ is the Lagrange multiplier associated to the total mass constraint. It is shown in ~\cite[Corollary 2.11]{caffarelli2010free} that there exists an optimal plan $\gamma^*$ for \eqref{PTdef}, which is also a minimizer for the optimal partial transport problem between $\rho_0$ and $\rho_1$ with mass constraint $m=\gamma^*(\Om \times \Om)$. If $\rho_0$ and $\rho_1$ are absolutely continuous, $m$ continuously increases from $0$ to $\min \{ \rho_0(\Om), \rho_1(\Om) \}$ as $\lambda$ increases. It is clear that for optimality, the integrand must be nonpositive $\gamma^*$-a.e.\, which means that no mass is transported over a distance greater than $\sqrt{\lambda}$.
+%where the choice of the Lagrange multiplier $\lambda$ corresponds to choosing the maximum distance on which mass can be transported---which is $\sqrt{\lambda}$ ---and consequently, the amount $m$ of mass being transported. 
+%%%%%%%%%%
+
+Independently, a class of distances interpolating between total variation and the $W_p$ metrics has been introduced by ~\cite{piccoli2014generalized, piccoli2013properties}, taking their inspiration from the optimal control formulation of~\cite{benamou2001mixed}. 
+This distances are defined as the infimum of
+\[
+W_p (\tilde{\rho}_0,\tilde{\rho}_1) + 
+\kappa \cdot
+(  \vert \rho_0 - \tilde{\rho}_0 \vert + \vert \rho_1 - \tilde{\rho}_1 \vert  )
+\]
+over $\tilde{\rho}_0, \tilde{\rho}_1$, non-negative measures on $\Om$, for $p \geq 1$. Now remark that, for fixed $\rho_0$ and $\rho_1$ and up to changing $\kappa$, the previous problem is equivalent to minimizing
+\begin{equation}
+W^p_p (\tilde{\rho}_0,\tilde{\rho}_1) + 
+\kappa^p \cdot
+(  \vert \rho_0 - \tilde{\rho}_0 \vert + \vert \rho_1 - \tilde{\rho}_1 \vert  )
+\label{PRdef}
+\end{equation}
+To our knowledge, the equivalence between this model and partial optimal transport has not been exposed yet although this allows an interesting dynamical formulation for the well studied partial transport problem. This is the object of the following Proposition.
+
+
+\begin{proposition}[Equivalence between partial OT and Piccoli-Rossi distances]
+\thlabel{equivalence TV partial}
+When choosing $2\kappa^2=\lambda$ and $p=2$, problems \eqref{PTdef} and \eqref{PRdef} are equivalent.
+\end{proposition}
+
+\begin{proof}
+First, it is clear that problem \eqref{PRdef} is left unchanged when adding the domination constraints $\tilde{\rho}_0\leq \rho_0$ and $\tilde{\rho}_1\leq \rho_1$ (\cite[Proposition 4]{piccoli2013properties}). This implies that $\vert \rho_i-\tilde{\rho_i}\vert$ is equal to $\rho_i(\Om)-\tilde{\rho_i}(\Om)$ in such a way that \eqref{PRdef} can be rewritten as
+\[
+\inf_{\gamma \in \Gamma_{\leq(\rho_0,\rho_1)}} \int_{\Om \times \Om} \left( \vert x-y\vert^2 \right) \d\gamma (x,y) +
+\kappa^2
+\left(  \rho_0(\Om)+\rho_1(\Om)-2\gamma(\Om\times \Om )\right)
+\]
+This is clearly equivalent to the Lagrangian formulation \eqref{PTdef}.
+\end{proof}
+
+The interest of this result is that it allows a dynamic formulation of the partial optimal transport problem. Indeed, it is shown in~\cite{piccoli2013properties} that minimizing \eqref{PRdef} is equivalent to minimizing the following dynamic functional
+\begin{equation}
+\label{dynamic PT}
+\int_0^1 \left[ \int_{\Om} \frac{|\M(t,x)|^2}{\rho(t,x)} \d x + \kappa^2 \int_{\Om} |\Z(t,x)| \d x \right] \d t
+\end{equation}
+subject to the continuity constraints with a source \eqref{continuity with source intro}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{The case $W_1$.}
+
+When chosing $p=1$ in \eqref{PRdef}, one obtains another partial optimal transport problem, with $|\cdot|$ as a ground metric. This distance was already introduced by~\cite{hanin1992kantorovich} in view of the study of Lipschitz spaces. Without providing a proof, it is quite clear that this distance is also obtained by minimizing
+\begin{equation}
+\int_0^1 \left[ \int_{\Om} |\M(t,x)| \d x + \kappa \int_{\Om} |\Z(t,x)| \d x \right] \d t
+\label{eq: Hanin KR}
+\end{equation}
+over the set set of solutions to \eqref{continuity with source intro}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{A unifying framework: homogeneity and convexity.}
+
+We conclude this bibliographical section by suggesting a unifying framework for a class of generalizations of the $W_p$ metrics. Consider the problem of minimizing
+\[
+ \int_0^1 \left[ \frac1p \int_{\Om} \frac{|\M|^p}{\rho^{p-1}} \d x + \kappa^p \frac1q \int_{\Om} \frac{|\zeta|^q}{\rho^{q-1}}\d x \right] \d t
+\]
+over the set of solutions to  \eqref{continuity with source intro}. The functional penalizes the $p$-th power of the $L^p_{\rho}$ norm of the velocity field and the $q$-th power of the $L^q_{\rho}$ norm of the rate of growth, the latter being reparametrization invariant. Whatever $p,q\geq 1$, the above functional can be rigorously defined as a homogeneous, convex, l.s.c functional on measures (as in Section \ref{sec:theory}). Also, this problem can be seen as the dual problem of maximizing the variation of an energy
+\[
+\int_{\Om} \varphi(1,\cdot) \rho_1 - \int_{\Om} \varphi(0,\cdot) \rho_0
+\]
+over continuously differentiable potentials $\varphi$ on $[0,1]\times \Om$ satisfying
+\[
+\D_t \varphi + \frac{p-1}{p}|\nabla \varphi |^{p/(p-1)} + \kappa^{-p/(q-1)} \frac{q-1}{q}|\varphi|^{q/(q-1)} \leq 0
+\]
+if $p$ and $q$ are greater than $1$. Otherwise, the constraint should be adapted as follows: if $p=1$, remove the second term from the inequality constraint and add the constraint $|\nabla \varphi|\leq 1$. If $q=1$, remove the third term and add the constraint $|\varphi| \leq \kappa$. 
+
+For $p=q=1$, we recover \eqref{eq: Hanin KR} and for $p=2$ and $q=1$, we recover \eqref{dynamic PT}, implying the connections to partial optimal transport arising from our previous remarks. While there is an interesting decoupling effect between the growth term and the transport term when $p$ or $q$ is equal to $1$, one should choose in general $p=q\geq1$ so as to define (the $p$-th power of) a metric. In this article, we focus on the case $p=2,\, q=2$, which is the only Riemannian-like metric of this class, namely our interpolated distance between $W_2$ and Fisher-Rao. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Relation with~\cite{new2015kondratyev}}
+
+After finalizing this paper, we became aware of the recent work of~\cite{new2015kondratyev} which defines and studies the same metric.  These two works were done simultaneously and independently.  The approach of~\cite{new2015kondratyev} is however quite different.
+%
+While both works prove existence of geodesics, the proofs rely on different strategies, and in particular our construction is based on convex analysis.
+%
+The use of tools from convex analysis allows us to prove a useful sufficient condition for the uniqueness of a geodesic.
+% 
+We study the limiting models (generalized transport and Fisher-Rao), through the introduction of the $\kappa$ parameter. 
+% 
+We prove existence and uniqueness of travelling Dirac solutions, while~\cite{new2015kondratyev} provides an informal discussion. 
+% 
+Lastly, we detail a numerical scheme and show applications to image interpolation. 
+% 
+Let us stress that~\cite{new2015kondratyev} provides many other contributions (such as a Riemannian calculus, topological properties and the definition of gradient flows) that we do not cover here. 
+
+% As for the study of geodesics between Diracs, we do it rigorously in our article and it is a formal discussion in~\cite{new2015kondratyev}.
+
+
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%
+\subsection{Notations and preliminaries}
+
+\paragraph{Space of measures}
+In the sequel, we consider a compact convex spatial domain $\Om \subset \R^d$ with $d \in \mathbb{N}^*$. For $X$ being either $\Om$ or $[0,1]\times \Om$, the set of Borel measures (resp. nonnegative Borel measures) on $X$ is denoted by $\mathcal{M}(X)$ (resp. $\mathcal{M}_+(X)$). Endowed with the total variation norm
+\[
+|\mu|(X) \defeq \sup \left\{ \int_{X} \varphi\, \d \mu : \varphi \in C(X),\, \vert \varphi \vert_{\infty} =1 \right\} ,
+\]
+$\mathcal{M}(X)$ is a Banach space. We identify this space with the topological dual of the space of real valued continuous functions $C(X)$ endowed with the $\sup$ norm topology. Another useful topology on $\mathcal{M}(X)$ is the weak* topology arising from this duality: a sequence of measures $(\mu_n)_{n\in \N}$ weak* converges towards $\mu \in \mathcal{M}(X)$ if and only if for all $\varphi \in C(X)$, $\lim_{n\rightarrow + \infty}\int_{X} \varphi \d\mu_n = \int_{X} \varphi \d\mu$. By Prokhorov's Theorem, any bounded subset of $\mathcal{M}(X)$ (for the total variation) is relatively sequentially compact for the weak* topology.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Convex analysis}
+Let $E$ and $E^*$ be \emph{topologically paired} vector spaces i.e.\ vector spaces assigned with locally convex Hausdorff topology such that all continuous linear functionals on each space can be identified with the elements of the other (e.g.\ $C(X)$ and $\mathcal{M}(X)$ with the strong and weak* topology respectively). The pairing between those spaces is the bilinear form $\langle \cdot , \cdot \rangle : E \times E^* \to \mathbb{R}$. The convex conjugate of a function $f:E\to \mathbb{R} \cup \{+\infty\}$ is defined for each $y\in E^*$ by
+\[
+f^*(y) \defeq \sup_{x\in E}\; \langle x, y \rangle - f(x) \, .
+\]
+The subdifferential operator is defined at a point $x\in E$ as
+\[
+\partial f (x) \defeq \left\{ y \in E^* ; f(x')-f(x) \geq \langle y, x'-x \rangle \text{ for all $x'\in E$}\right\}
+\]
+and is empty if $f(x)=+\infty$. Those definitions admit their natural counterparts for functions defined on $E^*$.
+
+\begin{theorem}[Fenchel-Rockafellar \cite{rockafellar1967duality}]
+\label{thm_FR}
+Let $(E,E^*)$ and $(F,F^*)$ be two couples of topologically paired spaces. Let $A : E \to F$ be a continuous linear operator and $A^*:F^* \to E^*$ its adjoint. Let $f$ and $g$ be l.s.c.\ and proper convex functions defined on $E$ and $F$ respectively, with values in $\mathbb{R}\cup \{+\infty\}$. If there exists $x\in E$ such that $f(x)$ is finite and $g$ is continuous at $Ax$, then
+\[
+\sup_{x \in E} - f(-x) - g(Ax) = \min_{y^* \in F^*} f^*(A^*y^*) + g^*(y^*)
+\]
+and the $\min$ is attained. Moreover, there exists a maximizer $x\in E$ if and only if there exists $y^*\in F^*$ satisfying $Ax \in \partial g^*(y^*)$ and $A^*y^* \in \partial f(-x)$.
+\end{theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Other notations \\}
+
+\indent$\bullet$ $\mu \ll \nu$ means that the measure $\mu$ is absolutely continuous w.r.t. $\nu$;
+\\
+\indent$\bullet$ for a (possibly vector valued) measure $\mu$, $|\mu| \in \mathcal{M}_+(X)$ is its variation;
+\\
+\indent$\bullet$ for a positively 1-homogeneous (in short : homogeneous) function $f$, we denote by $f(\mu)$ the measure defined by $f(\mu)(A) = \int_A f(\d\mu/\d\lambda) \d\lambda$ for any measurable set $A$, with $\lambda$ satisfying $|\mu| \ll \lambda$. The homogeneity assumption guarantees that this definition does not depend on $\lambda$;
+\\
+\indent$\bullet$ $T_{\#} \mu$ is the image measure of $\mu$ through the Borel map $T: X_1 \to X_2$, also called the pushforward measure. It is given by $(T_{\#} \mu) (A_2) = \mu(T^{-1}(A_2))$ for any Borel subset of $X_2$;
+\\
+\indent$\bullet$ $\delta_x$ is a Dirac measure of mass $1$ located at the point $x$;
+\\
+\indent$\bullet$ $\iota_{\mathcal{C}}$ is the (convex) indicator function of a convex set $\mathcal{C}$ which takes the value $0$ on $\mathcal{C}$ and $+\infty$ everywhere else;
+\\
+%\indent$\bullet$ if $f$ is a convex function on a Banach space $E$ with values in $]-\infty, + \infty]$, $f^*$ is its dual function in the sense of Fenchel-Legendre duality, i.e.\ for $y$ in the topological dual space $E'$, $f^*(y) = \sup_{x\in E} \langle x, y \rangle - f(x) $. The subdifferential of $f$ is denoted $\D f$ and is the set valued map $x \mapsto \{ y\in E' : \forall x' \in E, \, f(x')-f(x) \geq \langle y, x'-x \rangle \}$.
+%\\
+%\indent$\bullet$ Notice that the duality between $C(X)$ and $\mathcal{M}(X)$ is not reflexive : we have $C(X) \neq \mathcal{M}(X)'$. Then, when we write $x \in \partial g $ for $x\in C(X)$ and $g : \mathcal{M}(X) \mapsto \R$, we identify an element $x \in  C(X)$ with its image in $ C(X)''$ by the canonical injection. We write $\partial^c g$ the intersection of the subdifferential of $g$ with $ C(X)$. 
+\indent$\bullet$ when $\mu$ is a measure on $[0,1] \times \Om$ whose time marginal is absolutely continuous with respect to the Lebesgue measure on $[0,1]$, we denote by $(\mu_t)_{t\in[0,1]}$ the ($\d t$-a.e.\ uniquely determined) family of measures satisfying $\mu = \int_0^1 (\mu_t \otimes \delta_t ) \d t$, where $\otimes$ denotes the product of measures. This is a consequence of the disintegration Theorem (see for instance ~\cite[Theorem 5.3.1]{ambrosio2006gradient}) which we frequently use without explicitly mentioning it. In order to alleviate notations, we replace the integral expression of $\mu$ by $\mu = \mu_t \otimes \d t$.
+
+%%%%%%%%%%%%%

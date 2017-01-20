@@ -1,0 +1,37 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2016.4.4)  21 JUN 2016 12:47
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**mystyle.sty
+(./mystyle.sty
+LaTeX2e <2015/01/01>
+Babel <3.9l> and hyphenation patterns for 79 languages loaded.
+
+./mystyle.sty:6: LaTeX Error: \usepackage before \documentclass.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.6 \usepackage{
+                amsmath}
+? 
+./mystyle.sty:6: Emergency stop.
+ ...                                              
+                                                  
+l.6 \usepackage{
+                amsmath}
+\usepackage may only appear in the document preamble, i.e.,
+between \documentclass and \begin{document}.
+
+ 
+Here is how much of TeX's memory you used:
+ 7 strings out of 493089
+ 273 string characters out of 6134843
+ 53199 words of memory out of 5000000
+ 3590 multiletter control sequences out of 15000+600000
+ 3640 words of font info for 14 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 5i,0n,5p,62b,14s stack positions out of 5000i,500n,10000p,200000b,80000s
+./mystyle.sty:6:  ==> Fatal error occurred, no output PDF file produced!

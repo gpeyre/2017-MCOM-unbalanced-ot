@@ -1,0 +1,340 @@
+\providecommand{\bysame}{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+\providecommand{\MR}{\relax\ifhmode\unskip\space\fi MR }
+% \MRhref is called by the amsart/book/proc definition of \MR.
+\providecommand{\MRhref}[2]{%
+  \href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}
+}
+\providecommand{\href}[2]{#2}
+\begin{thebibliography}{10}
+
+\bibitem{agueh2011barycenters}
+M.~Agueh and G.~Carlier, \emph{Barycenters in the {Wasserstein} space}, SIAM
+  Journal on Mathematical Analysis \textbf{43} (2011), no.~2, 904--924.
+
+\bibitem{agueh2015optimal}
+M.~Agueh, B.~Khouider, and L-P. Saumier, \emph{Optimal transport for particle
+  image velocimetry}, Communications in Mathematical Sciences \textbf{13}
+  (2015), no.~1, 269--296.
+
+\bibitem{ambrosio2006gradient}
+L.~Ambrosio, N.~Gigli, and G.~Savar{\'e}, \emph{Gradient flows: in metric
+  spaces and in the space of probability measures}, Springer Science \&
+  Business Media, 2008.
+
+\bibitem{AurenhammerHA98}
+F.~Aurenhammer, F.~Hoffmann, and B.~Aronov, \emph{Minkowski-type theorems and
+  least-squares clustering}, Algorithmica \textbf{20} (1998), no.~1, 61--76.
+
+\bibitem{bauschke-lewis}
+H.~H. Bauschke and A.~S. Lewis, \emph{Dykstra's algorithm with {B}regman
+  projections: a convergence proof}, Optimization \textbf{48} (2000), no.~4,
+  409--427.
+
+\bibitem{beck2015convergence}
+A.~Beck, \emph{On the convergence of alternating minimization for convex
+  programming with applications to iteratively reweighted least squares and
+  decomposition schemes}, SIAM Journal on Optimization \textbf{25} (2015),
+  no.~1, 185--209.
+
+\bibitem{benamou2000computational}
+J-D. Benamou and Y.~Brenier, \emph{A computational fluid mechanics solution to
+  the {M}onge-{K}antorovich mass transfer problem}, Numerische Mathematik
+  \textbf{84} (2000), no.~3, 375--393.
+
+\bibitem{2015-benamou-cisc}
+J-D. Benamou, G.~Carlier, M.~Cuturi, L.~Nenna, and {G. Peyr{\'e}},
+  \emph{Iterative {Bregman} projections for regularized transportation
+  problems}, SIAM Journal on Scientific Computing \textbf{37} (2015), no.~2,
+  A1111--A1138.
+
+\bibitem{JDB-JKO}
+J-D. Benamou, G.~Carlier, Q.~M\'erigot, and E.~Oudet, \emph{Discretization of
+  functionals involving the {Monge-Amp\`ere} operator}, Preprint
+  arXiv:1408.4536 (2014).
+
+\bibitem{Bertsekas-OptimalTransport-1989}
+D.~Bertsekas and D.~Castanon, \emph{The auction algorithm for the
+  transportation problem}, Annals of Operations Research \textbf{20} (1989),
+  67--96.
+
+\bibitem{Bonneel-displacement}
+N.~Bonneel, M.~{van de Panne}, S.~Paris, and W.~Heidrich, \emph{Displacement
+  interpolation using {Lagrangian} mass transport}, ACM Transactions on
+  Graphics (SIGGRAPH ASIA'11) \textbf{30} (2011), no.~6.
+
+\bibitem{bregman1967relaxation}
+L.~M. Bregman, \emph{The relaxation method of finding the common point of
+  convex sets and its application to the solution of problems in convex
+  programming}, USSR computational mathematics and mathematical physics
+  \textbf{7} (1967), no.~3, 200--217.
+
+\bibitem{Brenier91}
+Y.~Brenier, \emph{Polar factorization and monotone rearrangement of
+  vector-valued functions}, Comm. Pure Appl. Math. \textbf{44} (1991), no.~4,
+  375--417.
+
+\bibitem{burger2010mixed}
+M.~Burger, J.~A. Carrillo, and M-T. Wolfram, \emph{A mixed finite element
+  method for nonlinear diffusion equations}, Kinetic and Related Models
+  \textbf{3} (2010), no.~1, 59--83.
+
+\bibitem{Burger-JKO}
+M.~Burger, M.~Franek, and C-B. Sch\"onlieb, \emph{Regularised regression and
+  density estimation based on optimal transport}, Appl. Math. Res. Express
+  \textbf{2} (2012), 209--253.
+
+\bibitem{Burkard09}
+R.~Burkard, M.~Dell'Amico, and S.~Martello, \emph{Assignment problems}, Society
+  for Industrial and Applied Mathematics, Philadelphia, PA, USA, 2009.
+
+\bibitem{caffarelli2010free}
+L.~A. Caffarelli and R.~J. McCann, \emph{Free boundaries in optimal transport
+  and monge-ampere obstacle problems}, Annals of mathematics (2010), 673--730.
+
+\bibitem{2015-carlier-convergence}
+G.~Carlier, V.~Duval, {G. Peyr{\'e}}, and B.~Schmitzer, \emph{Convergence of
+  entropic schemes for optimal transport and gradient flows}, Preprint
+  01235146, HAL, 2015.
+
+\bibitem{CarrilloFiniteVolume}
+J.~A. Carrillo, A.~Chertock, and Y.~Huang, \emph{A finite-volume method for
+  nonlinear nonlocal equations with a gradient flow structure}, Communications
+  in Computational Physics \textbf{17} (2015), 233--258.
+
+\bibitem{CensorReich}
+Y.~Censor and S.~Reich, \emph{The {Dykstra} algorithm with {Bregman}
+  projections}, Communications in Applied Analysis \textbf{2} (1998), 407--419.
+
+\bibitem{ChambollePock-div}
+A.~Chambolle and T.~Pock, \emph{On the ergodic convergence rates of a
+  first-order primal-dual algorithm}, preprint (2014).
+
+\bibitem{2015-chizat-unbalanced}
+L.~Chizat, G.~Peyr{\'e}, B.~Schmitzer, and F-X. Vialard, \emph{Unbalanced
+  optimal transport: Geometry and kantorovich formulation}, Preprint
+  1508.05216, Arxiv, 2015.
+
+\bibitem{2015-chizat-interpolating}
+L.~Chizat, B.~Schmitzer, G.~Peyr{\'e}, and F-X. Vialard, \emph{An interpolating
+  distance between optimal transport and {Fischer-Rao}}, Preprint 1506.06430,
+  Arxiv, 2015.
+
+\bibitem{CuturiSinkhorn}
+M.~Cuturi, \emph{{Sinkhorn} distances: Lightspeed computation of optimal
+  transport}, Advances in Neural Information Processing Systems (NIPS) 26,
+  2013, pp.~2292--2300.
+
+\bibitem{CuturiBarycenter}
+M.~Cuturi and A.~Doucet, \emph{Fast computation of {Wasserstein} barycenters},
+  Proceedings of ICML, vol.~32, 2014.
+
+\bibitem{delon2006movie}
+J.~Delon, \emph{Movie and video scale-time equalization application to flicker
+  reduction}, IEEE Transactions on Image Processing \textbf{15} (2006), no.~1,
+  241--248.
+
+\bibitem{DemingStephanIPFP}
+W.~E. Deming and F.~F. Stephan, \emph{On a least squares adjustment of a
+  sampled frequency table when the expected marginal totals are known}, Annals
+  Mathematical Statistics \textbf{11} (1940), no.~4, 427--444.
+
+\bibitem{Dykstra83}
+R.~L. Dykstra, \emph{An algorithm for restricted least squares regression}, J.
+  Amer. Stat. \textbf{78} (1983), no.~384, 839--842.
+
+\bibitem{EcksteinProxPoint}
+J.~Eckstein, \emph{Nonlinear proximal point algorithms using {Bregman}
+  functions, with applications to convex programming}, Mathematics of
+  Operations Research \textbf{18} (1993), no.~1, 202--226.
+
+\bibitem{figalli2010optimal}
+A.~Figalli, \emph{The optimal partial transport problem}, Archive for rational
+  mechanics and analysis \textbf{195} (2010), no.~2, 533--560.
+
+\bibitem{franklin1989scaling}
+J.~Franklin and J.~Lorenz, \emph{On the scaling of multidimensional matrices},
+  Linear Algebra and its applications \textbf{114} (1989), 717--735.
+
+\bibitem{FrognerNIPS}
+C.~Frogner, C.~Zhang, H.~Mobahi, M.~Araya-Polo, and T.~Poggio, \emph{Learning
+  with a {Wasserstein} loss}, Preprint 1506.05439, Arxiv, 2015.
+
+\bibitem{GallouetMonsaingeon2015}
+T.~O. Gallouet and L.~Monsaingeon, \emph{A {JKO} splitting scheme for
+  {Kantorovitch-Fisher-Rao} gradient flows}, Preprint arXiv (2015).
+
+\bibitem{hanin1992kantorovich}
+L.~G. Hanin, \emph{{K}antorovich-{R}ubinstein norm and its application in the
+  theory of {L}ipschitz spaces}, Proceedings of the American Mathematical
+  Society \textbf{115} (1992), no.~2, 345--352.
+
+\bibitem{jordan1998variational}
+R.~Jordan, D.~Kinderlehrer, and O.~Otto, \emph{The variational formulation of
+  the {Fokker}-{Planck} equation}, SIAM journal on mathematical analysis
+  \textbf{29} (1998), no.~1, 1--17.
+
+\bibitem{Kantorovich42}
+L.~Kantorovich, \emph{On the transfer of masses (in russian)}, Doklady Akademii
+  Nauk \textbf{37} (1942), no.~2, 227--229.
+
+\bibitem{kondratyev2015}
+S.~Kondratyev, L.~Monsaingeon, and D.~Vorotnikov, \emph{A new optimal transport
+  distance on the space of finite {R}adon measures}, Tech. report, Pre-print,
+  2015.
+
+\bibitem{YuilleInvisibleHand1994}
+J.J. Kosowsky and A.L. Yuille, \emph{The invisible hand algorithm: Solving the
+  assignment problem with statistical physics}, Neural Networks \textbf{7}
+  (1994), no.~3, 477--490.
+
+\bibitem{leonard2012schrodinger}
+C.~L{\'e}onard, \emph{From the schr{\"o}dinger problem to the
+  monge--kantorovich problem}, Journal of Functional Analysis \textbf{262}
+  (2012), no.~4, 1879--1920.
+
+\bibitem{LeonardSchroedinger}
+\bysame, \emph{A survey of the {Schr\"odinger} problem and some of its
+  connections with optimal transport}, Discrete Contin. Dyn. Syst. A
+  \textbf{34} (2014), no.~4, 1533--1574.
+
+\bibitem{Levy3d}
+B.~Levy, \emph{A numerical algorithm for {$L^2$} semi-discrete optimal
+  transport in 3d}, M2AN, to appear (2015).
+
+\bibitem{LieroMielkeSavareLong}
+M.~{Liero}, A.~{Mielke}, and G.~{Savar{\'e}}, \emph{Optimal entropy-transport
+  problems and a new {Hellinger-Kantorovich} distance between positive
+  measures}, ArXiv e-prints (2015).
+
+\bibitem{LieroMielkeSavareShort}
+\bysame, \emph{Optimal transport in competition with reaction: the
+  {Hellinger-Kantorovich} distance and geodesic curves}, ArXiv e-prints (2015).
+
+\bibitem{maury2010macroscopic}
+B.~Maury, A.~Roudneff-Chupin, and F.~Santambrogio, \emph{A macroscopic crowd
+  motion model of gradient flow type}, Mathematical Models and Methods in
+  Applied Sciences \textbf{20} (2010), no.~10, 1787--1821.
+
+\bibitem{roudneff2011handling}
+B.~Maury, A.~Roudneff-Chupin, F.~Santambrogio, and J.~Venel, \emph{Handling
+  congestion in crowd motion models}, Journal: Net. Het. Media \textbf{6}
+  (2011), no.~3, 485--519.
+
+\bibitem{Merigot11}
+Q.~M{\'e}rigot, \emph{A multiscale approach to optimal transport}, Comput.
+  Graph. Forum \textbf{30} (2011), no.~5, 1583--1592.
+
+\bibitem{Monge1781}
+G.~Monge, \emph{M{\'e}moire sur la th{\'e}orie des d{\'e}blais et des
+  remblais}, Histoire de l'Acad{\'e}mie Royale des Sciences (1781), 666--704.
+
+\bibitem{NguyenFB2015}
+Q.~V. Nguyen, \emph{Forward-backward splitting with {Bregman} distances},
+  arXiv:1505.05198 (2015).
+
+\bibitem{otto2001geometry}
+F.~Otto, \emph{The geometry of dissipative evolution equations: the porous
+  medium equation}, Communications in partial differential equations
+  \textbf{26} (2001), no.~1-2, 101--174.
+
+\bibitem{2014-papadakis-siims}
+N.~Papadakis, {G. Peyr{\'e}}, and E.~Oudet, \emph{Optimal transport with
+  proximal splitting}, SIAM Journal on Imaging Sciences \textbf{7} (2014),
+  no.~1, 212--238.
+
+\bibitem{PerthameTumor}
+B.~Perthame, F.~Quiros, and J.~L. Vazquez, \emph{The {Hele-Shaw} asymptotics
+  for mechanical models of tumor growth}, Archive for Rational Mechanics and
+  Analysis \textbf{212} (2014), no.~1, 93--127 (English).
+
+\bibitem{2015-Peyre-siims}
+G.~Peyr{\'e}, \emph{Entropic approximation of {Wasserstein} gradient flows},
+  SIAM Journal on Imaging Sciences \textbf{8} (2015), no.~4, 2323--2351.
+
+\bibitem{piccoli2014generalized}
+B.~Piccoli and F.~Rossi, \emph{Generalized {W}asserstein distance and its
+  application to transport equations with source}, Archive for Rational
+  Mechanics and Analysis \textbf{211} (2014), no.~1, 335--358.
+
+\bibitem{pitie2007automated}
+F.~Piti{\'e}, A.C. Kokaram, and R.~Dahyot, \emph{Automated colour grading using
+  colour distribution transfer}, Computer Vision and Image Understanding
+  \textbf{107} (2007), no.~1, 123--137.
+
+\bibitem{RabinPapadakisSSVM}
+J.~Rabin and N.~Papadakis, \emph{Convex color image segmentation with optimal
+  transport distances}, Proc. SSVM'15, 2015.
+
+\bibitem{rockafellar1967duality}
+R.T. Rockafellar, \emph{Duality and stability in extremum problems involving
+  convex functions}, Pacific Journal of Mathematics \textbf{21} (1967), no.~1,
+  167--187.
+
+\bibitem{rockafellar1968integrals}
+\bysame, \emph{Integrals which are convex functionals}, Pacific journal of
+  mathematics \textbf{24} (1968), no.~3, 525--539.
+
+\bibitem{rockafellar1976integral}
+\bysame, \emph{Integral functionals, normal integrands and measurable
+  selections}, Nonlinear operators and the calculus of variations, Springer,
+  1976, pp.~157--207.
+
+\bibitem{rockafellar2009variational}
+R.T. Rockafellar and R.~J-B. Wets, \emph{Variational analysis}, vol. 317,
+  Springer Science \& Business Media, 2009.
+
+\bibitem{RubTomGui00}
+Y.~Rubner, C.~Tomasi, and L.J. Guibas, \emph{The earth mover's distance as a
+  metric for image retrieval}, International Journal of Computer Vision
+  \textbf{40} (2000), no.~2.
+
+\bibitem{SantambrogioBook}
+F.~Santambrogio, \emph{Optimal transport for applied mathematicians},
+  Birkhauser, 2015.
+
+\bibitem{SchmitzerShortCuts2015}
+B.~Schmitzer, \emph{A sparse multiscale algorithm for dense optimal transport},
+  J Math Imaging Vis \textbf{56} (2016), no.~2, 238--259.
+
+\bibitem{SchmitzerScaling2016}
+\bysame, \emph{Stabilized sparse scaling algorithms for entropy regularized
+  transport problems}, https://arxiv.org/abs/1610.06519, 2016.
+
+\bibitem{Schroedinger31}
+E.~Schr\"odinger, \emph{{\"U}ber die {U}mkehrung der {N}aturgesetze},
+  Sitzungsberichte Preuss. Akad. Wiss. Berlin. Phys. Math. \textbf{144} (1931),
+  144--153.
+
+\bibitem{Sinkhorn64}
+R.~Sinkhorn, \emph{A relationship between arbitrary positive matrices and
+  doubly stochastic matrices}, Ann. Math. Statist. \textbf{35} (1964),
+  876--879.
+
+\bibitem{2015-solomon-siggraph}
+J.~Solomon, F.~de~Goes, {G. Peyr{\'e}}, M.~Cuturi, A.~Butscher, A.~Nguyen,
+  T.~Du, and L.~Guibas, \emph{Convolutional {Wasserstein} distances: Efficient
+  optimal transportation on geometric domains}, ACM Transactions on Graphics
+  (Proc. SIGGRAPH 2015) \textbf{34} (2015), no.~4, 66:1--66:11.
+
+\bibitem{Solomon-ICML}
+J.~Solomon, R.M. Rustamov, L.~Guibas, and A.~Butscher, \emph{{Wasserstein}
+  propagation for semi-supervised learning}, Proc. ICML 2014, 2014.
+
+\bibitem{thompson1963certain}
+A.C. Thompson, \emph{On certain contraction mappings in a partially ordered
+  vector space}, Proceedings of the American Mathematical Society \textbf{14}
+  (1963), no.~3, 438--443.
+
+\bibitem{cedric2003topics}
+C.~Villani, \emph{Topics in optimal transportation}, American Mathematical
+  Soc., 2003.
+
+\bibitem{Villani-OptimalTransport-09}
+C.~Villani, \emph{Optimal transport: Old and new}, Grundlehren der
+  mathematischen Wissenschaften, vol. 338, Springer, 2009.
+
+\bibitem{WangBanerjee-ADMM}
+H.~Wang and A.~Banerjee, \emph{{Bregman} alternating direction method of
+  multipliers}, preprint arXiv:1306.3203 (2014).
+
+\end{thebibliography}

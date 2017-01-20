@@ -1,0 +1,406 @@
+% !TEX root = ../DynamicToStatic.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%STATIC PROBLEM
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Static Kantorovich Formulations}
+\label{sec : general static problem}
+
+Inspired by the Monge formulation of Section \ref{Monge} which emphasizes the importance of the distance on the space $\Omega \times \R^*_+$, we now propose a general Kantorovich problem in Definition \ref{def:extended kantorovich} and its dual formulation in Theorem \ref{th: duality}. It includes as a particular case the relaxation of the Monge formulation. This Kantorovich formulation does not need the cost on the product space to be related to a distance, yet, when it is the case and under mild assumptions described below, the Kantorovich formulation defines a distance on $\mathcal{M}_+(X)$ as shown in Theorem \ref{th:metric}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Definitions}
+In what follows, $\Omega$ is a compact set in $\R^d$, $x$ typically refers to a point in $\Omega$ and $m$ to a mass. We first require some properties on the cost function.
+
+
+\begin{definition}[Cost function]
+	\label{def:CostFunction}
+	In the sequel, a \emph{cost function} is a function 
+	\[
+		c : 
+		\begin{array}{lcl}
+			(\Omega \times [0, + \infty[) ^2 &\to & [0,+ \infty] \\
+			(x_0,m_0),(x_1,m_1) &\mapsto &c(x_0,m_0,x_1,m_1)
+		\end{array}
+	\]
+which is l.s.c.\ in all its arguments and jointly sublinear in $(m_0, m_1)$.
+\end{definition}
+
+A sublinear function is by definition a positively 1-homogeneous and subadditive function, or equivalently, a positively 1-homogeneous and convex function. The joint sub-additivity of $c$ in $(m_0,m_1)$ guarantees that it is always better to send mass from one point to another in one single chunk. In order to allow for variations of mass, we need to adapt the constraint set of standard optimal transport by introducing two ``semi-couplings'', which are relaxed couplings with only one marginal being fixed. 
+
+\begin{definition}[Semi-couplings]
+For two marginals $\rho_0, \rho_1 \in \mathcal{M}_+(\Omega)$, the set of semi-couplings is
+	\begin{align}
+		\Gamma(\rho_0,\rho_1) \eqdef \left\{
+			(\gamma_0,\gamma_1) \in \big(\mathcal{M}_+(\Omega^2)\big)^2 \colon
+			\pfwd{(\Proj_0)} \gamma_0 = \rho_0,\, \pfwd{(\Proj_1)} \gamma_1 = \rho_1
+			\right\}.
+	\end{align}
+\end{definition}
+
+Informally, $\gamma_0(x,y)$ represents the amount of mass that is taken from $\rho_0$ at point $x$ and is then transported to an (possibly different, to account for creation/destruction) amount of mass $\gamma_1(x,y)$ at point $y$ of $\rho_1$. These semi-couplings allow us to formulate a novel static Kantorovich formulation of unbalanced optimal transport as follows. 
+
+\begin{definition}[Unbalanced Kantorovich Problem]
+	\label{def:extended kantorovich}
+	For a cost function $c$ we introduce the functional
+	\begin{align}
+		J_K(\gamma_0,\gamma_1) \eqdef \int_{\Omega^2} c \left( x,\dens{ \gamma_0}{ \gamma},y,\dens{ \gamma_1}{ \gamma}\right) \d \gamma(x,y)\, ,
+	\end{align}
+where $\gamma \in \mathcal{M}_+(\Omega^2)$ is any measure such that $\gamma_0, \gamma_1 \ll \gamma$. This functional is well-defined since $c$ is jointly 1-homogeneous w.r.t.\ the mass variables (see Definition \ref{def:CostFunction}).
+	The corresponding optimization problem is
+	\begin{align}
+	\label{eq: static problem}
+	%\tag{Q_{\mathcal{M}}}
+		C_K(\rho_0,\rho_1)  \eqdef \inf_{(\gamma_0,\gamma_1) \in \Gamma(\rho_0,\rho_1)}
+			J_K(\gamma_0,\gamma_1)\,.
+	\end{align}
+\end{definition}
+
+
+\begin{proposition}
+	\label{prop:KMinimizers}
+	If $c$ is a \emph{cost function} then a minimizer for $C_K(\rho_0,\rho_1)$ exists.
+\end{proposition}
+\begin{proof}
+Let $\hat{\Omega}$ be an open set such that $\Omega \subset \hat{\Omega}$ and extend $c$ as $+\infty$ whenever $x_i \in \hat{\Omega}\setminus \Omega$. Then by virtue of Reshetnyak lower semicontinuity \cite[Theorem 2.38]{ambrosio2000functions}, $J_K$ is weakly* l.s.c. on $\mathcal{M}(\hat{\Omega}^2)$ and \emph{a fortiori} on $\mathcal{M}(\Omega^2)$. Since $\Omega$ is compact and the marginals $\rho_0,\rho_1$ have finite mass, $\Gamma(\rho_0,\rho_1)$ is tight and thus weakly* pre-compact. It is also closed so $\Gamma(\rho_0,\rho_1)$ is weakly* compact and any minimizing sequence admits a cluster point which is a minimizer (the minimum is not assumed to be finite).
+\end{proof}
+
+\begin{example}
+
+	Standard optimal transport problems with a nonnegative, l.s.c.\ cost $\tilde{c}$ are retrieved as particular cases, by taking 
+	\begin{align*}
+		c(x_0,m_0,x_1,m_1) & = 
+		\begin{cases}
+			m_0 \cdot \tilde{c}(x,y)& \text{if } m_0 = m_1\,, \\
+			+ \infty & \text{otherwise.}
+		\end{cases}
+	\end{align*}
+	\end{example}
+
+Other examples, in particular the $\WF$-metric, are studied in more detail in Section \ref{sec:Examples}.
+
+%\begin{example}
+%	The interpolation between optimal transport and the Fisher-Rao metric is obtained \todo{at this stage, isn't it to early to state this? Otherwise, explain what ``obtained'' means}  by choosing the cost function \eqref{eq:GeneralizedCost:OTFR}.In this case, the optimization problem~\eqref{eq: static problem} is a conic program involving quadratic cones, and if the measures $(\rho_0,\rho_1)$ are finite sums of Diracs, it can be solved using interior point solvers~\cite{nesterov1994interior}. 
+%\end{example}
+
+%\begin{example}
+%One can recover the ``flat metric'' (a metric between total variation and $W_1$, see the definition of $W^{1,1}_1$ in \cite{piccoli2013properties}), by taking
+%	\begin{align*}
+%		c(x_0,m_0,x_1,m_1) & = 
+%		\begin{cases}
+%			|x_0-x_1|\min (m_0,m_1) + |m_1-m_0|& \text{if $|x_0-x_1|<2$}\,, \\
+%			m_0 + m_1 & \text{otherwise.}
+%		\end{cases}
+%	\end{align*}
+%\end{example}
+%
+%More examples will be studied with more details in the last section of this article.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% PROPERTIES
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Properties}
+
+
+%%%%%%% METRIC PROPERTY
+A central property of optimal transport is that it can be used to lift a metric from the base space $\Omega$ to the space of probability measures over $\Omega$ (cf.\ \cite[Chapter 6]{villani2009oldnew}). We now show that this extends to the unbalanced framework.
+\todo{extended metric?}
+\begin{theorem}[Metric]
+\label{th:metric}
+Let $c$ be a cost function such that, for some $p \in [1, + \infty[$ 
+\begin{align}
+	\label{eq:CMetric}
+	(x_0,m_0), (x_1,m_1) \mapsto c(x_0,m_0,x_1,m_1)^{1/p}
+\end{align}
+is a metric on  $\Cone(\Omega)$. Then $C_K(\cdot,\cdot)^{1/p}$ defines a metric on $\mathcal{M}_+(\Omega)$.
+\end{theorem}
+\begin{remark}
+The space $\Cone(\Omega)$ is the space $\Omega \times [0,+\infty[$, where all points with zero mass $\Omega \times \{0\}$ are identified (see Definition~\ref{def:Cone}). Thus, the assumption of Theorem \ref{th:metric} implies in particular that for all $x_2\in \Omega$, $m\geq0$, 
+$c(x_1, 0, x_2, m)$ is independant of $x_1\in \Omega$.
+
+%Note also that the metric $C_K(\cdot,\cdot)^{1/p}$ may take the value $+ \infty$ if $c$ does so and the denomination ``pseudo-metric'' is sometimes preferred for such objects.
+\end{remark}
+%%%%%%%%%%%%%%%
+
+\begin{proof}
+First, symmetry and non-negativity are inherited from $c$. Moreover, 
+\begin{multline*}
+[ C_K(\gamma_0,\gamma_1) = 0 ]
+\Leftrightarrow \\
+[ \exists (\gamma_0, \gamma_1) \in \Gamma(\rho_0, \rho_1) : (\gamma_0= \gamma_1) \tn{ and }  (x=y \tn{ $\gamma_0$-a.e.}) ] \\
+\Leftrightarrow
+[ \rho_0 = \rho_1 ].
+\end{multline*}
+%And thus $C_K(\cdot,\cdot)^{1/p}=0$ if and only if $\rho_0=\rho_1$. 
+
+\newcommand{\mudens}[1]{{\textstyle{\frac{#1}{\mu}}}}
+\newcommand{\mudisint}[1]{{(#1|\mu)}}
+It remains to show the triangle inequality. Fix $\rho_0$, $\rho_1$, $\rho_2 \in \mathcal{M}_+(\Omega)$. Take two pairs of minimizers for \eqref{eq: static problem} 
+	\begin{align*}
+		(\gamma_0^{01},\gamma_1^{01}) & \in \Gamma(\rho_0,\rho_1)\,, &
+		(\gamma_0^{12},\gamma_1^{12}) & \in \Gamma(\rho_1,\rho_2)\,, 		
+	\end{align*}
+and let $\mu \in \mathcal{M}_+(\Omega)$ be such that $\pfwd{(\Proj_1)} (\gamma_0^{01},\gamma_1^{01}) \ll \mu$ and $\pfwd{(\Proj_0)} (\gamma_0^{12},\gamma_1^{12}) \ll \mu $. Denote by $\mudisint{\gamma_i^{01}}(x|y)$ the disintegration of $\gamma_i^{01}$ along the second factor w.r.t.\ $\mu$. More precisely, for all $y\in \Omega$, $\mudisint{\gamma_i^{01}}(\cdot|y)\in \mathcal{M}_+(\Omega)$ and it holds, for all $f$ measurable on $\Omega^2$, 
+\begin{align*}
+	\int_{\Omega^2} f\,\d\gamma_i^{01} & = \int_{\Omega} \left( \int_{\Omega} f(x,y)\,\d\mudisint{\gamma_i^{01}}(x|y) \right)\,\d\mu(y)
+\end{align*}
+and analogously for $\mudisint{\gamma_i^{12}}(z|y)$ along the first factor for $i=0,1$. Write $\mudens{\rho_1}(y)$ for the density of $\rho_1$ w.r.t.\ $\mu$.
+%
+%By an abuse of notation, we use the same letters for denoting the measures and their density w.r.t.\ $\mu$. 
+We combine the optimal semi-couplings in a suitable way to define $\gamma_0$, $\gamma_1$, $\hat{\gamma} \in \mc{M}(\Omega^3)$ (via disintegration w.r.t.\ $\mu$ along the second factor):
+\begin{align*}
+\mudisint{\gamma_0}(x,z|y) &\eqdef
+\begin{cases}
+\frac{\mudisint{\gamma_0^{01}}(x|y) \otimes \mudisint{\gamma_0^{12}}(z|y)}{\mudens{\rho_1}(y)} & \tn{ if } \mudens{\rho_1}(y) >0, \\
+\mudisint{\gamma_0^{01}}(x|y) \otimes \delta_{y}(z) & \tn{ otherwise, }
+\end{cases} \\
+\mudisint{\gamma_1}(x,z|y) &\eqdef
+\begin{cases}
+\frac{\mudisint{\gamma_1^{01}}(x|y) \otimes \mudisint{\gamma_1^{12}}(z|y)}{\mudens{\rho_1}(y)} & \tn{ if } \mudens{\rho_1}(y) >0, \\
+\delta_{y}(x) \otimes \mudisint{\gamma_1^{12}}(z|y) & \tn{ otherwise, }
+\end{cases} \\
+\mudisint{\hat{\gamma}}(x,z|y) &\eqdef  
+\begin{cases}
+\frac{\mudisint{\gamma_1^{01}}(x|y) \otimes \mudisint{\gamma_0^{12}}(z|y)}{\mudens{\rho_1}(y)} & \tn{ if } \mudens{\rho_1}(y) >0, \\
+0 & \tn{ otherwise. }
+\end{cases}
+\end{align*}
+The interpretation of $\gamma_0$ is that all mass that leaves $x$ towards $y$, according to $\gamma_0^{01}(x,y)$, is distributed over the third factor according to $\gamma_0^{12}(y,z)$. In case the mass disappears at $y$, it is simply ``dropped'' as $\delta_y$ on the third factor. Then $\gamma_1$ is built analogously for the incoming masses and $\hat{\gamma}$ is a combination of incoming and outgoing masses.
+%
+For $i=0,1$ let $\gamma_i^{02} \eqdef \pfwd{(\Proj_{02})} \gamma_i$ and note that, by construction, $(\gamma_0^{02},\gamma_1^{02}) \in \Gamma(\rho_0, \rho_2)$.
+In the rest of the proof, for an improved readability, when writing the functional the ``dummy'' measure $\gamma$ such that $\gamma_0, \gamma_1 \ll \gamma$ is considered as implicit and we write
+	\begin{equation*}
+	\label{remark : abuse of notation}
+		\int_{\Omega^2} c\big(x,\gamma_0(x,y),y,\gamma_1(x,y)\big)\,\d x\,\d y
+		\quad \text{for}\quad \int_{\Omega^2} c \left(x,\dens{ \gamma_0}{ \gamma},y,\dens{ \gamma_1}{ \gamma}\right) \d \gamma(x,y)\, .
+	\end{equation*}
+With this notation, one has
+\begin{align*}
+& \int_{\Omega^3} c\big(x,\gamma_0(x,y,z),y,\hat{\gamma}(x,y,z)\big) \d x\,\d y\,\d z \\
+= {} & \int_{\rho(y)>0} \left( \int_{\Omega^2}
+	c\big(x,\mudisint{\gamma_0^{01}}(x|y), y, \mudisint{\gamma_1^{01}}(x|y)\big)
+	\frac{\mudisint{\gamma_0^{12}}(y|z)}{\mudens{\rho}(y)} \d x\,\d z \right) \d \mu(y) \\
+& + \int_{\rho(y)=0} \left( \int_{\Omega^2}
+	c\big(x,\mudisint{\gamma_0^{01}}(x|y),y,0\big) \delta_{y}(z) \d x\,\d z \right) \d \mu(y) \\
+= {} &  \int_{\Omega} \left( \int_{\Omega}
+	c\big(x,\mudisint{\gamma_0^{01}}(x|y), y, \mudisint{\gamma_1^{01}}(x|y)\big)
+	\d x \right) \d\mu(y) \\
+= {} & J_K(\gamma_0^{01},\gamma_1^{01}) = C_K(\rho_0,\rho_1)\, ,
+\end{align*}
+and analogously
+\begin{align*}
+	\int_{\Omega^3} c\big(y,\hat{\gamma}(x,y,z),z,\gamma_1(x,y,z)\big) \d x\,\d y\,\d z & =
+	C_K(\rho_1,\rho_2)\,.
+\end{align*}
+%%
+One finally obtains
+	\begin{align*}
+		 C_K(\rho_0,\rho_2)^{\frac{1}{p}} 
+		 \leq {} & \Big(\int_{\Omega^2} c\big(x,\gamma_0^{02}(x,z),z,\gamma_1^{02}(x,z) \big) \d x\,\d z \Big)^{\frac{1}{p}} \\
+		\overset{(1)}{\leq} {} & \Big( \int_{\Omega^3} c\big( x, \gamma_0(x,y,z),z, \gamma_1(x,y,z) \big) \d x\,\d y\,\d z \Big)^{\frac{1}{p}} \\
+		\overset{(2)}{\leq} {} & 
+			\Big( \int_{\Omega^3} 
+			\Big[ 
+			c\big( x, \gamma_0(x,y,z), y, \hat{\gamma}(x,y,z) \big)^{\frac{1}{p}} + \\
+			&\qquad\qquad c\big( y, \hat{\gamma}(x,y,z), z, \gamma_1(x,y,z) \big)^{\frac{1}{p}}
+			\Big]^p \d x\,\d y\,\d z 
+			\Big)^{\frac{1}{p}} \\
+		\overset{(3}{\leq} {} & 
+			\Big( \int_{\Omega^3} c\big( x, \gamma_0(x,y,z),y, \hat{\gamma}(x,y,z)\big) \d x\,\d y\,\d z \Big)^{\frac{1}{p}} + \\
+			&\qquad\qquad  \Big( \int_{\Omega^3} c\big( y, \hat{\gamma}(x,y,z), z,\gamma_1(x,y,z) \big) \d x\,\d y\,\d z\Big)^{\frac{1}{p}} \\
+		\overset{(4)}{=} {} & C_K\left(\rho_0, \rho_1\right)^{\frac{1}{p}} + 
+			C_K\left(\rho_1, \rho_2\right)^{\frac{1}{p}} 
+		\end{align*}
+	where we used (1) the convexity of $c$, (2) the fact that $c^{1/p}$ satisfies the triangle inequality, (3) Minkowski's inequality and (4) comes from the computations above. Thus $C_K(\cdot,\cdot)^{1/p}$ satisfies the triangle inequality, and is a metric. 
+\end{proof}
+
+
+%%%%% CONTINUITY
+Next, we establish under reasonable assumptions on the cost $c$ that the corresponding unbalanced transport cost $C_K$ is weakly* continuous w.r.t.\ the marginals.
+This is important for numerical applications, since it implies robustness when one approximates the original measures with discrete sums of Diracs. It is also crucial to study the well posedness of variational problems involving these metrics, such as for instance the definition of barycenters (see~\cite{Carlier_wasserstein_barycenter} for the classical optimal transport case). 
+%
+Moreover it will be a useful tool in our further analysis (e.g.~Theorem \ref{th: continuous static general} and examples in Sect.~\ref{sec:Examples}).
+
+%\begin{theorem}
+%\label{th : continuity continuous static}
+%Assume that $c$ satisfies the assumptions of \thref{th:metric} for some $p\in [1, + \infty[$, and moreover that
+%\begin{enumerate}[{(A}1{)}]
+%	\item $c(\cdot, 1, \cdot,0)$ is bounded; \label{continuity asp 1}
+%	\item the family of functions $(c_{x,x})_{x\in \Omega} \eqdef (c(x,\cdot, x, \cdot))$ is uniformly continuous at $(m_0,m_1)=(1,1)$; \label{continuity asp 2}
+%	\item there exists $(q,\alpha) \in ]0,\infty[^2$ such that, $\forall (x,y)\in \Omega^2$, $c(x,1,y,1) \leq \alpha |x-y|^q$.\label{continuity asp 3}
+%\end{enumerate}
+%Then $C_K$ is continuous for the weak* topology on $\mathcal{M}_+(\Omega)^2$.
+%\end{theorem}
+%
+%\begin{remark}
+%	Let us briefly comment on the assumptions on the cost function.
+%	\begin{itemize}
+%		\item (A\ref{continuity asp 1}) provides that mass for which no assignment partner can be found can be removed with a finite cost.
+%		\item (A\ref{continuity asp 2}) guarantees that small deviations in mass only inflict a small additional matching cost. Note that this assumption is not met by classical optimal transport.
+%		\item (A\ref{continuity asp 3}) states that as long as the initial and final mass are the same, the extended transport cost is always bounded from above by the classical optimal transport cost. For example, the cost between two Diracs $\delta_{x}$ and $\delta_{y}$ is bounded by $\alpha\,|x-y|^q$.
+%	\end{itemize}
+%\end{remark}
+\begin{theorem}
+	\label{th : continuity continuous static}
+	Assume $c$ satisfies the assumptions of Theorem \ref{th:metric} and:
+	\begin{enumerate}[{(A}1{)}]
+		\item Continuity of the spatial metric: $(x,y) \mapsto c(x,1,y,1)$ is continuous. \label{asp:ContinuityContinuity}
+		\item Finite cost of mass disappearance: there exists $x \in \Omega$ such that $c(x,1,x,0) < \infty$. \label{asp:ContinuityFiniteness}
+	\end{enumerate}
+	Then $C_K$ is continuous for the weak* topology on $\mc{M}_+(\Omega)^2$.
+\end{theorem}
+%
+\begin{lemma}
+	\label{lemma: continuity aux lemma}
+	Under the assumptions of Theorem \ref{th : continuity continuous static}, for some $p\in [1,+\infty[$,
+	\begin{enumerate}[{(B}1{)}]
+		\item $(x_0,x_1) \mapsto c(x_0,1,x_1,1)^{1/p}$ is equivalent to the Euclidean metric; \label{asp:ContinuityInterEquivalence}
+		\item $x \mapsto c(x,1,x,0)$ is bounded on $\Omega$;
+		\label{asp:ContinuityInterBounded}
+		\item the family of functions $\{m \mapsto c(x,1,x,m)\}_{x \in \Omega}$ is  equicontinuous at $m=1$. \label{asp:ContinuityInterContinuity}
+	\end{enumerate}
+\end{lemma}
+\begin{proof} \textit{(B\ref{asp:ContinuityInterEquivalence}):}
+	Two metrics $d_1$, $d_2$ are equivalent when
+	\begin{align*}
+		d_1(x_n,x) \rightarrow 0 \Leftrightarrow d_2(x_n,x) \rightarrow 0\,.
+	\end{align*}
+	Let $d_1(x,y) = |x-y|$ the Euclidean metric on $\Omega$ and $d_2(x,y) = c(x,1,y,1)^{1/p}$. Assumption (A\ref{asp:ContinuityContinuity}) implies ``$\Rightarrow$''.
+	Now we want to show that $d_2(x_n,x) \rightarrow 0$ implies $d_1(x_n,x) \rightarrow 0$. Let $\veps > 0$ and let $S = \Omega \cap B(x,\veps)$ ($B(x,\veps)$ denoting the open ball of radius $\veps$ around $x$). Then $\Omega \setminus S$ is compact. Therefore $x' \mapsto d_2(x,x')$ attains its minimum $\delta$ over $\Omega \setminus S$ on that set and by the metric property $\delta > 0$. Since $d_2(x_n,x) \rightarrow 0$ there is some $N \in \mathbb{N}$ such that $d_2(x_n,x) < \delta$ for $n>N$ and consequently $x_n \in B(x,\veps)$ for $n>N$.
+	
+	\textit{(B\ref{asp:ContinuityInterBounded})} For any $y \in \Omega$ one has by the triangle inequality and the identification of zero-mass points $c(y,1,y,0)^{1/p} \leq c(y,1,x,1)^{1/p} + c(x,1,x,0)^{1/p}$. The first term is bounded since it is continuous in $y$ and $\Omega$ is compact. The second term is bounded by assumption (A\ref{asp:ContinuityFiniteness}).
+	
+	\textit{(B\ref{asp:ContinuityInterContinuity})} Let $C$ be the uniform bound of $c(x,1,x,0)$ over $\Omega$. By 1-homogeneity and triangle inequality it holds $c(x,1,x,2) \leq \big( c(x,1,x,0)^{1/p} + c(x,2,x,0)^{1/p} \big)^p \leq C\,\big( 1+ 2^{1/p} \big)^p \eqdef C'$. By convexity of $c$, $c(x,m,x,1) \leq |m-1|\,C'$ for $m \in [0,2]$. As $c$ is nonnegative, the family $\{m \mapsto c(x,1,x,m) \}_{x \in \Omega}$ is therefore uniformly continuous at $m=1$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{th : continuity continuous static}]
+Throughout this proof we are going to use the properties (B\ref{asp:ContinuityInterEquivalence}) to (B\ref{asp:ContinuityInterContinuity}) established in Lemma \ref{lemma: continuity aux lemma}.
+Thanks to the triangle inequality, we only need to check that, if $\rho_n \rightharpoonup^* \rho$ then $C_K(\rho_n,\rho) \allowbreak \to 0$.
+
+Recall that weak* convergence implies (1) convergence of the total masses and (2) convergence for the $p$-Wasserstein distance $W_p$ ($p\in [1,+\infty[$) of the rescaled measures (see for instance \cite[Theorem 7.12]{cedric2003topics}). We denote by $W_{p,c}$ the Wasserstein metric induced by the ground metric $(x,y) \mapsto c(x,1,y,1)^{1/p}$. By property (B\ref{asp:ContinuityInterEquivalence}) this ground metric induces the same topology on $\Omega$ as the Euclidean metric. Therefore both metrics induce the same space of continuous functions $C(\Omega)$ and therefore convergence of $W_p$ and $W_{p,c}$ is equivalent, too.
+
+If $\rho = 0$ then, by taking $(\gamma_n \eqdef \pfwd{(\id,\id)} \rho_n, 0) \in \Gamma(\rho_n, \rho)$ we see that, by property (B\ref{asp:ContinuityInterBounded}),
+\[
+C_K(\rho_n, \rho) \leq \int_{\Omega^2} c(x_0,1,x_1,0)\, \d \gamma_n(x_0,x_1) \leq (\sup_{x \in \Omega} |c(x,1, x,0) |) \cdot \rho_n(\Omega) \to 0 \, .
+\]
+Otherwise, let us assume that for all $n\in \mathbb{N}$, $\rho_n(\Omega)>0$ as it is eventually true. Introduce $\mnorm(\rho_n) \eqdef (\rho(\Omega)/\rho_n(\Omega)) \cdot \rho_n$. It holds, by the triangle inequality,
+\[
+C_K^\frac1p (\rho_n,\rho) \leq C_K^\frac1p (\rho_n,\mnorm(\rho_n)) + C_K^\frac1p (\mnorm(\rho_n),\rho)\, .
+\]
+On the one hand, by choosing $\gamma_0 = \pfwd{(\id,\id)} \rho_n$ and  $\gamma_1 = (\rho(\Omega)/\rho_n(\Omega)) \cdot \gamma_0$ we have, by property (B\ref{asp:ContinuityInterContinuity}),
+\begin{align*}
+C_K(\rho_n,\mnorm(\rho_n)) \leq J_K(\gamma_0,\gamma_1) = \int_{\Omega} c\big(x,1,x,\frac{\rho(\Omega)}{\rho_n(\Omega}\big) \d \rho_n(x) \to 0 \, .
+\end{align*}
+On the other hand, by choosing $\gamma_0 = \gamma_1$ equal to the optimal transport plan for the $W_{p,c}$ metric between $\rho$ and $\mnorm(\rho_n)$, we have by property (B\ref{asp:ContinuityInterEquivalence}),
+\[
+C_K(\mnorm(\rho_n),\rho)
+ \leq \int_{\Omega^2} c(x,1,y,1) \d \gamma_0
+ \to 0
+\]
+and we conclude thus that $C_K(\rho_n,\rho)  \to 0$.
+\end{proof}
+
+
+%%%%%%%%% DUALITY
+Let us now give a dual formulation of the problem. 
+Since the cost function $c$ is jointly 1-homogeneous, convex, and l.s.c.\ in the variables $(m_0,m_1)$, for all $(x,y)\in \Omega^2$, the Legendre transform of $c(x,\cdot,y,\cdot)$ is the indicator of a closed convex set. Morevover, as $c$ is non-negative, and $+\infty$ if $m_0$ or $m_1$ is negative, the latter contains the negative orthant. This set is described by the set valued function $Q : \Omega^2 \to 2^{\R \times \R}$. 
+
+%For nonempty convex valued multifunctions, $Q$ is said to be \emph{lower semicontinuous} if $G=\{(x,t) : x \in \tn{int } Q(t)\}$ is open (see \cite[Lemma 2]{rockafellar1971integrals}).
+
+\begin{theorem}[Duality]
+\label{th: duality}
+Let $c$ be a \emph{cost function}, define for all $(x,y)\in \Omega^2$ the nonempty, closed and convex set $Q(x,y)= \{(a,b)\in \R^2 : c(x,\cdot,y,\cdot)^*(a,b)<+\infty \}$ and let
+\[ 
+B =  \left\{ (\phi, \psi) \in C(\Omega)^2 :  \forall (x,y) \in \Omega^2, (\phi(x),\psi(y)) \in Q(x,y) \right\}\,.
+\]
+Then
+\[
+ \sup_{(\phi, \psi) \in B} \int_{\Omega} \phi(x) \d \rho_0 + \int_{\Omega} \psi(y) \d \rho_1 
+ = \min_{(\gamma_0, \gamma_1)\in \Gamma(\rho_0, \rho_1)} J_K(\gamma_0, \gamma_1)  \, .
+\]
+\end{theorem}
+
+\begin{proof}
+Let us rewrite  the supremum problem as
+\[
+\sup_{(u_0,u_1) \in (C(\Omega^2)^2} - F(u_0,u_1) - G(u_0,u_1)
+\]
+where
+\begin{align*}
+G &: (u_0,u_1) \mapsto 
+\begin{cases}
+- \int_{\Omega}  \phi(x) \d \rho_0 -  \int_{\Omega} \psi(y) \d \rho_1  & \tn{if } u_0(x,y)=\phi(x) \\
+		& \tn{and } u_1(x,y) = \psi(y) \\
++ \infty &\tn{otherwise,}
+\end{cases} 
+\end{align*}
+and $F$ is the indicator of $\{ (u_0,u_1)\in (C(\Omega^2)^2) : (u_0,u_1)(x,y) \in Q(x,y), \, \forall (x,y)\in \Omega^2 \}$.
+Note that $F$ and $G$ are convex and proper. Also, given our assumptions, there is a pair of functions $(u_0,u_1)$ at which $F$ is continuous (for the $\sup$ norm topology) and $F$ and $G$ are finite since for all $(x,y)\in \Omega^2$, $Q(x,y)$ contains the negative orthant. Then Fenchel-Rockafellar duality theorem (see, e.g.\ \cite[Theorem 1.9]{cedric2003topics}) states that
+ \begin{equation}
+ \label{eq: Fenchel-Rockafellar}
+ \sup_{(u_0,u_1) \in (C(\Omega^2)^2} \!\!\!\!\!\! - F(u_0,u_1) - G(u_0,u_1) 
+ = 
+ \!\!\!\!\!\!\min_{(\gamma_0, \gamma_1) \in \mathcal{M}(\Omega^2)^2} \!\!\!\!\! \left\{ F^*(\gamma_0,\gamma_1) + G^*(-\gamma_0,-\gamma_1) \right\} .
+ \end{equation}
+Let us compute the Legendre transforms. For $G$, we obtain
+\begin{align*}
+G^*(-\gamma_0,-\gamma_1) 
+&= \!\!\!\!\!\! \sup_{(\phi,\psi)\in C(\Omega)^2} \!\!\!\! - \int_{\Omega^2} \phi(x)\d \gamma_0 - \int_{\Omega^2} \psi(x)\d \gamma_1 + \int_{\Omega} \phi(x) \d \rho_0 + \int_{\Omega} \psi(y) \d \rho_1\\
+&= 
+\begin{cases}
+0 & \tn{ if } (\gamma_0, \gamma_1)\in \Gamma^{+/-}_{\rho_0, \rho_1}\\
++ \infty & \tn{ otherwise.}
+\end{cases}
+\end{align*}
+where $\Gamma^{+/-}_{\rho_0, \rho_1} $ is the set of semi-couplings without the non-negativity constraint. On the other hand, $F^*$ is given by \cite[Theorem 6]{rockafellar1971integrals} which states that
+\[
+F^*(\gamma_0,\gamma_1) = 
+\int_{\Omega^2} c\left(x, \dens{ \gamma_0}{ \gamma},y, \dens{ \gamma_1}{ \gamma} \right) \d\gamma(x,y) 
+\]
+where $\gamma$ is any measure in $\mathcal{M}_+(\Omega^2)$ with respect to which $(\gamma_0,\gamma_1)$ is absolutely continuous. Note that this duality result requires $Q$ to be lower-semicontinuous in a sense which is equivalent to the lower-semicontinuity of $c$, thanks to \cite[Lemma A.2]{bouchitte1988integral}. Finally, as $F^*$ includes the nonnegativity constraint, the right hand side of \eqref{eq: Fenchel-Rockafellar} is equal to $\min_{(\gamma_0,\gamma_1)\in \Gamma(\rho_0,\rho_1)} J_K(\gamma_0,\gamma_1)$.
+\end{proof}
+%%%%%%%%%%%%
+%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMMENTED SECTION 
+% COMMENTED SECTION 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% MonGE
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\subsection{A formulation with deterministic semi-couplings}
+By analogy with the Monge formulation of optimal transport, we can rewrite the problem in the particular case where the semi-couplings are generated by a map.
+\begin{definition}[Monge-like Problem]
+	For fixed marginals $\rho_0, \, \rho_1\in \mathcal{M}_+(\Omega)$, an auxiliary measure $\hat{\rho}_1 \in \mathcal{M}_+(\Omega)$ and a measurable map $T : \Omega \rightarrow \Omega$ satisfying $\pfwd{T} \hat{\rho}_1 = \rho_1$, it holds
+\[
+ \left( \pfwd{(\id,T)} \rho_0\, , \, \pfwd{(\id,T)} \hat{\rho}_1 \right) \in \Gamma(\rho_0,\rho_1)\, .
+\]
+We define a Monge-like functional by
+	\begin{align*}
+		J_M(\rho_0,\hat{\rho}_1,T) & = J_K \left( \vphantom{\sum}
+			\pfwd{(\id,T)} \rho_0,
+			\pfwd{(\id,T)} \hat{\rho}_1
+			\right) \\
+			& = \int_{\Omega} c\big(x,T(x),\rho_0(x),\hat{\rho}_1(x)\big)\,dx
+	\end{align*}
+	and the corresponding optimization problem as
+	\[
+		C_M(\rho_0,\rho_1) = \inf_{\hat{\rho}_1 , T}
+			J_M(\rho_0,\hat{\rho}_1,T)
+			\qquad  \tn{subject to}\qquad \pfwd{T} \hat{\rho}_1 = \rho_1\, .
+	\]
+with the convention that this infimum is $+\infty$ when the feasible set is empty.
+\end{definition}
+\begin{proposition}
+\label{th : inequality monge static}
+For $\rho_0,\, \rho_1 \in \mathcal{M}_+(\Omega)$, we have $C_K(\rho_0,\rho_1) \leq C_M(\rho_0,\rho_1)$.
+\end{proposition}
+
+\begin{proof}
+It is direct since $C_M$ is obtained by minimizing $J_K$ over a subset of $\Gamma(\rho_0, \rho_1)$.
+\end{proof}
+\fi
+
+

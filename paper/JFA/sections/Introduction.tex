@@ -1,0 +1,185 @@
+% !TEX root = ../DynamicToStatic.TEX
+
+\section{Introduction}
+
+Optimal transport is an optimization problem which gives rise to a popular class of metrics between probability distributions. We refer to the monograph of Villani~\cite{cedric2003topics} for a detailed overview of optimal transport. 
+%
+A major constraint of the resulting transportation metrics is that they are restricted to measures of equal total mass (e.g.\ probability distributions). In many applications, there is however a need to compare unnormalized measures, which corresponds to so-called ``unbalanced'' transportation problems, following the terminology introduced in~\cite{benamou2003numerical}. Applications of these unbalanced metrics range from image classification~\cite{rubner1997earth,pele2008linear} to the processing of neuronal activation maps~\cite{GramfortMICCAI}.
+%
+This class of problems requires to precisely quantify the amount of transportation, creation and destruction of mass needed to compare arbitrary positive measures. While several proposals to achieve this goal have been made in the literature (see below for more details), to the best of our knowledge, there lacks a coherent framework that enables to deal with generic measures while preserving both the dynamic and the static perspectives of optimal transport. It is precisely the goal of the present paper to describe such a framework and to explore its main properties. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Previous Work}
+In the last few years, there has been an increasing interest in extending optimal transport to the unbalanced setting of measures having non-equal masses. 
+%%%
+\paragraph{Dynamic formulations of unbalanced optimal transport. }
+
+Several models based on the fluid dynamic formulation introduced in~\cite{benamou2000computational} have been proposed recently~\cite{OTmaasrumpf,lombardi2013eulerian,piccoli2014generalized,piccoli2013properties}. In these works, a source term is introduced in the continuity equation. They differ in the way this source is penalized or chosen.
+%
+We refer to~\cite{ChizatOTFR2015} for a detailed overview of these models.  
+
+%%%
+\paragraph{Static formulations of unbalanced optimal transport. }
+Purely static formulations of unbalanced transport are however a longstanding problem. 
+%
+A simple way to address this issue is given in the early work of Kantorovich and Rubinstein~\cite{kantorovich1958space}. The corresponding ``Kantorovich norms'' were later extended to separable metric spaces by~\cite{hanin1999extension}. These norms handle mass variations by allowing to drop some mass from each location with a fixed transportation cost. 
+%
+The computation of these norms can in fact be re-casted as an ordinary optimal transport between normalized measures by adding a point ``at infinity'' where mass can be sent to, as explained by~\cite{guittet2002extended}. This reformulation is used in~\cite{GramfortMICCAI} for applications in neuroimaging. 
+%
+A related approach is the so-called optimal partial transport. It was initially proposed in the computer vision literature to perform image retrieval \cite{rubner1997earth,pele2008linear}, while its mathematical properties are analyzed in detail by \cite{caffarelli2010free,figalli2010optimal}. 
+%
+As noted in~\cite{ChizatOTFR2015} and recalled in Section \ref{sec:ExamplesPartial}, optimal partial transport is tightly linked to the generalized transport proposed in~\cite{piccoli2014generalized,piccoli2013properties} which allows a dynamic formulation of the optimal partial transport problem.
+%
+The contributions in \cite{piccoli2014generalized} were inspired by \cite{benamou2003numerical} where it is proposed to relax the marginal constraints and to add an $L^2$ penalization term instead.
+%
+%On a numerical aspect, while dynamic formulations of optimal transport (and generalizations) are useful for low-dimensional problems where the computational domain can be uniformly discretized, they do not scale to higher dimensions. In sharp contrast, the celebrated ``static'' formulation by Kantorovich~\cite{Kantorovich42} of optimal transport as a linear program is able to cope with discrete measures (i.e.\ sums of Diracs) in arbitrary dimension, with a complexity which scales only with the number of Diracs.
+%%
+\paragraph{Wasserstein-Fisher-Rao metric and relation with recent work.}
+
+A new metric between measures of non equal masses has recently and independently been proposed by~\cite{ChizatOTFR2015,new2015kondratyev}. This new metric interpolates between the Wasserstein $W_2$ and the Fisher-Rao metrics. It is defined through a dynamic formulation, corresponding formally to a Riemannian metric on the space of measures, which generalizes the formulation of optimal transport due to Benamou and Brenier~\cite{benamou2000computational}. 
+
+% This metric has also been introduced at the same time in~\cite{new2015kondratyev}, where they study associated topological properties,  gradient flows and Riemannian calculus on the space of measures.
+
+\iffalse % % BEGIN COMMENT %%%%%%%%%%%%%
+\todo{Gabriel: I think the following paragraph could be removed.}
+
+Let us introduce this Wasserstein-Fisher-Rao metric, denoted by $\WF$, from a physical point of view and in a smooth setting. Let $\Omega$ be a convex domain in $\R^d$ and $\rho_0,\rho_1$ two smooth and positive functions of finite integrals. The distance between $\rho_0$ and $\rho_1$ is given by the minimization over $v(t,x) \in \R^d$ and a time dependent vector field and $g(t,x)$ a real valued function of
+\begin{equation}\label{WF}
+\frac12 \int_0^1 \left[ \int_{\Omega} |v(t,x)|^2 \rho(t,x) \d x  + \delta^2 \int_{\Omega} |\alpha(t,x)|^2 \rho(t,x) \d x \right] \d t
+\end{equation}
+under the generalized continuity constraint and the boundary constraints
+\[
+\partial_t \rho(t,x) + \nabla \cdot (\rho(t,x) v(t,x)) = \alpha(t,x)\rho(t,x) \quad \rho(0,\cdot) = \rho_0 , \quad  \rho(1,\cdot) = \rho_1\, .
+\]
+\fi % % END COMMENT %%%%%%%%%%%%%%%%%%%
+
+In~\cite{ChizatOTFR2015}, we proved existence of minimizers in a general setting, presented the limit models (for extreme values of mass creation/destruction cost) and proposed a numerical scheme based on first order proximal splitting methods. We also thoroughly treated the case of two Dirac masses which was the first step towards a Lagrangian description of the model. This metric is the prototypical example for the general framework developed in this article. It thus enjoys both a dynamic formulation and a static one (Sect.~\ref{sec:equivalence WF}). It is also sufficiently simple so that its geometry (and in particular curvature) can be analyzed in detail, which is useful to get a deep insight about the properties of our generic class of metrics. 
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Contribution}
+\label{sec:IntroContribution}
+The starting point of this article is the Wasserstein-Fisher-Rao ($\WF$) metric. For two non-negative densities $\rho_0$, $\rho_1$ on a domain $\Omega \subset \R^d$ it is informally obtained by optimizing
+\begin{align}
+	\label{eq:WFInformal}
+	\WF^2(\rho_0,\rho_1) = \inf_{(\rho,v,\alpha)} \int_0^1 \int_{\Omega} \left( \frac{1}{2} |v(t,x)|^2 + \frac{1}{2} \alpha(t,x)^2 \right)\,\rho(t,x)\,\d x\,\d t
+\end{align}
+where $\rho$ is a time-dependent density, $v$ is a velocity field that describes the movement of mass of $\rho$ and $\alpha$ a scalar field that models local growth and destruction of mass. The triplet $(\rho,v,\alpha)$ must satisfy the following continuity equation with source:
+\begin{align}
+	\label{eq:ContinuityEqInformal}
+	\partial_t \rho + \nabla \cdot (\rho\,v) = \rho\,\alpha\,, \qquad
+	\rho(0,\cdot) = \rho_0\,, \qquad
+	\rho(1,\cdot) = \rho_1\,.
+\end{align}
+
+This article presents two sets of contributions. The first one (Section~\ref{sec:geometry}) studies in detail the geometry of the $\WF$ metric and related functionals. It is both of independent interest and serves as a motivation to introduce the second class of contributions.
+Formula \eqref{eq:WFInformal} is formally interpreted as a particular case of a family of Riemannian metrics on a semi-direct product of groups between diffeomorphisms and scalar functions. The diffeomorphisms account for mass transportation, the scalar fields act as pointwise mass multipliers.
+%
+The main result of this part is the formal derivation of a submersion of this semi-direct product of groups into the space of positive measures, equipped with a metric from this family (Proposition \ref{thm:Submersion}). This corresponds to a generalization to $\WF$ of the Riemannian submersion first introduced by Otto in the optimal transport case \cite{OttoPorousMedium}. 
+%
+A first application of this result is the computation of the sectional curvature of the $\WF$ space (Proposition \ref{prop-curvature}). A second application is the definition of a Monge-like formulation, i.e.\ the computation of $\WF$ in terms of a transport diffeomorphism and a pointwise mass multiplier (Section~\ref{Monge}).
+
+
+The second set of contributions introduces and studies a general class of unbalanced optimal transport metrics, which enjoy both a static and a dynamic formulation. 
+%
+We introduce in Section~\ref{sec : general static problem} a new Kantorovich-like class of \emph{static} problems of the form
+\begin{align}
+	\label{eq:StaticInformal}
+	C_K(\rho_0,\rho_1) = \inf_{(\gamma_0,\gamma_1)} \int_{\Omega \times \Omega} c(x,\gamma_0(x,y),y,\gamma_1(x,y))\,\d x\,\d y
+\end{align}
+where $(\gamma_0,\gamma_1)$ are two `semi-couplings' between $\rho_0$ and $\rho_1$, describing analogously to standard optimal transport, how much mass is transported between any pair $x$, $y \in \Omega$. Two semi-couplings are required, to be able to describe changes of mass during transport. The function $c(x_0,m_0,x_1,m_1)$ determines the cost of transporting a quantity of mass $m_0$ from $x_0$ to a (possibly different) quantity $m_1$ at $x_1$.
+It is a crucial assumption of our approach that $c(x,\cdot,y,\cdot)$ is jointly positively 1-homogeneous and convex in the two mass arguments. This ensures that \eqref{eq:StaticInformal} can be rigorously defined as an optimization problem over measures and that the resulting problem is convex.
+A continuity result and the dual problem are established (Theorems \ref{th : continuity continuous static} and \ref{th: duality}).
+Analogous to standard optimal transport, when $c$ induces a metric over pairs of location and mass, then \eqref{eq:StaticInformal} defines a metric over non-negative measures (Theorem \ref{th:metric}).
+
+Then, in Section \ref{sec:DynamicToStatic} we look at a family of dynamic problems given by
+\begin{align}
+	\label{eq:DynamicInformal}
+	C_C(\rho_0,\rho_1) = \inf_{(\rho,v,\alpha)} \int_0^1 \int_{\Omega} f\big(x,\rho(t,x),v(t,x) \cdot \rho(t,x), \alpha(t,x) \cdot \rho(t,x) \big)\,\d x\,\d t
+\end{align}
+where the infimum is again taken over solutions of \eqref{eq:ContinuityEqInformal}. Here, $f(x,m,v \cdot m, \alpha \cdot m)$ gives the \emph{infinitesimal cost} of moving a chunk of mass $m$ at $x$ in direction $v$ while undergoing an infinitesimal scaling by $\alpha$.
+%
+Note that in the two last arguments of $f$ we multiply $v$ and $\alpha$ by $m$. This corresponds to the velocity $\leftrightarrow$ momentum change of variables proposed in \cite{benamou2000computational} to obtain a convex problem.
+%
+Under suitable assumptions on $f$ (that include \eqref{eq:WFInformal} and go beyond the Riemannian case) we establish equivalence between \eqref{eq:StaticInformal} and \eqref{eq:DynamicInformal} when $c$ is chosen to be the `pointwise distance' induced by $f$ (Theorem \ref{th: continuous static general} and Proposition \ref{prop : alternative dynamic/static}).
+
+Finally, we apply those results to two unbalanced optimal transport models. 
+Section \ref{sec:ExamplesPartial} introduces a dynamic formulation and gives duality results for a family of metrics obtained from the optimal partial transport problem. This is reminiscent of --- and generalizes --- the results in \cite{piccoli2013properties,piccoli2014generalized}.
+The case of the $\WF$ metric is rigorously discussed in Section \ref{sec:equivalence WF}. In Section \ref{sec:StaticGamma} it is shown how standard static optimal transport is obtained as a limit (in the sense of $\Gamma$-convergence) of the $\WF$ metric, thus complementing a previous result of~\cite{ChizatOTFR2015} obtained for dynamic formulations. 
+
+While being motivated by Section \ref{sec:geometry}, Sections \ref{sec : general static problem} to \ref{sec:Examples} are mathematically self-contained. Readers not familiar with infinite dimensional Riemannian geometry do therefore not necessarily need to read Section \ref{sec:geometry} before proceeding to the rest of the paper.
+
+%
+%This article presents two sets of contributions. The first one (Section~\ref{sec:geometry}) studies in detail the geometry of the Wasserstein-Fisher-Rao ($\WF$) metric. It is both of independent interest and serves as the main motivation to introduce the second class of contributions. 
+%%
+%The main contribution of this first part is the formal derivation in Proposition \ref{Submersion} of a submersion from a semi-direct product of groups with a flat metric to the space of positive measures endowed with the $\WF$ metric. These groups are diffeomorphisms to account for mass transportation and positive functions acting as pointwise mass multipliers. 
+%%
+%This corresponds to a generalization to $\WF$ of the Riemannian submersion first introduced by Otto in~\cite{OttoPorousMedium} in the optimal transport case. 
+%%
+%A first application of this result is the computation of the sectional curvature of the $\WF$ space in Proposition \ref{thm:Curvature}. A second application is the definition in Section~\ref{Monge} of a ``Monge'' formulation, i.e.\ the computation of $\WF$ in terms of a transport diffeomorphism and a pointwise mass multiplier.
+%
+%
+%The second set of contributions introduces and studies a general class of unbalanced optimal transport metrics, which enjoy both a static and a dynamic formulation. 
+%%
+%We introduce in Section~\ref{sec : general static problem} a new Kantorovich formulation and its dual (\thref{th: duality}) which can be seen as a generalization of standard optimal transport. It defines a metric over positive measures if the ground cost is a metric over position and mass (\thref{th:metric}). Under suitable assumptions the resulting metric is weakly* continuous (\thref{th : continuity continuous static}).
+%%
+%Then, in Section~\ref{sec:DynamicToStatic} a dynamic formulation and its dual (\thref{th: dynamic dual}) are introduced. The metric defined through these dynamic problems can also be computed by our static formulation, when one sets the ground cost to be equal to the metric between Diracs (\thref{th: continuous static general,cor : alternative dynamic/static}). 
+%%
+%Finally, in Section~\ref{sec:Examples}, we apply those results to two unbalanced optimal transport models. \thref{th:POT dyn/stat} introduces a dynamic formulation and gives duality results for a family of metrics obtained from the partial optimal transport problem. This is reminiscent of---and generalizes---the results in \cite{piccoli2013properties,piccoli2014generalized}. Our approach also applies to the $\WF$ metric, which can thus be computed through a static formulation (\thref{th: continuous static}). \thref{th:static gamma convergence} shows how standard static optimal transport is obtained as a limit (in the sense of $\Gamma$-convergence) of the $\WF$ metric, thus complementing a previous result of~\cite{ChizatOTFR2015} obtained for dynamic formulations. 
+
+
+
+%%%%%%%%%%%%%%
+\subsection[Relation with Liero,Mielke,Savare 2015]{Relation with \cite{LieroMielkeSavareLong,LieroMielkeSavareShort}}
+
+After completing this paper, we became aware of the independent work of \cite{LieroMielkeSavareLong,LieroMielkeSavareShort}. In these two papers the authors develop and study the same class of ``static'' transportation-like problems as here. This huge body of work contains many theoretical aspects that we do not cover. For instance measures defined over more general metric spaces are considered, while we work over $\R^d$.
+%
+The construction of~\cite{LieroMielkeSavareLong} defines three equivalent static formulations. Their third ``homogeneous'' formulation is closely related (by a change of variables) to our ``semi-couplings'' formulation. Their first formulation gives an intuitive and nice interpretation of this class of convex programs as a modification of the original optimal transportation problem where one replaces the hard marginal constraints by soft penalization using Bregman divergences. The dual of this first formulation is related to the dual of our formulation by a logarithmic change of variables. Quite interestingly, the same idea is used in an informal and heuristic way by~\cite{FrognerNIPS} for applications in machine learning, where soft marginal constraints is the key to stabilize numerical results. 
+%
+The authors of~\cite{LieroMielkeSavareLong,LieroMielkeSavareShort} study dynamical formulations in the Wasserstein-Fisher-Rao setting (that they call the ``Hellinger-Kantorovich'' problem). This allows them to make a detailed analysis of the geodesic structure of this space. In contrast, we study a more general class of dynamical problems, but restrict our attention to the equivalence with the static problem. Another original contribution of our work is the proof of the metric structure (in particular the triangular inequality) for static and dynamic formulations when the underlying cost over the cone manifold $\Omega \times \R^+$ is related to a distance. 
+% 
+Lastly, our geometric study of Section \ref{sec:geometry}, and in particular the Riemannian submersion structure, the explicit sectional curvature computation and the Monge problem appear to be original contributions. Note that along these lines, the work of~\cite{LieroMielkeSavareLong} proves a lower bound on the Alexandrov curvature in the $\WF$ case, which in particular allows these authors to state sufficient condition for the $\WF$ space to have positive curvature. In a smooth setting, we find similar results in Proposition \ref{prop-curvature} and Corollary \ref{th:CorollaryCurvature}.
+
+%%%%%%%%%%%%%%
+\subsection{Preliminaries and Notation}
+We denote by $C(X)$ the Banach space of real valued continuous functions on a compact set $X\subset \R^d$ endowed with the sup norm topology. Its topological dual is identified with the set of Radon measures, denoted by $\mathcal{M}(X)$ and the dual norm on $\mathcal{M}(X)$ is the total variation, denoted by $|\cdot|_{TV}$. Another useful topology on $\mathcal{M}(X)$ is the weak* topology arising from this duality: a sequence of measures $(\mu_n)_{n\in \N}$ weak* converges towards $\mu \in \mathcal{M}(X)$ if and only if for all $u \in C(X)$, $\lim_{n\rightarrow + \infty}\int_{X} u \, \d\mu_n = \int_{X} u \,\d\mu$. According to that topology, $C(X)$ and $\mathcal{M}(X)$ are topologically paired spaces (the elements of each space can be identified with the continuous linear forms on the other), this is a standard setting in convex analysis.
+%Any bounded subset of $\mathcal{M}(X)$ (for the total variation) is relatively sequentially compact for the weak* topology.
+We also use the following notations:
+\begin{itemize}
+	\item $\mathcal{M}_+(X)$ is the space of nonnegative Radon measures,  $\mathcal{M}_+^{ac}(X)$, the subset of absolutely continuous measures w.r.t.\ the Lebesgue measure and $\mathcal{M}_+^{at}(X)$ the subset of purely atomic measures.
+	\item For $M$ a given manifold, $TM$ denotes the tangent bundle of $M$ and $T_pM$ the tangent space at a point $p \in M$.
+	\item $\Dens(X)$ the set of finite Radon measures that have smooth positive density w.r.t.\ a reference volume form $\nu$;
+
+	\item $\mu \ll \nu$ means that the $\R^m$-valued measure $\mu$ is absolutely continuous w.r.t.\ the positive measure $\nu$. We denote by $\dens{\mu}{\nu} \in (L^1(X,\nu))^m$ the density of $\mu$ with respect to $\nu$.
+
+	\item For a (possibly vector) measure $\mu$, $|\mu| \in \mathcal{M}_+(X)$ is its variation;
+
+	%\item for a positively homogeneous function $f$, we denote by $f(\mu)$ the measure defined by $f(\mu)(A) \eqdef \int_A f(\d\mu/\d\lambda) \d\lambda$ for any measurable set $A$, with $\lambda$ satisfying $|\mu| \ll \lambda$. The homogeneity assumption guarantees that this definition does not depend on $\lambda$;
+	\item For a map $\varphi: M \mapsto N$ between two manifolds $M,N$, $T\varphi$ denotes the tangent map of $\varphi$. For a given Riemannian metric $g$ on $N$, 
+	the pull-back of $g$ by $\varphi$ is denoted by $\varphi^*g$ and defined by $(\varphi^*g)(x)(v_x,v_x) \eqdef g(\varphi(x))(T_x\varphi(v_x),T_x\varphi(v_x))$.
+	\item $\pfwd{T} \mu$ is the image measure of $\mu$ through the measurable map $T: X_1 \to X_2$, also called the pushforward measure. It is given by $\pfwd{T} \mu (A_2) \eqdef \mu(T^{-1}(A_2))$; When $X_1= X_2$ is a manifold and $T$ is a diffeomorphism, we denote $\pfwd{T}$ by $\pfwdM{T}$.
+
+	\item $\delta_x$ is a Dirac measure of mass $1$ located at the point $x$;
+
+	\item $\iota_{\mathcal{C}}$ is the (convex) indicator function of a convex set $\mathcal{C}$ which takes the value $0$ on $\mathcal{C}$ and $+\infty$ everywhere else;
+
+	\item If $(E,E')$ are topologically paired spaces and $f : E \to \R \cup \{+ \infty\}$ is a convex function, $f^*$ is its Legendre transform i.e.\ for $y \in E'$, $f^*(y) \eqdef \sup_{x\in E} \langle x, y \rangle - f(x) $. %The subdifferential of $f$ is denoted $\D f$ and is the set valued map $x \mapsto \{ y\in E' : \forall x' \in E, \, f(x')-f(x) \geq \langle y, x'-x \rangle \}$.
+
+	\item For $n \in \N$ and a tuple of distinct indices $(i_1,\ldots,i_k)$, $i_l \in \{0,\ldots,n-1\}$ the map
+\begin{equation}
+	\Proj_{i_1,\ldots,i_k} : \Omega^n \rightarrow \Omega^k
+\end{equation}
+denotes the canonical projection from $\Omega^n$ onto the factors given by the tuple $(i_1,\ldots,i_k)$.
+
+%Finally, when $\mu$ is a measure on $[0,1] \times \Om$ which time marginal is absolutely continuous with respect to the Lebesgue measure on $[0,1]$, we denote by $(\mu_t)_{t\in[0,1]}$ the ($\d t$-a.e.\ uniquely determined) family of measures satisfying $\mu = \int_0^1 (\mu_t \otimes \delta_t ) \d t$, where $\otimes$ denotes the product of measures. This is a consequence of the disintegration theorem (see for instance ~\cite[Theorem 5.3.1]{ambrosio2006gradient}) which we frequently use without explicitly mentioning it. In order to alleviate notations, we replace the integral expression of $\mu$ by $\mu = \mu_t \otimes \d t$.
+%
+
+	\item The truncated cosine is defined by $\trucos : z \mapsto \cos(|z|\wedge \frac{\pi}{2})$.
+\end{itemize}
+
+
+
+

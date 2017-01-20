@@ -1,0 +1,52 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: DynamicToStatic.aux
+The style file: spmpsci.bst
+Database file #1: SecOrdLandBig.bib
+Database file #2: SecOrdLand.bib
+Database file #3: bibchizat.bib
+Database file #4: references.bib
+Warning--can't use both author and editor fields in GammaConvergenceBraides2002
+Warning--missing publisher in pele2008linear
+You've used 45 entries,
+            2946 wiz_defined-function locations,
+            886 strings with 11317 characters,
+and the built_in function-call counts, 27910 in all, are:
+= -- 3153
+> -- 525
+< -- 11
++ -- 349
+- -- 173
+* -- 1198
+:= -- 2858
+add.period$ -- 48
+call.type$ -- 45
+change.case$ -- 221
+chr.to.int$ -- 0
+cite$ -- 47
+duplicate$ -- 3151
+empty$ -- 1979
+format.name$ -- 199
+if$ -- 5820
+int.to.chr$ -- 0
+int.to.str$ -- 45
+missing$ -- 409
+newline$ -- 188
+num.names$ -- 92
+pop$ -- 1218
+preamble$ -- 1
+purify$ -- 175
+quote$ -- 0
+skip$ -- 1518
+stack$ -- 0
+substring$ -- 1213
+swap$ -- 2462
+text.length$ -- 11
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 156
+warning$ -- 2
+while$ -- 151
+width$ -- 47
+write$ -- 445
+(There were 2 warnings)

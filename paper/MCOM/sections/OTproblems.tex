@@ -1,0 +1,349 @@
+% !TEX root = ../EntropicNumeric.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Unifying Formulation of Transport-like Problems}
+\label{sec-ot-like}
+We review below a variety of variational problems related to optimal transport that can all be recast as a generic variational problem, involving transport and functions on the marginals. The notion of ``divergence'' functionals, introduced in optimal transport by \cite{LieroMielkeSavareLong}, makes this unification possible and is defined in the following.
+
+
+\subsection{Divergence Functionals}
+\label{sec_divergencefunc}
+Divergences are functionals which, by looking at the pointwise ``ratio'' between two measures, give a sense of how close they are. They have nice analytical and computational properties and are built from \emph{entropy functions}.
+
+\begin{definition}[Entropy function]
+\label{def_entropy}
+A function $\phi : \RR \to \RR \cup \{\infty\}$ is an entropy function if it is lower semicontinuous, convex, $\dom \phi\subset [0,\infty[$ and satisfies the following feasibility condition:  $\dom \phi \; \cap\;  ]0, \infty[\; \neq \emptyset$. The speed of growth of $\phi$ at $\infty$ is described by %its recession (or horizon) function
+\eq{
+\phi'_\infty = \lim_{x\uparrow +\infty} \varphi(x)/x \in \RR \cup \{\infty\} \, .
+}
+%
+%A \emph{parametric} entropy function is a normal integrand $\phi : T\times \RR \to \RR \cup \{\infty\}$ such that for all $t\in T$, $\phi_t \eqdef \phi(t,\cdot)$ is an entropy function.
+\end{definition}
+%
+
+
+If $\phi'_\infty = \infty$, then $\phi$ grows faster than any linear function and $\phi$ is said \emph{superlinear}. Any entropy function $\phi$ induces a $\phi$-divergence (also known as Csisz\'ar divergence) as follows.
+%
+\begin{definition}[Divergences]
+\label{def_divergence}
+Let $\phi$ be an entropy function.
+For $\mu,\nu \in \Mm(T)$, let $\frac{\d \mu}{\d \nu} \nu + \mu^{\perp}$ be the Lebesgue decomposition of $\mu$ with respect to $\nu$. The divergence $\Divergm_\phi$ is defined by
+\eq{
+\Divergm_\phi (\mu|\nu) \eqdef \int_T \phi\left(\frac{\d \mu}{\d \nu} \right) \d \nu 
++ \phi'_\infty \mu^{\perp}(T)
+}
+if $\mu,\nu$ are nonnegative and $\infty$ otherwise.
+\end{definition}%
+%
+The proof of the following Proposition can be found in~\cite[Thm 2.7]{LieroMielkeSavareLong}.
+%
+\begin{proposition}
+If $\phi$ is an entropy function, then $\Divergm_\phi$ is jointly $1$-homogeneous, convex and weakly* lower semicontinuous in $(\mu,\nu)$.
+\end{proposition}
+%In the first case, some conditions could preserve lower semicontinuity even in the parametric case, but we chose to avoid this technicalities. See \cite{bouchitte1988integral}.
+%
+The Kullback-Leibler divergence, also known as the relative entropy, plays a central role in this article.
+\begin{example}
+\label{ex_KLdiv}
+The Kullback-Leibler divergence $\KLm \eqdef \Divergm_{\phi_{\KL}}$ is the divergence associated to the entropy function $\phi_{\KL}$, given by
+\eql{\label{eq-defn-kl}
+	\phi_{\KL}(s)= \begin{cases}
+		s\log(s)-s+1 & \textnormal{for } s>0 , \\
+		1 & \textnormal{for } s=0 , \\
+		+\infty & \textnormal{otherwise.}
+		\end{cases}
+}
+When restricted to densities on a measured space, it is also the Bregman divergence~\cite{bregman1967relaxation} associated to (minus) the entropy.
+\end{example}
+%
+The following divergences will also be considered as examples.
+%
+\begin{example}
+The total variation distance $\TV(\mu|\nu) \eqdef |\mu-\nu|_{\TV}$ is the divergence associated to:
+\eql{\label{eq-defn-tv}
+	\phi_{\TV}(s)= \begin{cases}
+		|s-1| & \textnormal{for } s\geq0 , \\
+		+\infty & \textnormal{otherwise.}
+		\end{cases}
+}
+\end{example}
+%
+\begin{example}
+The equality constraint $\iota_{\{=\}}(\mu| \nu)$ which is $0$ if $\mu=\nu$ and $\infty$ otherwise, is the divergence associated to $\varphi=\iota_{\{1\}}$.
+\end{example}
+%
+\begin{example}
+\label{ex_RG}
+One can generalize the latter and define a ``range constraint'', denoted $\RG_{[\alpha,\beta]}(\mu|\nu)$, as the divergence which is zero if $\alpha \, \nu \leq \mu \leq \beta \, \nu$ with $0\leq\alpha\leq\beta\leq \infty$, and $\infty$ else. This is the divergence associated to $\phi = \iota_{[\alpha, \beta]}$.
+\end{example}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Balanced Optimal Transport}
+\label{subsec_balanced}
+
+Using divergences, the classical ``balanced'' optimal transport problem can be defined as follows.
+
+\begin{definition}[Balanced Optimal Transport]
+Let $X$ and $Y$ be Hausdorff topological spaces, let $c : X \times Y \rightarrow \RR \cup \{\infty\}$ be a lower semi-continuous function. The optimal transport problem between $\mu\in \Mm_+(X)$ and $\nu\in \Mm_+(Y)$ is
+\eql{\label{eq-ot}
+	 \uinf{\gamma \in \Mm_+(X\times Y)}  \int_{X\times Y} \!\!\! c\, \d\gamma  
+	 + \iota_{\{=\}}(P^X_\# \gamma | \mu) 
+	 + \iota_{\{=\}}(P^Y_\# \gamma | \nu) .
+}
+\end{definition}
+
+\begin{proposition}
+If $c$ is lower bounded and \eqref{eq-ot} is feasible, then the infimum is attained.
+\end{proposition}
+The proof of this result, as well as  a general theory of optimal transport can be found in \cite{Villani-OptimalTransport-09}.
+%
+If one interprets $c(x,y)$ as the cost of transporting a unit mass from $x$ to $y$, the problem is then to find the cheapest way to move a mass initially distributed according to $\mu$ toward the distribution $\nu$.
+
+\begin{example}
+An important special case is when $X=Y$ and $c$ is the power of a distance on $X$. Then, the optimal cost (i.e. the value of~\eqref{eq-ot}) is itself the power of a distance on the space of probability measures on $X$. This distance is often referred to as ``Wasserstein'' distance and denoted by $\Wass$, although this denomination is disputed. We refer to \cite[Chap.\ 6, Bibliographical Notes]{Villani-OptimalTransport-09} for a discussion of the historical context.
+\end{example}
+
+%%%%%
+\subsection{Unbalanced Optimal Transport}
+\label{subsec_unbalanced}
+%%%%%% Start Update B
+Standard optimal transport only allows meaningful comparison of measures with the same total mass: whenever $\mu(X) \neq \nu(Y)$, there is no feasible $\gamma$ in \eqref{eq-ot}. Several propositions have been made to circumvent this limitation by defining ``unbalanced'' transport problems in various dynamic and static formulations (see Section~\ref{sec: previous works}).
+%
+The following formulation with relaxed marginal constraints is best suited for the numerical schemes presented in this article.
+
+%
+\begin{definition}[Unbalanced Optimal Transport {\protect \cite[Problem 3.1]{LieroMielkeSavareLong}}]
+	\label{def:SoftMarginalFormulation}
+	Let $X$ and $Y$ be Hausdorff topological spaces, let $c: X\times Y \rightarrow [0,\infty]$ be a lower semi-continuous function and let $\Divergm_{\varphi_1}$, $\Divergm_{\varphi_2}$ be two divergences over $X$ and $Y$, as in Definition \ref{def_divergence}. For $\mu \in \Mm_+(X)$ and $\nu \in \Mm_+(Y)$, the unbalanced soft-marginal transport problem is
+	\begin{align}	
+		\label{eq-unbalanced-ot}
+		 \inf_{\gamma \in \Mm_+(X\times Y)}
+			\int_{X \times Y}\!\!\! c\,\d\gamma + \Divergm_{\varphi_1}(P^X_\# \gamma | \mu)
+			+ \Divergm_{\varphi_2}(P^Y_\# \gamma | \nu)\,.
+	\end{align}
+\end{definition}
+\begin{proposition}
+
+\label{prop_UOT_existence}
+Assume that \eqref{eq-unbalanced-ot} is feasible. If $\phi_1$ and $\phi_2$ are superlinear, then the infimum is attained. This is also the case if $c$ has compact sublevel sets and $\phi'_{1\infty} + \phi'_{2\infty} + \inf c > 0$.
+\end{proposition}
+%
+The proof of this result as well as a thorough study of duality properties of this problem can be found in \cite{LieroMielkeSavareLong}.
+%
+Note that~\eqref{eq-ot} is a particular case of~\eqref{eq-unbalanced-ot} when the domains of the entropy functions $\phi_i$ are the singleton $\{1\}$. More generally, if the functions $\phi_i$ admit unique minima at $1$, \eqref{eq-unbalanced-ot} can be viewed as a relaxation of the initial problem~\eqref{eq-ot} where the ``hard'' marginal constraints are replaced by ``soft'' constraints, penalizing the deviation of the marginals of $\gamma$ from $\mu$ and $\nu$.
+%
+%
+Now we discuss a specific case of particular interest.
+\begin{definition}[Wasserstein-Fisher-Rao Distance]
+\label{def:WassF}
+Take $X=Y$, let $d$ be a distance on $X$ and $\lambda \geq 0$. For the cost
+\eql{ \label{logcost}
+	c(x,y) = -\log\pa{ \cos_+^2\pa{d(x,y)}}
+}
+with $\cos_+ : z \mapsto \cos(z\wedge\frac{\pi}{2})$ and $\Divergm_{\phi_1}=\Divergm_{\phi_2}=\lambda \KLm$, we define $\WassF_\lambda(\mu,\nu)$ as the square root of the minimum in \eqref{eq-unbalanced-ot} (as a function of the measures $(\mu,\nu) \in \Mm_+(X)^2$). 
+We simply write $\WassF \eqdef \WassF_1$ for $\lambda=1$.
+\end{definition}
+
+As shown in~\cite{LieroMielkeSavareLong}, $\WassF$ defines a distance on $\Mm_+(X)$, which is equal to the \emph{Wasserstein-Fisher-Rao} geodesic distance introduced simultaneously and independently in~\cite{LieroMielkeSavareLong,kondratyev2015,2015-chizat-interpolating}.
+An alternative static formulation is given in \cite{2015-chizat-unbalanced}.
+%
+Other important cases include:
+\begin{itemize}
+\item The \emph{Gaussian Hellinger-Kantorovich} distance $\GHK$ is obtained by taking the cost $c=d^2$ ($d$ still a metric) and  $\Diverg_{\phi_i}=\lambda \KL$ with $\lambda > 0$. It has been introduced in~\cite{LieroMielkeSavareLong} where it is also shown that when $X$ is a geodesic space, $\WF$ is the geodesic distance generated by $\GHK$.
+
+%
+\item The \emph{optimal partial transport} problem, which is obtained by taking a cost function bounded from below by $-2\lambda$ and $\Diverg_{\phi_i}=\lambda \TV$, with $\lambda>0$. Originally, optimal partial transport refers to a problem where the marginal constraints are replaced by a constraint on the total mass of the marginals (and domination constraints); here $\lambda$ is the Lagrange multiplier associated to the mass constraint (see \cite{caffarelli2010free}).
+%
+\item With the divergence $\RG$ as in example \ref{ex_RG}, one imposes a range constraint on the marginal:
+\eq{
+\RG(P^X_\# \gamma | \mu) < + \infty
+\qquad \Leftrightarrow \qquad
+\alpha \mu \leq P^X_\# \gamma \leq \beta \mu
+}
+(and similarly for $P^Y_\# \gamma$).
+%This problem will be referred to as \emph{optimal range transport}.
+\end{itemize}
+
+The following result is a minor extension of results from \cite{LieroMielkeSavareLong,2015-chizat-unbalanced} and is useful if one wishes to vary the parameter $\lambda$ in numerical applications.
+
+\begin{proposition}
+$\WassF_\lambda$ defines a distance if $0\leq\lambda\leq1$ (degenerate if $\lambda=0$). The upper bound on $\lambda$ is necessary when $X$ is a geodesic space of diameter greater than $\pi/2$.
+\end{proposition}
+%
+\begin{proof}
+The case $\lambda=0$ is trivial. If $\lambda>0$, when dividing \eqref{eq-unbalanced-ot} by $\lambda$, one obtains the new cost $-2\log(\cos_+^{1/\lambda}(d(x,y)))$. But the function $f:d \mapsto \arccos(\cos^{\frac1{\lambda}}(d))$ defined on $[0,\pi/2]$ is increasing, positive, satisfies $\{0\}=f^{-1}(0)$ and for $x\in ]0,\pi/2[$ it holds
+\[
+f'' = \frac{1}{\la} \frac{\cos^{\frac{1}{\la}-2}}{(1-\cos^{\frac{2}{\la}})^2} \left( 1 - \frac{1}{\la} \sin^2 -\cos^{\frac{2}{\la}}\right)
+\, .
+\]
+From the convexity inequality $\text{sign} [(1-X)^\frac{1}{\la}-1 + \frac{1}{\la} X] = \text{sign} (\frac{1}{\la}-1) $ it follows that $f$ is strictly concave on $[0,\pi/2]$ if $\la<1$ and strictly convex if $\la>1$.
+%
+Thus if $\la \leq 1$, $f \circ d$ still defines a distance on $X$ and consequently $\WassF_\lambda$ too. 
+%
+
+If $X$ is a geodesic space of diameter greater than $\pi/2$, take $(x_1,x_2) \in X^2$ such that $d(x_1,x_2)=\pi/2$. From~\cite[Corollary 8.3]{LieroMielkeSavareLong}, $(\Mm(X), \WassF_1)$ is itself a geodesic space. Consequently, there exists a midpoint $\mu \in \Mm_+(X)$, i.e.\ such that \eq{
+\WassF_1(\delta_{x_1},\mu) = \WassF_1(\delta_{x_2},\mu) =\frac12 \WassF_1(\delta_{x_1},\delta_{x_2})\, .
+}
+From \cite[Theorem 8.6]{LieroMielkeSavareLong} and the characterization of geodesics in $\text{Cone}(X)$ it holds $0<d(x,x_i)<\pi/2$ for  $\mu$ a.e.\ $x\in X$. This implies, for $\lambda>1$, and $\mu$ a.e.\ $x$, $-\log(\cos_+^{1/\lambda}(d(x_i,x)))<-\log(\cos_+(d(x_i,x)))$. Thus 
+$(\WassF^2_\lambda /\lambda)(\delta_{x_i},\mu)<\WassF^2_1(\delta_{x_i},\mu)$. But, for $\lambda\geq 1$, $(\WassF^2_\lambda/\lambda)(\delta_{x_1},\delta_{x_2})=2\KL(0|1)=2$ this leads to
+\eq{
+\WassF_\lambda(\delta_{x_1},\mu)+ \WassF_\lambda(\delta_{x_2},\mu) < \WassF_\lambda(\delta_{x_1},\delta_{x_2})
+}
+and the triangle inequality property is lost. %\qedhere
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Barycenter Problem and Extensions}
+\label{subsec_barycenter}
+
+The problem of finding an ``average'' measure $\sigma \in \Mm_+(Y)$ which minimizes the sum of the (possibly unbalanced) transport cost toward every measure of a family $(\mu_k)_{k=1}^n \in \Mm_+(X)^n$ is of theoretical and practical interest (see Section~\ref{sec: previous works}). To formalize this problem, consider a family of costs functions $(c_k)_{k=1}^n $ on $X \times Y$ and a family of divergences $(\Divergm_{\phi_{k,1}},\Divergm_{\phi_{k,2}})_{k=1}^n$. The problem is to solve
+\eq{
+\inf_{\sigma\in \Mm_+(Y)} \inf_{\substack{(\gamma_k)_{k=1}^n \in \\ \Mm_+(X\times Y)^n}} \sum_{k=1}^n  
+			\left( \int_{X\times Y} c_k \, \d \gamma_i  
+			+ \Divergm_{\varphi_{k,1}}(P^X_\# \gamma_i | \mu_i)
+			+ \Divergm_{\varphi_{k,2}}(P^Y_\# \gamma_i | \sigma) \right) \, .
+}
+%
+By exchanging the infima, this is equivalent to
+\eql{
+\label{eq_barycenter}
+\inf_{\substack{(\gamma_k)_{k=1}^n \in \\ \Mm_+(X\times Y)^n}} 
+	\sum_{k=1}^n  \int_{X\times Y} \!\!\!\! c_k \, \d \gamma_k 
+	+ \sum_{k=1}^n \Divergm_{\phi_{i,1}}(P^X_\# \gamma_k | \mu_k) 
+	+ \!\! \inf_{\sigma\in \Mm_+(Y)} \sum_{k=1}^n \Divergm_{\phi_{k,2}}(P^Y_\# \gamma_k| \sigma)\, .
+}
+%
+Note that while the object of interest is the minimizer $\sigma$ and not the family of couplings, we will see in Section \ref{sec_appli_bary} that the computation of $\sigma$ is a byproduct of the ``scaling'' algorithm defined below. 
+
+The two following examples are specific instances of so-called Fr\'echet means, defined in any complete metric space $(E,d)$ as solutions to
+\eq{
+\argmin_{\sigma \in E} \sum_k \al_k \, d(\mu_k, \sigma)^2
+}
+where $(\alpha_k)_{k=1}^n$ is a family of nonnegative weights and $(\mu_k)_{k=1}^n\in E^n$.
+%
+\begin{example}[Wasserstein barycenters]
+Let $X=Y$ and let $c$ be the quadratic cost $(x,y) \mapsto d(x,y)^2$ for a metric $d$ and define $c_k = \alpha_k \, c$. Let all the divergences be the equality constraints. Then \eqref{eq_barycenter} is a formulation of the Fr\'echet means in the Wasserstein space, also known as Wasserstein barycenters (see \cite{agueh2011barycenters}).
+\end{example}
+
+\begin{example}[$\WF$ barycenters]
+Let  $c$ be as in \eqref{logcost}, define $c_k=\alpha_k \, c$ and let $\Divergm_{\phi_{k,1}} = \Divergm_{\phi_{k,1}}= \alpha_i \KLm$ for all $k\in \{1,\dots,n\}$. Then \eqref{eq_barycenter} is a formulation of Fr\'echet means for the $\WF$ distance.
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Gradient Flows}
+\label{subsec_gradientflows}
+
+\paragraph{General outline.}
+Given a metric space $(T,d)$ and some lower-semicontinuous function $\mathcal{G} : T \rightarrow \RR \cup \{ \infty\}$ with compact sublevel sets, a time-discrete gradient flow with step size $\tau>0$ starting from an initial point $\mu_{0} \in T$ corresponds to the computation of a sequence $(\mu^\tau_k)_{k\in \NN}$ via
+\begin{align*}
+	\mu^\tau_0 & \eqdef \mu_0, &
+	\mu^\tau_{k+1} & \in \uargmin{\mu \in T} \mathcal{G}(\mu) + \frac{d^2(\mu^\tau_k,\mu)}{2\tau} \, .
+\end{align*}
+This scheme generalizes the notion of \textit{implicit Euler steps} to approximate gradient flows in Euclidean spaces, which are recovered when $(T,d)=(\RR^n,|\cdot|)$. From a theoretical point of view, the object of interest is the limit trajectory when $\tau \rightarrow 0$ of the piecewise constant interpolation
+\eq{
+\mu^\tau (t) \eqdef \mu^\tau_k  \text{ for all } t \in [k\tau, (k + 1)\tau[\, .
+}
+Initiated by \cite{jordan1998variational}, the study of such flows when $T$ is the space of probability measures endowed with the Wasserstein metric $d=\W$ (see Section \ref{subsec_balanced}) has led to considerable advances in the theoretical study of PDEs and their numerical resolution (see Section~\ref{sec: previous works}).
+%
+The recent introduction of ``unbalanced transport'' metrics paves the way for further applications, since it is now possible to consider the whole space of nonnegative measures, endowed for instance with the metric $\WassF$, as considered in \cite{GallouetMonsaingeon2015}.
+
+\paragraph{Minimization problem.}
+For gradient flows based on an optimal transport metric, such as $\W$, $\WF$ or $\GHK$, each step requires to solve a problem of the form
+\eql{
+\label{eq-grad-flow}
+%\inf_{\substack{\gamma \in \\ \Mm_+(X\times X)}}
+\inf_{\gamma \in \Mm_+(X\times X)}
+%\left\{
+\int _{X\times Y} \!\!\! c \, \d \gamma 
++ \Divergm_{\phi_1}(P^1_\# \gamma | \mu_k^\tau) 
++ \!\!\!  \inf_{\mu \in \Mm_+(X) } \left( \Divergm_{\phi_2}(P^2_\# \gamma | \mu) + 2 \tau \mathcal{G}(\mu) \right)
+%\right\}
+}
+where $\phi_1$, $\phi_2$ are entropy functions and $\mathcal{G}$ is a lower semicontinuous functional which we also assume convex.
+This problem, as well as variants, involving so-called ``splitting'' techniques (see \cite{GallouetMonsaingeon2015}) fit into the framework developed below. In particular, we show in Section \ref{sec_applicationGF} that the computation of $\mu_{k+1}$ is a byproduct of the minimization of \eqref{eq-grad-flow} with the ``scaling'' algorithm defined below.
+
+\paragraph{Flows associated to $\WF$.}
+The distance $\WF$ was only introduced recently, so a sound theoretical analysis of the corresponding gradient flows and their limit PDEs is not yet available (and is not the subject of the present article). Meanwhile, we present here heuristic arguments in a smooth setting which lead to the evolution equation
+\eql{
+\label{eq_GFforWF}
+\partial_t \mu = \diverg (\mu \nabla \mathcal{G}'(\mu)) -4 \mu \mathcal{G}'(\mu)
+}
+for the limit trajectory of $\mu^\tau(t)$ as $\tau \rightarrow 0$.
+Indeed, when restricted to measures $\mu$ with positive density of Sobolev regularity, $\WF$ is the weak Riemannian metric associated to the tensor
+\eq{
+g(\mu)(\delta \mu, \delta \mu) \eqdef \inf_{v, \alpha}  \int_X |v(x)|^2\mu(x) \d x + \frac14 \int_X |\alpha(x)|^2 \mu(x) \d x
+}
+where, for a small variation $\delta \mu$, one searches over the decompositions $\delta \mu = -\diverg(v\mu) + \alpha \mu$ into displacement (given by the velocity field $v\in \Ldeux(X,\mu)^d$) and growth (given by the rate of growth $\alpha\in \Ldeux(X,\mu)$) (see \cite{2015-chizat-unbalanced}).
+%
+A new step $\mu_{k+1}^\tau$ is given from $\mu^\tau_k$ through the resolution of
+\eq{
+\mu_{k+1}^\tau \in \argmin_{\mu\in \mathcal{M}_+(X)} \mathcal{G}(\mu) + \frac{1}{2\tau} \WF^2(\mu,\mu_k^\tau) \, .
+}
+By informally parametrizing the space $\mathcal{M}_+(X)$ with $(v,\alpha)$ as $\mu = \mu^\tau_k +\tau (-\diverg (v\mu^\tau_k) + \alpha \mu_k^\tau)$, this can be rewritten, in first order of $\tau \cdot (v,\alpha)$, as
+\eq{
+\inf_{v,\, \alpha} \mathcal{G}(\mu_k^\tau) + \int_X \left( \tau \mathcal{G}'(\mu_k^\tau) ( \alpha \mu_k^\tau- \diverg (v \mu_k^\tau))  + \frac{\tau^2}{2\tau}  \left( |v(x)|^2  + \frac14 \alpha(x)^2\right) \mu_k^\tau(x)\right) \d x
+}
+where $\mathcal{G}'(\mu)$ is, if it exists, the unique function such that $\frac{\d }{\d \epsilon} \mathcal{G}(\mu + \epsilon \chi)\vert_{\epsilon=0} = \int_X \mathcal{G}'(\mu) \d \chi$ for all perturbations $\chi$. 
+The first order optimality conditions yield $v = -\nabla \mathcal{G}'(\mu)$ and $\alpha = -4\mathcal{G}'(\mu)$. One thus obtains
+\eq{
+\frac{1}{\tau} (\mu- \mu_k^\tau) = \diverg (\mu \nabla \mathcal{G}'(\mu)) -4 \mu \mathcal{G}'(\mu)
+}
+which yields \eqref{eq_GFforWF} as $\tau \to 0$.
+%Such gradient flows are a promising tool for both theoretical and numerical concerns in the study of PDEs with varying mass.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Generic Formulation}
+\label{sec:GenericFormulation}
+
+Consider two convex and lower semicontinuous functions $\mathcal{F}_1$ and $\mathcal{F}_2$ defined on $\Mm_+(X)^n$ and $\Mm_+(Y)^n$ respectively. The variety of problems reviewed above can be seen as special cases of
+\eql{\label{eq-general}
+\min_{\gamma \in \Mm^n_+(X \times Y)} \mathcal{J}(\gamma) 
+\eqdef \langle c , \gamma \rangle 
++ \mathcal{F}_1(P^X_\# \gamma) 
++ \mathcal{F}_2(P^Y_\# \gamma)\, 
+}
+where $\langle c, \gamma \rangle = \sum_{k=1}^n \int c_k \d  \gamma_i $ is a short notation for the total transport cost of a family of couplings $(\gamma_k)_{k=1}^n$ w.r.t.\ a family of cost functions $(c_k)_{k=1}^n$ and the projection operators act elementwise. More precisely, they are recovered with the following choices of functions:
+%
+\begin{itemize}
+\item Balanced OT \eqref{eq-ot}:  
+$\mathcal{F}(\sigma)= \iota_{\{=\}} (\sigma | \mu)$; 
+%%%
+\item Unbalanced OT \eqref{eq-unbalanced-ot}: 
+$\mathcal{F}(\sigma) = \Divergm_{\phi}( \sigma | \mu)$; 
+%%%
+\item Barycenters \eqref{eq_barycenter}: 
+$\mathcal{F}(\sigma) = \inf_{\omega \in \Mm^n(X)} \left\{ \sum_{k=1}^n \Divergm_{\phi_k}(\sigma_k|\omega_k)+ \iota_D(\omega) \right\}$, 
+where $D$ is the set of families of measures for which all components are equal,
+\begin{equation*}
+	D \eqdef \left\{ (\omega_1,\ldots,\omega_n) \in \Mm^n(X) : \omega_i = \omega_j \textnormal{ for } i,j=1,\ldots,n \right\}\,; 
+\end{equation*}
+%%%
+\item Gradient flows \eqref{eq-grad-flow}: 
+$ \mathcal{F}(\sigma) =  \inf_{\omega \in \Mm(X) } \left\{ \Divergm_{\phi}(\sigma|\omega) + 2\tau \mathcal{G}(\omega) \right\}$.
+\end{itemize}
+%
+It is remarkable that, even if $\mathcal{F}$ is sometimes defined through an auxiliary minimization problem, it can still be handled efficiently in some cases by the scaling algorithm detailed below. For instance, functions of the form
+\eql{
+\label{eq_marginal_functional}
+ \mathcal{F}(\sigma) =  \inf_{\omega \in \Mm^n(X) } \sum_{k=1}^n \Divergm_{\phi_k}(\sigma_k|\omega_k) + \mathcal{G}(\omega)\,,
+ }
+where $\mathcal{G}$ is convex and $(\phi_k)_n$ is a family of entropy functions, are still convex and can model a great variety of problems. A graphical interpretation of these problems is suggested in Figure \ref{fig_generic_problem} along with some examples.
+
+\begin{figure}
+\centering
+\input{images/problem_types} 
+\caption{Representation of some problems of the form \eqref{eq-general}. Each circle represents a measure (filled with black if is fixed by an equality constraint); the terms in the functional $\mathcal{J}$, see \eqref{eq-general}, are represented by arrows (for transport terms), dotted lines (for divergence terms) and rectangles (for the $\mathcal{G}$ terms). (a) With $\mathcal{F}_1$ and $\mathcal{F}_2$ of the form \eqref{eq_marginal_functional} (b) Balanced barycenter (c) Unbalanced optimal transport (d) $\WF$ gradient flow of 2 species with interaction.}
+\label{fig_generic_problem}
+\end{figure}
+
+
+

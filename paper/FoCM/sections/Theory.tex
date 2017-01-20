@@ -1,0 +1,318 @@
+% !TEX root = ../InterpolatingOTFR.tex
+
+\section{Definition and existence of geodesics}
+\label{sec:theory}
+
+In order to prove that the minimum of the variational problem is attained, rather than using the direct method of calculus of variation, we choose to take advantage of the convexity of the problem and prove it by Fenchel-Rockafellar duality. Indeed, we show that (a generalization of) problem  \eqref{defsmooth} is obtained by considering the dual of a variational problem on the space of differentiable functions. This point of view allows to %kill two birds with one shot: 
+prove existence of geodesics and exhibit sufficient optimality conditions.
+
+\subsection{Definition of the interpolating distance}
+\label{subsec:average}
+
+Consider the closed convex set
+\[
+B_{\kappa} \defeq \left\{ (a,b,c)\in \R \times \R^d \times \R : a+\frac{1}{2}\left( |b|^2+\frac{c^2}{\kappa^2} \right) \leq 0 \right\}
+\]
+and its convex indicator function
+\[
+\iota_{B_{\kappa}} : (a,b,c) \in \R^{d+2} \mapsto 
+\begin{cases}
+0 & \text{if } (a,b,c) \in B_{\kappa} \\
++ \infty & \text{otherwise.}
+\end{cases}
+\]
+We denote by $\fonc$ the Fenchel-Legendre conjugate of $\iota_{B_{\kappa}}$, i.e.
+\[
+\fonc : (x,y,z)\in \R\times\R^d\times\R \mapsto
+\begin{cases}
+\frac{\vert y \vert^2 + \kappa^2 z^2 }{2x} &\text{if $x>0$,}\\
+0 & \text{if } (x,|y|,z)=(0,0,0)\\
++\infty & \text{otherwise}
+\end{cases}
+\]
+which is by construction proper, convex, lower semicontinuous (l.s.c.) and $1$-homogeneous. One can check by direct computations that
+\begin{equation}
+\label{subdiff fonctional}
+\D \fonc (x,y,z) =
+\begin{cases}
+\left( -\frac{|y|^2+\kappa^2 z^2}{2x^2}, \frac{y}{x},\frac{\kappa^2 z}{x} \right)& \text{if $x>0$,}\\
+B_{\kappa}& \text{if $(x,|y|,z)=(0,0,0)$,}\\
+\emptyset & \text{otherwise}.
+\end{cases}
+\end{equation}
+We denote $\mathcal{M} \defeq \mathcal{M}([0,1]\times \Om)$ and for $\mu=(\rho,\M,\Z) \in \mathcal{M}\times \mathcal{M}^d \times \mathcal{M}$ we define the convex functional
+\[
+\ifonc(\mu) \defeq \int_{[0,1] \times \Om} \fonc\left(\frac{\d\mu}{\d\lambda}\right) \d\lambda
+\]
+where $\lambda$ is any non-negative Borel measure satisfying $\vert \mu \vert \ll \lambda$. As $\fonc$ is homogeneous, the definition of $\ifonc$ does not depend on the reference measure $\lambda$.
+
+
+\begin{definition}[Continuity equation with source]
+\thlabel{continuity equation}
+We denote by $\ccons$ the affine subset of $\mathcal{M}\times \mathcal{M}^d \times \mathcal{M}$ of triplets of measures $\mu=(\rho,\M,\Z)$ satisfying the continuity equation $\D_t \rho + \nabla \cdot \M = \Z$ weakly, interpolating between $\rho_0$ and $\rho_1$ and satisfying homogeneous Neumann boundary conditions. This is equivalent to requiring
+\begin{equation}
+\label{continuity weak}
+\int_0^1 \int_{\Om} \D_t \varphi \ \d\rho + \int_0^1 \int_{\Om} \nabla \varphi \cdot \d\M + \int_0^1 \int_{\Om} \varphi \ \d\Z = \int_{\Om} \varphi(1,\cdot)\d\rho_1 - \int_{\Om} \varphi(0,\cdot)\d\rho_0
+\end{equation}
+for all $\varphi \in C^1([0,1]\times \Om)$.
+\end{definition}
+%
+\begin{remarks}\mbox{}
+\begin{itemize}
+\item The set $\ccons$ is not empty: it contains for instance the linear interpolation $(\rho,0,\D_t \rho)$ with $\rho = (t \rho_1 + (1-t) \rho_0 ) \otimes \d t$. Moreover, if we assume that $\rho_0$ and $\rho_1$ have equal mass, then there exists $(\rho,\M,\Z) \in \ccons$ such that $\zeta =0$. This is a consequence of \cite[Theorem 8.3.1]{ambrosio2006gradient}.
+\item If we make the additional assumption that $\M\ll\rho$ and $\Z \ll \rho$ (which is satisfied as soon as $\ifonc(\mu)$ is finite), we find that the time marginal of $\mu$ is absolutely continuous w.r.t.\ the Lebesgue measure, allowing to disintegrate it in time.
+\item Under the same assumptions, $\mu$ admits a continuous representative, i.e.\ it is $\d t-$a.e.\ equal to a curve which is weak* continuous in time. 
+\item When $\rho$ is disintegrable in time, the map $t \mapsto \rho_t(\Om) = \int_{\Om} \rho_t$ admits the distributional derivative $\rho'_t (\Om) = \zeta_t(\Om)$, for almost every $t\in[0,1]$. Indeed, taking a test function $\varphi$ constant in space in \eqref{continuity weak} gives
+\[
+\int_0^1 \varphi'(t) \rho_t(\Om)\d t + \int_0^1 \varphi(t) \Z_t(\Om)\d t = \varphi(1)\rho_1(\Om) -\varphi(0)\rho_0(\Om)\, .
+\]
+\end{itemize}
+\end{remarks}
+%
+We are now in position to define the central object of this paper $\WF_{\kappa}$, as a map $\mathcal{M}_+(\Om) \times \mathcal{M}_+(\Om) \rightarrow \R_+$.
+\begin{definition}[Interpolating distance]
+\thlabel{interpolating distance} 
+For $(\rho_0,\rho_1) \in \mathcal{M}_+(\Om)^2$, the (squared) interpolating distance is defined as
+\begin{equation*}
+\label{dual}
+\WF_{\kappa}^2(\rho_0,\rho_1) \defeq \inf_{\mu \in \ccons} \ifonc (\mu) \, . \tag{$\mathcal{P}_{\mathcal{M}}$}
+\end{equation*}
+\end{definition}
+%
+
+The following result shows that $\WF_{\kappa}(\rho_0,\rho_1)$ is always finite. 
+
+\begin{proposition}[Bound on the distance]
+\thlabel{bounddistance}
+Let $(\rho_0,\rho_1)\in\mathcal{M}_+(\Om)^2$. The following bounds hold:
+\begin{align*}
+\WF^2_{\kappa}(\rho_0,\rho_1) & \leq 2\kappa^2 \vert (\sqrt{\rho_1} -\sqrt{\rho_0})^2 \vert(\Om) \\
+&\leq 2\kappa^2(\rho_0(\Om)+\rho_1(\Om)).
+\end{align*}
+\end{proposition}
+
+\begin{proof}
+Consider the triplet of measures $\mu=(\rho,\M,\Z)$ with
+\[
+\begin{cases}
+\rho =  \left( t\sqrt{\rho_1}+(1-t)\sqrt{\rho_0} \right)^2  \otimes \d t \, ,\\
+\M = 0\, , \\
+\Z = 2(\sqrt{\rho_1}-\sqrt{\rho_0})(t\sqrt{\rho_1}+(1-t)\sqrt{\rho_0}) \otimes \d t  ,
+\end{cases}
+\]
+and notice that it belongs to $\ccons$.  Taking $\lambda \in \mathcal{M}_+$ such that $\mu \ll \lambda$, the first bound comes from
+ \[
+ \ifonc(\mu)= 2 \kappa^2 \int_{\Om} \left( \sqrt{\frac{\d\rho_1}{\d\lambda}} -  \sqrt{\frac{\d\rho_0}{\d\lambda}}\right)^2 \d\lambda
+ \]
+ and does not depend on $\lambda$ by homogeneity, while the second bound is obtained in the worst case when the supports are disjoint.
+ \end{proof}
+
+\begin{remark}
+Notice that the first bound is tight and it corresponds to the Hellinger distance, defined in \thref{def FR}. It is the solution to \eqref{dual}  when adding the constraint $\M=0$ (see \thref{uniqueness FR}).
+\end{remark}
+
+%%%%%%
+\subsection{Existence of geodesics}
+We now prove existence of geodesics. The proof mainly uses the Fenchel-Rockafellar duality Theorem (see Theorem \ref{thm_FR}) and a duality result for integrals of convex functionals.
+
+\begin{definition}[Geodesics]
+Geodesics are measures $\rho \in \mathcal{M}_+$ for which there exists a momentum $\M$ and a source $\Z$ such that $(\rho,\M,\Z)$ is a minimizer of \eqref{dual}.
+\end{definition}
+
+\begin{definition}[Primal problem] We introduce a variational problem on the space of differentiable functions which is defined as follows
+\thlabel{def: primal}
+\begin{equation*}
+\label{primal}
+\inf_{\varphi \in C^1([0,1] \times \Om)} J(\varphi) \defeq \int_0^1 \int_{\Om} \iota_{B_{\kappa}}(\D_t \varphi, \nabla \varphi, \varphi) + \int_{\Om} \varphi(0,\cdot)\d\rho_0 - \int_{\Om} \varphi(1,\cdot) \d\rho_1 \, .
+\tag{$\mathcal{P}_{C^1}$}
+\end{equation*}
+\end{definition}
+%
+\begin{theorem}[Strong duality and existence of geodesics]
+\thlabel{existence}
+Let $(\rho_0,\rho_1)\in\mathcal{M}_+(\Om)^2$. It holds
+\[
+\WF_{\kappa}(\rho_0,\rho_1)^2 = -\inf_{\varphi \in C^1([0,1] \times \Om)} J(\varphi)
+\] 
+and the infimum in \eqref{dual} is attained.
+\end{theorem}
+
+\begin{proof}
+First remark that $\WF_{\kappa}(\rho_0,\rho_1)$ is necessarily finite from \thref{bounddistance}. Let us rewrite \eqref{primal} as 
+\[
+\inf_{\varphi \in C^1([0,1] \times \Om)} F(A\varphi) + G(\varphi)
+\]
+where
+\begin{align*}
+A : \varphi &\mapsto (\D_t \varphi, \nabla \varphi, \varphi)\, , \\
+F :(\alpha,\beta,\gamma) &\mapsto \int_0^1 \int_{\Om} \iota_{B_{\kappa}}(\alpha(t,x),\beta(t,x),\gamma(t,x)) \d x \d t \, , \\
+%\intertext{and}
+ \text{and} \quad G : \varphi &\mapsto \int_{\Om} \varphi(0,\cdot)\d\rho_0 - \int_{\Om} \varphi(1,\cdot) \d\rho_1 .
+\end{align*}
+Remark that $F$ and $G$ are convex, proper and lower-semicontinuous. It is easy to find a function $\varphi \in C^1([0,1]\times \Om)$ such that $F$ is continuous at $A\varphi$, taking $(A\varphi)(t,x)$ in the interior of the closed set $B_{\kappa}$ for all $(t,x)$ is enough. The Fenchel-Rockafellar duality Theorem guarantees the following equality
+\begin{equation}
+\inf_{\varphi \in C^1([0,1] \times \Om)} J(\varphi) = \max_{\mu \in \mathcal{M} \times \mathcal{M}^{d} \times \mathcal{M}} 
+\left\{ -F^*(\mu)-G^*(-A^*\mu) \right\}.
+\label{fenchelrocka}
+\end{equation}
+In the second term, we recognize the generalized continuity constraint
+\begin{align*}
+G^*(-A^*\mu) &= \sup_{\varphi \in C^1([0,1]\times \Om)} \left\{ - \langle A\varphi, \mu \rangle    +\int_{\Om} \varphi(1,\cdot)\d\rho_1 - \int_{\Om} \varphi(0,\cdot) \d\rho_0 \right\}  \\
+ &= 
+\begin{cases}
+0 & \text{ if $\mu \in \ccons$}\\
++\infty & \text{otherwise}.
+\end{cases}
+\end{align*}
+For the first term, as the Fenchel conjugate of $\iota_{B_{\kappa}}$ is $\fonc$, we can apply \cite[Theorem 5]{rockafellar1971integrals}. This Theorem gives an integral representation for the conjugate of integral functionals by means of the recession function $f^{\infty}$, defined as $f^{\infty}(z) \defeq \sup_t f(x+tz)/t$, for $x$ such that $f(x)<+\infty$. More precisely,
+\[
+F^*(\mu) = \int_0^1 \int_{\Om} \fonc \left( \frac{\d\mu}{\d\mathscr{L}} \right) \d \mathscr{L}+
+\int_0^1 \int_{\Om} \fonc^{\infty} \left( \frac{\d\mu}{\d|\mu^S|} \right) \d|\mu^S|
+\]
+where $\mathscr{L}$ is the Lebesgue measure, $\mu^S$ is any singular measure which dominates the singular part of $\mu$ and $\fonc^{\infty}$ is $\fonc$ itself by homogeneity. Finally we obtain $F^*(\mu)=\ifonc(\mu)$, which allows to recognize the opposite of \eqref{dual} in the right-hand side of \eqref{fenchelrocka}. The fact that the minimum is attained is part of the Fenchel-Rockafellar Theorem.
+\end{proof}
+%%%%%%%%%%%%%%
+
+The following Theorem shows that we have defined a metric and provides two useful formulas. 
+
+%%%%%%%%%%%%%%
+\begin{theorem}
+\thlabel{WF defines a metric}
+$\WF_{\kappa}$ defines a metric on $\mathcal{M}_+(\Om)$. Moreover, we have the equivalent characterizations, by changing the time range
+\begin{equation}
+\label{alternative1}
+\WF_{\kappa}(\rho_0,\rho_1) = \left\{ \inf_{\mu \in \mathcal{CE}_0^{\tau}(\rho_0,\rho_1)} \tau  \int_{[0,\tau] \times \Om} \fonc\left(\frac{\d\mu}{\d\lambda}\right) \d\lambda \right\}^{\frac12} 
+\end{equation}
+with $\tau > 0$, and by disintegrating $\mu$ in time:
+\begin{equation}
+\label{alternative2}
+\WF_{\kappa}(\rho_0,\rho_1)= \inf_{\mu \in \mathcal{CE}_0^1(\rho_0,\rho_1)} \int_0^1 \left\{ \int_{\Om} \fonc\left( \frac{\d\mu_t}{\d\lambda_t}\right) \d\lambda_t \right\}^{\frac12} \d t
+\end{equation}
+where $(\lambda_t)_{t\in [0,1]}$ is such that for all $t \in [0,1]$, $\mu_t \ll \lambda_t$.
+\end{theorem}
+
+\begin{remark}
+Curves $(\rho_t)_{t\in [0,1]}$ associated to minimizers of \eqref{dual} have the \emph{constant speed} property, i.e.\ $\WF_\kappa (\rho_s,\rho_t) = |t-s| \WF_\kappa(\rho_0,\rho_1)$ and this is not necessarily the case for minimizers of \eqref{alternative2} (for more details see \cite[Theorem 5.4]{dolbeault2009new} where the proof of a similar result is given).
+\end{remark}
+%\begin{remark}
+%The difference between minimizers of \eqref{dual} and \eqref{alternative2} is that for the former, the integrand is constant in time (as a consequence of  \eqref{alternative2}), i.e.\ minimizers of \eqref{dual} satisfy for almost every $t\in[0,1]$
+%\[
+%\WF_{\kappa}(\rho_0,\rho_1) = \int_{\Om} \fonc\left( \frac{\d\mu_t}{\d\lambda_t} \right) \d\lambda_t
+%\]
+%while this is not necessarily the case for minimizers of \eqref{alternative2}.
+%\end{remark}
+
+\begin{proof}
+We obtain characterization \eqref{alternative1}, by remarking that if $T:t \mapsto \tau \cdot t$ is a time scaling and $\mu=(\rho,\M,\Z) \in \ccons$ then $\tilde{\mu}=(T_{\#} \rho, \frac{1}{\tau}T_{\#} \M, \frac{1}{\tau} T_{\#} \Z) \in \mathcal{CE}_0^{\tau} (\rho_0, \rho_1)$. For the proof of \eqref{alternative2}, the arguments  of \cite[Theorem 5.4]{dolbeault2009new} apply readily. Let us now prove that $\WF_{\kappa}$ defines a metric. By definition, it is non-negative and it is symmetric because the functional satisfies $\ifonc(\rho,\M,\Z)=\ifonc(\rho,-\M,-\Z)$ so time can be reversed leaving $\ifonc$ unchanged. Finally, the triangle inequality comes from characterization \eqref{alternative2} and the fact that the continuity equation is stable by concatenation in time i.e.\ for $\tau \in ]0,1[$, if $\mu_1\in \mathcal{CE}_0^{\tau} (\rho_0, \rho_{\tau})$ and $\mu_2\in \mathcal{CE}_{\tau}^1 (\rho_{\tau}, \rho_1)$ then $\mu_1 1_{[0,\tau]}+\mu_2 1_{[\tau,1]} \in \ccons$. 
+\end{proof}
+
+%\marginpar{[Proof skipped: constant speed geodesics]}
+
+\begin{proposition}[Homogeneity by mass rescaling]
+\thlabel{mass rescaling}
+Let $\alpha >0$. If $\rho$ is a geodesic for $\WF_{\kappa}(\rho_0,\rho_1)$ then $\alpha \rho$ is a geodesic for $\WF_{\kappa}(\alpha \rho_0,\alpha \rho_1)$ and 
+\[
+\WF_{\kappa}(\alpha \rho_0,\alpha \rho_1)=\sqrt{\alpha} \WF_{\kappa}(\rho_0,\rho_1)
+\]
+\end{proposition}
+
+\begin{proof}
+It is a direct consequence of the homogeneity of $\ifonc$.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+\subsection{Sufficient optimality and uniqueness conditions}
+\label{sec:optimality condition}
+
+We now leverage tools from convex analysis in order to provide a useful condition ensuring uniqueness of geodesics. We use this condition to study travelling Dirac solutions in Section~\ref{sec-travelling-dirac}. 
+
+\begin{lemma}
+\thlabel{lemma:subdiff}
+The subdifferential of $\ifonc$ at a point $\mu=(\rho,\M,\Z)$ such that $\ifonc (\mu) < + \infty$ is
+\begin{multline}
+\label{subdiff}
+\D \ifonc (\mu) = \Big\{ (\alpha,\beta,\gamma) \in C([0,1]\times \Om; B_{\kappa}) : 
+ \alpha+\frac12 \left(  |\beta|^2 + \frac{\gamma^2}{\kappa^2}\right) = 0 - \rho \  a.e.,\  \\ 
+  \beta \rho=\M \text{ and } \gamma \rho=\kappa^2 \Z \Big\}.
+\end{multline}
+\end{lemma}
+
+\begin{remark}
+This set is exactly the set of continuous functions of the form $(\alpha, \beta,\gamma)$ which take their values in $\D \fonc$ (defined in \eqref{subdiff fonctional}) for all $(t,x)\in [0,1] \times \Om$. %Note that, as $C([0,1]\times \Omega)$ is not reflexive, the set described above is not $\partial \ifonc$, but the intersection of $\partial \ifonc$ with the set $C([0,1]\times \Omega)$, by implicitly using the canonical injection of $C([0,1]\times \Omega)$ in $C([0,1]\times \Omega)''$. In particular, $\D^{c} \ifonc$ can be empty even at a point where $\ifonc$ is finite.
+\end{remark}
+
+\begin{proof}
+Take $\tilde{\mu}\in \mathcal{M}^{d+2}$ and choose $\rho^{\perp}\in \mathcal{M}_+$ such that $\rho$ and $\rho^{\perp}$ are mutually singular and $\lambda \defeq \rho + \rho^{\perp}$ satisfies $|\mu| + |\tilde{\mu}| \ll \lambda$. We have
+\begin{align*}
+\ifonc(\tilde{\mu})- \ifonc(\mu) 
+&= \int_{[0,1] \times \Om} \left[\fonc \left( \frac{\d\tilde{\mu}}{\d\lambda} \right) - \fonc \left( \frac{\d\mu}{\d\lambda} \right) \right] \d\lambda \\
+&= \int_{[0,1] \times \Om} \left[\fonc \left( \frac{\d\tilde{\mu}}{\d\lambda} \right) - \fonc \left( \frac{\d\mu}{\d\lambda} \right) \right] \d\rho + \int_{[0,1] \times \Om} \fonc \left( \frac{\d\tilde{\mu}}{\d\lambda} \right) \d\rho^{\perp} \\
+& \overset{(*)}{\geq}  \int_{[0,1] \times \Om} \langle (\alpha,\beta,\gamma),  \frac{\d\tilde{\mu}}{\d\lambda}- \frac{\d\mu}{\d\lambda} \rangle  \d\rho+  \int_{[0,1] \times \Om} \langle (\alpha,\beta,\gamma) ,  \frac{\d\tilde{\mu}}{\d\lambda} \rangle \d\rho^{\perp}   \\
+&= \langle (\alpha,\beta,\gamma), \tilde{\mu} - \mu \rangle
+\end{align*}
+and inequality $(*)$ holds for every $\tilde{\mu}$ if and only if for all $(t,x)\in [0,1] \times \Om$, $(\alpha,\beta,\gamma)(t,x) \in \D \fonc \left(\frac{\d\mu}{\d\lambda}(t,x)\right)$: this comes from the definition of the subdifferential and from the fact the $\fonc = \iota_{B_{\kappa}}^*$.
+\end{proof}
+
+\begin{theorem}[Sufficient optimality and uniqueness condition]
+\thlabel{certificate}
+Let $(\rho_0,\rho_1)\in \mathcal{M}_+(\Om)^2$. If $\mu=(\rho,\M,\Z) \in \ccons$ and there exists $\varphi \in C^1([0,T] \times \Om)$ such that
+\[
+(\D_t \varphi, \nabla \varphi, \varphi) \in \D \ifonc (\mu)  
+\]
+then $\rho$ is a geodesic for $\WF_{\kappa}(\rho_0,\rho_1)$. 
+If moreover, $\nabla \varphi$ is Lipschitz, then $\rho$ is the unique geodesic.
+\end{theorem}
+
+\begin{definition}[Optimality certificate]
+From now on, a function $\varphi$ as in \thref{certificate} is referred to as an optimality certificate. 
+\end{definition}
+
+\begin{proof}
+With the notations of the proof of \thref{existence}, Fenchel-Rockafellar duality also gives the following result: $\varphi$ is a solution to \eqref{primal} if and only if  there exists $\mu$ such that $A\varphi \in \partial F^*(\mu)$ and $-A^*\mu \in \partial G(\varphi)$, in which case $\mu$ is a solution to \eqref{dual}. The first condtion is our hypothesis and second is satisfied since for all $\psi \in C^1([0,1] \times \Om)$,
+\[
+\langle -A^*\mu, \psi-\varphi \rangle = \langle \mu, A\phi \rangle - \langle \mu, A\psi \rangle = G(\psi)-G(\phi)
+\]
+as $\mu \in \ccons$. This shows that $\mu$ is a geodesic for $\WF_{\kappa}(\rho_0,\rho_1)$. 
+
+%Consider another triplet $\tilde{\mu}\in \ccons$. We have, from the proof of the previous lemma 
+%\[
+%\ifonc(\tilde{\mu})- \ifonc(\mu) \geq \langle (\D_t \varphi, \nabla \varphi, \varphi), \tilde{\mu} - \mu \rangle = 0 \,
+%\]
+%which shows that $\mu$ is a minimizer of $\ifonc$. 
+
+For uniqueness, consider another minimizer $\tilde{\mu}=(\tilde{\rho},\tilde{\M}, \tilde{\Z}) \in \ccons$. It holds
+\begin{align}
+\ifonc(\tilde{\mu}) &
+\geq \int_0^1 \int_{\Omega} \D_t \varphi \d \tilde{\rho} + \int_0^1 \int_{\Omega} \nabla \varphi \d \tilde{\M} + \int_0^1 \int_{\Omega}  \varphi \d \tilde{\Z} \\
+&= \int_{\Omega} \varphi(1,\cdot)\d \rho_1 - \int_{\Omega} \varphi (0,\cdot) \d \rho_0 \\ 
+&= \ifonc(\tilde{\mu})
+\end{align}
+where we used successively: the duality inequality for $\ifonc$, the fact that $\tilde{\mu} \in \ccons$ and the optimality of $\varphi$. 
+
+So, the first inequality is an equality, and hence $\lambda$ a.e., $(\D_t \varphi, \nabla \varphi, \varphi)(t,x) \in \D \fonc \left( \frac{\d \tilde{\mu}}{\d \lambda} (t,x) \right)$ for $\lambda$ such that $\tilde{\mu}\ll \lambda$. And thus, from the characterization of $\D \fonc$, we have 
+\[
+\tilde{\mu} = (\tilde{\rho}, (\nabla \varphi) \tilde{\rho}, \frac{\varphi}{\kappa^2}\tilde{\rho}).
+\]
+Thus, $\rho$ and $\tilde{\rho}$ are both solutions of $\D_t \rho + \nabla \cdot ((\nabla \varphi) \rho) = \frac{\varphi}{\kappa^2} \rho$ with initial condition $\rho_0$. This equation has a unique solution if $\nabla \varphi$ is Lipschitz.
+%But $\tilde{\mu}\in \ccons$ and thus $\sigma = (\rho^{\sigma}, \M^{\sigma}, \Z^{\sigma}) \defeq \tilde{\mu}-\mu \in \mathcal{CE}_0^1(0,0)$. 
+%Recall (see the remarks after \thref{continuity equation}) that the map $t \mapsto \rho^{\sigma}_t(\Om)$ admits the distributional derivative $ \Z^{\sigma}_t(\Om)$, for almost every $t\in[0,1]$. As a consequence,
+%\[
+%\rho^{\sigma}(\Om)'(t) \leq \|\varphi\|_{\infty} \rho^{\sigma}(\Om)(t)
+%\]
+%since $\varphi$ is continuous on the compact domain $\Om$.
+%But $\rho^{\sigma}(\Om)(0)=0$ thus $\rho^{\sigma}= 0$ and $\tilde{\rho}=\rho$. Consequently $\tilde{\mu}=\mu$.
+ \end{proof}
+
+\begin{remark}[Relaxation]
+The above condition is not necessary: the optimality certificate $\varphi$ is sometimes not as smooth as required by this condition. It is an interesting problem to study the space in which the infimum of \eqref{primal} is always attained. For instance, in the case of dynamical optimal transport, this space is that of Lipschitz functions \cite{jimenez2008dynamic}. In a different setting, for a class of distances which interpolate between optimal transport and Sobolev, \cite{Cardaliaguet:2012aa} proves that the optimum is attained in $BV \cap L^{\infty}$, where $BV$ is the set of functions with bounded variation. This question is non-trivial and beyond the scope of the present paper.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{remark}[Geodesic equations]
+%add  remarks on Perthame.
+%\end{remark}
+%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%
+

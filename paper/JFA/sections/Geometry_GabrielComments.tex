@@ -1,0 +1,591 @@
+% !TEX root = ../DynamicToStatic.tex
+
+\section{The Geometric Formulation in a Riemannian setting}
+\label{sec:geometry}
+
+This section is focussed on the $\WF$ metric and its generalizations to Riemannian-like metrics. While Section~\ref{sec-wf-defn} defines the $\WF$ metric over a bounded domain $\Omega \subset \R^d$, we will assume in the rest of the section that $\Omega$ is a compact manifold possibly with smooth boundary.
+
+
+%%%%%%%%%%%%%
+\subsection[The WF Metric]{The $\WF$ Metric}
+\label{sec-wf-defn}
+
+Hereafter, we introduce the $\WF$ distance on the space of Radon measures. This distance is the motivating example for the geometric formulation of Section~\ref{sec:geometry}. It is also a key example of metric for which a static Kantorovich formulation (defined in Section~\ref{sec : general static problem}) holds, as detailed in Section~\ref{sec:Examples}. 
+
+We first gives the definition of the mass conservation constraint linking a measure $\rho$, a momentum field $\omega$ and a source $\zeta$, which is used in all the dynamical formulations of this article. Hereafter, $\Omega$ is a smooth bounded domain in $\R^d$.
+
+\begin{definition}[Continuity equation with source]
+\thlabel{continuity equation}
+We denote by $\mathcal{CE}_0^1(\rho_0,\rho_1)$ the affine subset of $\mathcal{M}([0,1]\times \Omega)\times \mathcal{M}([0,1]\times \Omega)^d \times \mathcal{M}([0,1]\times \Omega)$ of triplets of measures $\mu=(\rho,\omega,\zeta)$ satisfying the continuity equation $\partial_t \rho + \nabla \cdot \omega = \zeta$ weakly, interpolating between $\rho_0$ and $\rho_1$ and satisfying homogeneous Neumann boundary conditions. This is equivalent to requiring
+\begin{equation}
+\label{eq:continuity weak}
+\int_0^1 \int_{\Omega} \partial_t \varphi \ \d\rho + \int_0^1 \int_{\Omega} \nabla \varphi \cdot \d\omega + \int_0^1 \int_{\Omega} \varphi \ \d\zeta = \int_{\Omega} \varphi(1,\cdot)\d\rho_1 - \int_{\Omega} \varphi(0,\cdot)\d\rho_0
+\end{equation}
+for all $\varphi \in C^1_c([0,1]\times \ol{\Omega})$.
+\end{definition}
+The Wasserstein-Fisher-Rao distance ($\WF$) is defined in~\cite{ChizatOTFR2015,new2015kondratyev} as follows.
+
+\begin{definition}[The $\WF$ distance]
+We consider the convex, positively homogeneous, l.s.c.\ function
+\[ 
+	f : \R \times \R^d \times \R \ni (\rho,\omega, \zeta) \eqdef
+\begin{cases}
+\frac12 \frac{|\omega|^2+ \delta^2 \zeta^2}{\rho} & \tn{if } \rho>0 \, ,\\
+0 & \tn{ if } (\rho,\omega,\zeta)=(0,0,0)\, , \\
++ \infty & \tn{ otherwise,} 
+\end{cases} 
+\]
+and define, for $\rho_0,\rho_1 \in \mathcal{M}_+(\Omega)$,
+\[
+	\WF(\rho_0,\rho_1)^2 \eqdef 
+	\inf_{\mu \in \mathcal{CE}_0^1(\rho_0,\rho_1)} \int_0^1 \int_{\Omega} f\left( \frac{\mu}{|\mu|} \right) \d |\mu|  \, .
+\]
+\end{definition}
+
+It is shown in~\cite{ChizatOTFR2015,new2015kondratyev} that $\WF$ defines a distance on $\mathcal{M}_+(\Omega)$. As this will be clear in Section~\ref{sec : general static problem}, it is a particular case of a large class of metrics that enjoy an alternative ``static'' Kantorovich formulation. 
+
+\todo{G: Write down the change of variable between $(\omega,\zeta)$ and $(v,\alpha)$.}
+Note that the action functional is finite only if $\omega, \zeta \ll \rho$ and then $\rho$ is disintegrable in time w.r.t.\ the Lebesgue measure by \eqref{eq:continuity weak}, i.e.\ it can be written $\rho = \int_0^1 \rho_t \otimes \d t$. We can thus write an equivalent formulation of the squared $\WF$ distance which emphasizes its physical interpretation as an energy minimization:
+\begin{equation}\label{WF}
+\WF^2(\rho_0,\rho_1) = \inf_{\rho,v, \alpha} \int_0^1 \left(\frac12 \int_\Omega  |v(x,t)|^2 \d \rho_t(x) + \frac{\delta^2}{2}  \int_\Omega  \alpha(x,t)^2 \d \rho_t(x) \right) \d t 
+\end{equation}
+subject to $v \in (L^2(\Omega, \rho))^d$, $\alpha \in L^2(\Omega, \rho)$, $ \partial_t \rho + \nabla \cdot (\rho v) = \rho \alpha $ and the appropriate boundary constraints.
+Actually, this metric is a prototypical example of metrics on densities that can be written as:
+\todo{G: why $g(x)$ does not depend on $m$ as in the following sections?}
+\begin{equation}\label{WFgeneralized}
+	\WF^2(\rho_0,\rho_1) \eqdef \inf_{\rho,v, \alpha} \int_0^1 \frac12 \int_\Omega  g(x)((v,\alpha),(v,\alpha)) \d \rho_t(x)  \d t 
+\end{equation}
+for a given scalar product $g(x)$ on $T_xM \times \R	$ where the second factor and under the same constraints. Although this metric depends on the choice of $g$, we will still denote it by $\WF$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Otto's Riemannian Submersion: Eulerian and Lagrangian Formulations}\label{sec-submersion}
+
+% In the remaining part of this section, $\Omega = \R^d$. 
+
+Standard optimal transport consists in moving one mass to another while minimizing a transportation cost, which is an optimization problem originally formulated in Lagrangian (static) coordinates. In~\cite{benamou2000computational}, the authors introduced a convex Eulerian formulation (dynamic) which enables the natural generalization proposed in~\cite{ChizatOTFR2015,new2015kondratyev}. The link between the static and dynamic formulation is made clear using Otto's Riemannian submersion\todo{Add reference to Otto} which emphasizes the idea of a group action on the space of densities.
+More precisely, let $\Omega$ be a compact manifold and $\Diff(\Omega)$ be the group of smooth diffeomorphisms of $\Omega$ and $\Dens(\Omega)$ be the set of measures that have smooth positive density with respect to a reference volume measure $\nu$. We consider such a density denoted by $\rho_0$. Otto proved that the map 
+
+\begin{align*}
+\Pi:
+\left\{
+\begin{array}{ccc}
+	\Diff(\Omega) & \longrightarrow & \Dens(\Omega) \\
+	\varphi &\longmapsto& \pfwdM{\varphi} \rho_0
+\end{array}
+\right.
+\end{align*} 
+is a Riemannian submersion of the metric $L^2(\rho_0)$ on  $ \Diff(\Omega)$ to the Wasserstein $W_2$ metric on $\Dens(\Omega)$. Therefore, the geodesic problem on $\Dens(\Omega)$ can be reformulated on the group $\Diff(\Omega)$ as the Monge problem,
+\begin{equation}
+W_2(\rho_0, \rho_1) \eqdef \inf_{\varphi \in \Diff(\Omega)} \left\{ \int_\Omega \| \varphi(x) - x\|^2  \, \rho_0(x) \, \d \nu(x) \, : \, \pfwdM{\varphi} \rho_0 = \rho_1 \right\}\,.
+\end{equation}
+For an overview on the geometric formulation of optimal transport, we refer the reader to~\cite{khesin2008geometry} and to \cite{DelanoeGeometryOT} for a more detailed presentation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Admissible metrics}
+
+In our setting, where mass is not only moved but also changed, the group acting on a mass particle has to include a mass rescaling action in addition to the transport action. Let us introduce informally the Lagrangian formulation of the continuity constraint with source associated to \eqref{WF}. Let $m(t) \delta_{x(t)}$ be a particle of mass $m(t)$ at point $x(t)$. The continuity constraint with source reads
+\begin{equation}\label{ParticleFormulation}
+\begin{cases}
+\frac{\d}{\d t} x(t)  = v(t,x(t))\\
+\frac{\d}{\d t} m(t) = \alpha(t,x(t))m(t)\,.
+\end{cases}
+\end{equation}
+This formulates that the mass is dragged along by the vector field $v$ and simultaneously undergoes a growth process at rate $\alpha$. These equations  also represent the infinitesimal action of the group which is described in more abstract terms in the next section. 
+
+Another important object is the metric used to measure spatial and mass changes. Note that the metric $g$ introduced in \eqref{WFgeneralized} defines a unique metric on the product space $\Omega \times \R_+^*$ which transforms homogeneously under pointwise multiplication. Since the pointwise multiplication is used, it is natural to consider this product space as trivial principal fiber bundle where the structure group is $\R^*_+$. Section~\ref{sec:DynamicToStatic} proves an equivalence result between dynamic and static formulations for a general cost function which reduces, in the Riemannian case, to this type of metrics. We therefore define an admissible class of metrics:
+
+In the rest of the section, $\Omega$ will be a compact manifold possibly with smooth boundary.
+
+\begin{definition}\label{AdmissibleMetrics}
+A smooth metric $g$ on $\Omega \times \R_+^*$ will be said \emph{admissible} if 
+the maps $\Psi_\lambda:(\Omega \times \R_+^*,\lambda g) \to (\Omega \times \R_+^*, g)$ defined by $\Psi(x,m)= (x,\lambda m)$ are isometries.
+In other words, the metric is admissible if and only if\todo{Previously $(v_x,v_m)$ was denoted $(v,\alpha)$, I think we should be consistent. }
+\begin{equation}\label{BiInvariance}
+\lambda g(x,m)((v_x,v_m),(v_x,v_m)) = g(x,\lambda m)((v_x,\lambda v_m),(v_x,\lambda v_m)) \,,
+\end{equation}
+for all $(x,m) \in \Omega \times \R_+^*$ and $(v_x,v_m) \in T_{(x,m)} \Omega \times \R_+^*$.
+\end{definition}
+
+\todo{G: I think it would be good to enclosed~\eqref{GeneralFormOfMetric} in a Proposition, even if the proof is simple. }
+
+As a consequence of this definition, we have that 
+$$g(x,m)((v_x,v_m),(v_x,v_m))= m g(x,1)((v_x,v_m/m),(v_x,v_m/m))\,,$$ 
+and thus any \emph{admissible} metric can be written as 
+\todo{I find the notation $g(x)$ confusing.}
+\todo{$\alpha(x)$ is clashing with previous use in~\eqref{WFgeneralized} and with $\alpha = v_m/m$ below.}
+\begin{equation}\label{GeneralFormOfMetric}
+	g(x,m) = m g(x) + \alpha(x)  \d m + \beta(x) \frac{\d m^2}{m}
+\end{equation}
+for $\alpha \in T^*\Omega$ a one form on $\Omega$ and $\beta(x) $ a positive function on $\Omega$.
+For a given one form $\alpha$, the previous formula defines a metric if and only if its determinant is everywhere positive.
+We will also use the short notation 
+\todo{I have the impression that $g(x)(v_x,\alpha)$ should be $g(x)(v_x,v_m)$ below otherwise it seems inconsistent with the writing $m g(x)$ above, or otherwise $mg(x)$ should be replaced with $m g(x)(\cdot,\cdot/m)$.}  
+\begin{equation*} 
+	g(x)(v_x,\alpha) \eqdef g(x,1)((v_x,v_m/m),(v_x,v_m/m))
+\end{equation*}
+with $\alpha = v_m/m$ as it was introduced in \eqref{WFgeneralized}.
+This type of metric is needed in order to define the action on the space of measures as explained in more details in Section \ref{sec:DynamicToStatic}.
+
+\todo{Why introducing a new variable $M$ for the manifold instead of using $\Om$?}
+\todo{Also why introducing $t$ and the $y$ variable instead of using $m$ everywhere?}
+
+Using a square root change of variable, this type of metric can be related to (generalized) Riemannian cones. Recall\todo{add a citation here} that a Riemannian cone on a Riemannian manifold $(M,h)$ is the manifold $M \times \R_+^*$ endowed with the cone metric $g_c \eqdef t^2 h + \d t^2$. The change of variable $\Psi: (x,t) \mapsto (x,\sqrt{t})$ gives \todo{Add the definition of $\Psi^*$ in the notations}  $\Psi^*g_c= t h + \frac 1{4t}\d t^2$, which is the \emph{admissible} metric associated with the initial Wasserstein-Fisher-Rao metric \eqref{WF}. This type of metric is well-known and we summarize hereafter some important properties:
+
+
+\begin{proposition}\label{RiemannianMetric}
+Let  $(\Omega,g)$ be a complete Riemannian manifold and consider $\Omega \times \R_+^*$ with the \emph{admissible} metric defined by $ y \, g + \frac{1}{4 y} \d y^2$ for $(x,y) \in \Omega \times \R_+^*$. For a given vector field $X$ on $\Omega$, define its lift on $\Omega \times \R_+^*$ by $\tilde{X}= (X,0)$ and denote by $e$ the vector field defined by\todo{Why $\partial_y$ and not $\partial y$?} $\frac{\partial}{\partial_y}$.
+This Riemannian manifold has the following properties:
+\begin{enumerate}
+\item Its curvature tensor satisfies $R(\tilde{X},e) = 0$ and $R(\tilde{X},\tilde{Y})\tilde{Z} = (R_g(X,Y)Z,0)$ where $R_g$ denotes the curvature tensor of $(\Omega,g)$.
+\item The \todo{G: what is metric completion? is it the closure?} metric completion of $\Omega \times \R_+^*$ is $(\Omega \times \R_+^*) \cup \mc{S}$ (where $\mc{S}$ is the apex of the cone and can be identified to $ \Omega \times \{ 0\}$) endowed with the distance\todo{Define the geodesic distance $d(\cdot,\cdot)$} \todo{Replace $\wedge$ by $\bar \cos$. The normalization give $\pi$ instead of $\pi/2$ for the cut locus? is it because of the $1/4$ factor?}
+\begin{equation}\label{eq-dist-cone-cos}
+d\left((x_0,y_0),(x_1,y_1)\right) = \left[ y_0 + y_1 -2\sqrt{y_0 y_1} \cos \left(d(x_0,x_1) \wedge \pi \right) \right]^{1/2}.
+\end{equation}
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+The proof of the first point is in \cite{Gallot1979} and the second point can be found in \cite{MetricGeometryBurago}.
+\end{proof}
+
+
+Note that (as remarked in \cite{Gallot1979}), for any geodesic $c$ parametrized with unit speed, the map $\phi: \C \setminus \R^- \to \Omega \times \R_+^*$ defined by $\phi(r e^{i\theta}) = (c(\theta),\sqrt{r})$ is a local isometry and totally geodesic\todo{G: define totally geodesic?}. 
+
+As a consequence of the proposition, if $(\Omega,g)$ is locally flat, so is $(\Omega \times \R_+^*, y \, g + \frac{1}{4 y} \d y^2)$.
+For instance, although the Riemannian cone over the euclidean space is locally flat, the curvature concentrates at the apex of the cone. %It is possible to define \emph{admissible} metrics that controls this angle: For instance, in the case of the Euclidean space for $\Omega$, $y \, \d x^2 + \alpha  \d x \d y+\frac{1}{4 y} \d y^2 $ where $\alpha \in ]-1,1[$.
+
+In view of applications, it is of practical interest to classify, at least locally, the space of \emph{admissible} metrics. 
+The next proposition shows that any one homogeneous metric can be diagonalized as defined below. We define a diagonal metric to be a metric on $\Omega \times \R_+^*$ that can be written as $yg +  \frac{a}{y} \d y^2$ where $a$ and $g$ are respectively a positive function and a metric on $\Omega$.
+
+\todo{So I guess the following proposition (if the pull back is valid globally and $a$ is constant) can be used to compute the geodesic distance $d$ on the cone manifold in the non-diagonal case by using $\lambda$. Maybe add a comment?}
+
+\begin{proposition}
+Any \emph{admissible} metric $h$ on $\Omega \times \R_+^*$ is locally the pull back of a diagonal metric by a \todo{G: is ``principal fiber bundle isomorphism'' well-known ? maybe add a ref ?} principal fiber bundle isomorphism. More precisely, there exist positive functions $a, \lambda$ on $\Omega$ and $g$ a metric on $\Omega$ such that $\Phi^*(yg +  \frac{a}{ y} \d y^2) = h$ and $\Phi(x,t)= (x,\lambda(x)t)$.
+\end{proposition}
+
+
+\begin{proof}
+For given positive functions $a, \lambda$ on $\Omega$, one has\todo{G: what is $\d \lambda \otimes \d \lambda$? }
+\begin{equation}
+\Phi^*(yg +  \frac{a(x)}{ y} \d y^2) = y (g + a \d \lambda \otimes \d \lambda) + 2a \lambda \d \lambda  \d y + \frac{a}{y} \lambda^2 \d y^2\,.
+\end{equation}
+Recall the general form of an \emph{admissible} metric in \eqref{GeneralFormOfMetric},
+$y h(x) + \alpha(x) \d y + \beta(x) \frac{\d y^2}{y}$.
+If the result is satisfied, we obtain the system
+\begin{equation}\label{System}
+\begin{cases}
+a  \d (\lambda^2)= \alpha \\
+a \lambda^2 =  \beta \,.
+\end{cases}
+\end{equation} 
+Therefore, since $a, \lambda,\beta$ are positive functions, dividing the first equation by the second gives:
+$$ \frac{\d (\lambda^2)}{\lambda^2} = \frac{\alpha}{\beta}\,\cdot$$ 
+This then gives a solution for $\lambda$ locally at least and $a$ can then be deduced using the second equation of the system.
+
+The last point consists in proving that $g \eqdef h - a \d \lambda \otimes \d \lambda$ is a metric on $\Omega$. Using the relation in system \eqref{System}, we get 
+$a  \d \lambda \otimes \d \lambda = \frac{\alpha^2}{4\beta}$. Let us fix $(v_x,v_y) \in T_{(x,y)}(M \times \R_+^*)$ for a non nul vector $v_x$, then $yh(x)(v_x,v_x) + \alpha(x)(v_x)v_y + \frac{\beta(x)}{y}v_y^2$ is a polynomial function in $v_y$ whose discriminant is necessarily strictly negative since $(v_x,v_y) \neq 0$ for all $v_y$. Therefore, we obtain 
+\begin{equation}
+\alpha(x)(v_x)^2 < 4 \beta(x)h(x)(v_x,v_x)
+\end{equation}
+which gives $h(x)(v_x,v_x) - a(x) \d \lambda(x)(v_x)^2 > 0$.
+\end{proof}
+
+It is important to note that the class of \emph{admissible} metrics is strictly bigger than the space of diagonal metrics of the form $yg +  \frac{1}{ y} \d y^2$. For instance, there exist \emph{admissible} metrics on $\R \times \R^*_+$ that have non zero sectional curvature whereas the metric $yg +  \frac{1}{ y} \d y^2$ has vanishing curvature tensor (whatever $g$ is).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{A Semi-direct Product of Groups}
+
+As mentioned before\todo{Where? Furthermore, $\mu$ clashes with the $(\rho,\omega,\zeta)$ notations}, we denote by $\mu$\todo{Later it is named $\nu$ I think} a volume form on $\Omega$.
+We first denote $\Lambda(\Omega) \eqdef \{ \lambda \in C^\infty(\Omega,\R) \, : \, \lambda > 0 \}$ which is a group under the pointwise multiplication and recall that $\Dens_g(\Omega)$ \todo{why $\Dens_g$ depends on $g$ and not rather on $\nu$? If $g$ is important, then it should be said that $\Omega$ has some Riemanian metric $g$} is the set of finite Radon measures that have smooth positive density w.r.t.\ the reference measure $\nu$.
+We first define a group morphism from $\Diff(\Omega)$ in the automorphisms group of $\Lambda(\Omega) $, $\Psi : \Diff(\Omega) \mapsto \Aut(\Lambda(\Omega))$ by $\Psi(\varphi): \lambda \mapsto \varphi^{-1} \cdot \lambda  $ where $ \varphi \cdot \lambda \eqdef \lambda \circ \varphi^{-1}$ is the usual left action of the group of diffeomorphisms on the space of functions. 
+The map $\Psi$ is an antihomomorphism since it reverses the order of the actions. 
+The associated semi-direct product is well-defined and it will be denoted by $\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$. 
+We  recall the following properties for $\varphi_1,\varphi_2 \in \Diff(\Omega)$ and $\lambda_1,\lambda_2 \in \Lambda(\Omega)$,
+\begin{align}
+&(\varphi_1,\lambda_1) \cdot (\varphi_2,\lambda_2) = (\varphi_1 \varphi_2,( \varphi_2^{-1} \cdot \lambda_1) \lambda_2 )\\
+&(\varphi_1,\lambda_1)^{-1} = (\varphi_1^{-1}, \varphi_1 \cdot \lambda_1^{-1})\,.
+\end{align}
+Note that this is not the usual definition of a semi-direct product of group but it is isomorphic to it. We use this definition on purpose in order to get the following left-action:
+
+\begin{proposition}
+ The map $\pi$ defined by 
+\begin{align*}& \pi: \left( \Diff(\Omega) \ltimes_\Psi \Lambda(\Omega) \right) \times \Dens_g(\Omega) \mapsto \Dens_g(\Omega) \\
+&\pi\left((\varphi,\lambda) , \rho \right) \eqdef \varphi \cdot \lambda \, \pfwdM{\varphi} \rho = \pfwdM{\varphi} (\lambda \rho)
+\end{align*}
+is a left-action of the group $\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$ on the space of generalized densities.
+\end{proposition}
+ 
+\begin{proof}
+  This can be checked by the following elementary calculation: \todo{G: is $\varphi_1 \varphi_2$ equal to $\varphi_1 \circ \varphi_2$?}
+\begin{align*}
+	\pi\left( (\varphi_1,\lambda_1) \cdot (\varphi_2,\lambda_2), \rho \right) 
+	&= \pi \left((\varphi_1 \varphi_2,( \varphi_2^{-1} \cdot \lambda_1) \lambda_2 ),\rho \right) \\ 
+	& = (\varphi_1 \varphi_2) \cdot (( \varphi_2^{-1} \cdot \lambda_1) \lambda_2 ) (\varphi_1 \varphi_2) \cdot \rho \\ 
+	& = (\varphi_1 \cdot \lambda_1) (\varphi_2 \cdot \lambda_2 )(\varphi_1 \varphi_2) \cdot \rho \\
+	& = \pi \left( (\varphi_1,\lambda_1), \pi\left( (\varphi_2,\lambda_2), \rho \right) \right)\,.
+\end{align*}
+The identity element in $\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$ is $(\Id,1)$ and one trivially has:
+\begin{equation*}
+	\pi\left(  (\Id,1), \rho \right) =   \Id \cdot 1 
+	\quad\text{and}\quad
+ 	\Id \cdot \rho = \rho \,.
+\end{equation*}
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Generalization of Otto's Riemannian Submersion}
+
+\todo{G: I would replace $M$ by $\Omega$, and I would replace the letter $h$ by $\phi$, so that both the particular case and the general one use the same notations. }
+
+In this section, we define useful notions to obtain the generalization of Otto's result. For a given manifold $M$, we will denote by $TM$ the tangent bundle of a manifold $M$ and $T_pM$ the tangent space at a given point $p \in M$.
+
+\todo{G: say a few word about why the following definition is useful.}
+\todo{G: actually, I have the impression $R$ is not used afterward, or at least not explicitly. If this is the case, I propose either to remove it or to make more explicit each time it is used. }
+
+\begin{definition}[Right-reduction]\todo{$R$ was previously used for curvature}
+Let $H$ be a group and a smooth manifold at the same time, possibly of infinite dimensions, the right-reduction of $TH$ is the isomorphic map $R : T H \mapsto H \times T_{\Id} H$ defined by $R(h,X_h) \eqdef (h, X_h \cdot h^{-1})$, where $X_h$ is a tangent vector at point $h$.
+\end{definition}
+
+Note that most of the time, this right-reduction map is continuous but not differentiable due to a loss of smoothness of the right composition (see \cite{em70}). 
+
+\begin{example}
+For the semi-direct product of groups defined above, we have 
+\begin{equation}
+R((\varphi,\lambda),(X_\varphi, X_\lambda)) = (X_\varphi \circ \varphi^{-1},\varphi \cdot (X_\lambda \lambda^{-1}))\,,
+\end{equation}
+or equivalently, 
+\begin{equation}
+R((\varphi,\lambda),(X_\varphi, X_\lambda)) = (X_\varphi \circ \varphi^{-1}, (X_\lambda \lambda^{-1}) \circ \varphi^{-1})\,,
+\end{equation}
+We will denote by $(v,\alpha)$ an element of the tangent space of $T_{(\Id,1)}\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$.
+Any path on the group can be parametrized by its initial point and its right-trivialized tangent vector. The reconstruction equation reads
+\begin{equation}\label{LagrangianFormulation}
+\begin{cases}
+\partial_t \varphi(t,x)= v(t,\varphi(t,x)), \\
+\partial_t \lambda(t,x) = \alpha(t,\varphi(t,x)) \lambda(t,x), 
+\end{cases}
+\end{equation}
+for given initial conditions $\varphi(0,x)$ and $\lambda(0,x)$.
+Note that this system recovers equation \eqref{ParticleFormulation}.
+\end{example}
+
+We state without proof a result that will be needed in the Kantorovich formulation~\eqref{} and which is a straightforward consequence of a Cauchy-Lipschitz result.
+
+\begin{proposition}\label{CauchyLipschitz}
+If $v\in L^1([0,T],W^{1,\infty}(\Omega))$, then the first equation in \eqref{LagrangianFormulation} has a unique solution in $W^{1,\infty}(\Omega)$.
+%
+If, in addition, $\alpha \in L^\infty(\Omega)$, then the system \eqref{LagrangianFormulation} has a unique solution.
+\end{proposition}
+
+We also need the notion of infinitesimal action associated with a group action.
+
+\begin{definition}[Infinitesimal action]
+For a smooth left action of $H$ on a manifold $M$, the infinitesimal action is the map $T_{\Id} H \times M \mapsto TM $defined by
+\begin{equation}
+\xi \cdot q \eqdef \frac {\d}{\d t}_{\big| t=0} \exp (\xi t) \cdot q \in T_qM
+\end{equation}
+where $\exp(\xi t)$ is the solution to $\dot{h} = \xi \cdot h$ and $h(0) = \Id$.
+\end{definition}
+
+\begin{example}
+For $H=\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$, the application of the definition gives $(v,\alpha) \cdot \rho = -\nabla \cdot (v\rho) + \alpha \rho$. \todo{G: some more details about why this formula holds would help (me at least).}
+\end{example}
+
+\todo{G: the following paragraph would probably be better written as a definition/proposition. Then Prop~\ref{thm:Submersion} would just be an instantiation of this generic result. }
+
+\todo{G: I would keep using the same notation, i.e. for instance $q \rightarrow \rho$}
+
+Let us consider a left action of $H$ on $M$ which is transitive and such that for every $q \in M$, the map $\xi \mapsto \xi \cdot q$ is a surjection. Then,
+there is a standard way\todo{G: add a ref?} of choosing the scalar products on $H$ and $M$ in order to obtain a Riemannian submersion. Let us choose a point $q_0  \in M$ and a Riemannian metric $G$ on $H$ that can be written as: $G(h)(X_h,X_h) =  g(h\cdot q_0)(X_h \cdot h^{-1},X_h \cdot h^{-1})$ for $ g(h\cdot q_0)$ an inner product on $T_{\Id}H$. 
+Indeed,
+let $X_q \in T_qM$ be a tangent vector at point $h\cdot q_0 = q \in M$, we define the Riemannian metric $m$ on $M$ by
+\begin{equation}\label{HLift}
+m(q)(X_q,X_q) \eqdef \min_{\xi \in T_{\Id} H} g(q)(\xi,\xi) \text{ under the constraint } X_q = \xi \cdot q \,.
+\end{equation}
+where $\xi = X_g \cdot g^{-1}$. By hypothesis, the infinitesimal action is surjective, therefore the optimization set is not empty and under mild assumptions\todo{G: which ones?} the infimum is attained. Then, by construction, the map $\pi_0: H \mapsto M$ defined by $\pi_0(g) = g\cdot q_0$ is a Riemannian submersion of the metric $H$ on $G$ to the metric $m$ on $M$.
+Thus, the fiber of the submersion $\pi$ at point $q_0$ is the isotropy subgroup denoted by $H_0$ and other fibers are right-cosets of the subgroup $H_0$ in $H$.
+
+
+
+\todo{G: bellow I would first given the general definition~\eqref{eq-metric-G} and if needed put after the special case associated to WF.} 
+
+We now apply this construction to the action of the semi-direct product of group onto the space of densities in order to retrieve the $\WF$ metric: We choose a reference smooth density $\rho_0$ and we define the weak Riemannian metric\todo{G: put here the definition of a weak metric} we use on $\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$ by, denoting $\varphi \cdot \lambda \, \pfwdM{\varphi} \rho_0$ by $\rho$: \todo{G: what are $(v,\alpha)$ in the following formula?}
+\begin{multline}
+	G(\varphi,\lambda)\left((X_\varphi,X_\lambda) , (X_\varphi,X_\lambda)\right) \eqdef \frac{1}{2} \int_{\Omega} | v(x)  |^2 \rho(x) \d x + \frac{\delta^2}{2} \int_{\Omega}   \alpha(x)^2  \rho(x) \d x \\
+= \frac{1}{2} \int_{\Omega} | X_\varphi \circ \varphi^{-1}  |^2 \varphi \cdot \lambda \, \pfwdM{\varphi} \rho_0(x) \d x + \frac{\delta^2}{2}   \int_{\Omega} \left( \varphi \cdot (X_\lambda \lambda^{-1}) \right)^2 \varphi \cdot \lambda \,  \pfwdM{\varphi} \rho_0(x) \d x
+\end{multline}
+where $(X_\varphi,X_\lambda) \in T_{(\varphi,\lambda)}\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$ is a tangent vector at $(\varphi,\lambda)$.
+More generally, for an \emph{admissible} metric $g$ we have,
+\begin{multline}\label{eq-metric-G}
+G(\varphi,\lambda)\left((X_\varphi,X_\lambda) , (X_\varphi,X_\lambda)\right) \eqdef \frac{1}{2} \int_{\Omega} g((v,\alpha),(v,\alpha)) \rho \, \d x  \\
+= \frac{1}{2} \int_{\Omega} g((X_\varphi \circ \varphi^{-1},(X_\lambda \lambda^{-1}) \circ \varphi^{-1}),(X_\varphi \circ \varphi^{-1},(X_\lambda \lambda^{-1}) \circ \varphi^{-1})) \rho \,\d x  
+\end{multline}
+where $g(x)$\todo{What is $g(x)$? how does it relates to the admissible metric $g$?} is an inner product on $T_x\Omega \times \R$ that depends smoothly on $x$.
+
+
+At a formal level, we thus get, for $\rho_0$ a measure of finite mass and which has a smooth density w.r.t. the reference measure $\nu$ for a general metric $G$ defined in~\eqref{eq-metric-G}, the following definition. 
+
+\begin{proposition}
+	\thlabel{thm:Submersion}
+Let $\rho_0 \in \Dens_g(\Omega)$ and $\pi_0:\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega) \mapsto \Dens_g$ be the map defined by $\pi_0(\varphi, \lambda) \eqdef \pfwdM{\varphi} (\lambda \rho_0)$.
+
+Then, the map $\pi_0$ is formally a Riemannian submersion of the metric $G$ on the group $\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$ to the metric $\WF$ defined in~\eqref{} on the space of generalized densities $\Dens_g(\Omega)$.
+\end{proposition}
+
+This proposition is  formal in the sense that we do not know if the metrics $G$ and $\WF$ and the map $\pi_0$ are smooth or not for some well chosen topologies. We address the smoothness of $G$ in the next section.
+%\begin{proof}
+%The fiber of the map $\pi$ at a generalized density $\rho \in \Dens_g(\Omega)$ is $$\pi^{-1}(\{ \rho\}) = \left\{ (\varphi,\lambda) \in \Diff(\Omega) \ltimes_\Psi \Lambda(\Omega) \, | \,  \varphi \cdot \lambda \pfwdM{\varphi} \mu = \rho \right\}\,.$$
+%We have to prove that at a point in the fiber $(\varphi, \lambda) \in \pi^{-1}(\{ \rho \})$, the orthogonal of the tangent space to the fiber maps isometrically to the tangent space at point $(\varphi \cdot \lambda)\pfwdM{\varphi}(\mu)=\rho$.
+
+%On one hand, let $(\delta \varphi, \delta \lambda)$ be a tangent vector orthogonal to the fiber, the length of a tangent vector can be expressed as a minimum:
+%\begin{equation}
+% \min \frac 12 G(g,\lambda)(X_g,X_\lambda)\,,
+%\end{equation}
+%under the constraint that $\pfwdM{\pi}(X_g,X_\lambda) = \delta \rho$.
+%
+%On the other hand, the norm of a tangent vector $\delta \rho$ at $\rho$ is given by the minimization problem
+%\begin{equation}
+% \min \frac 12  \int_{\Omega} |v|^2 \rho \d \mu + \frac 12  \int_{\Omega} \alpha^2 \rho \d \mu \,,
+%\end{equation}
+%under the constraint that $-\div(\rho v) + \alpha \rho = \delta \rho$.
+%It 
+%.
+%\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection[Curvature of Diff(Omega) x\_Psi Lambda(Omega)]{Curvature of $\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$}
+
+In this section, we are interested in curvature properties of the space $\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$. %We aim at formally applying O'Neill's formula on the Riemannian submersion defined above and we thus need the 
+%curvature of $\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$ with the metric $G$. 
+In order to give a rigorous meaning to the following lemma, we work on the group of Sobolev diffeomorphisms $\Diff^{s}(\Omega)$ for $s> d/2+1$ and $\Lambda^s(\Omega) \eqdef \{  f \in H^s(\Omega) \, : \, f > 0\}$. We refer to \cite{BruverisVialard} for a more detailed presentation of $\Diff^{s}(\Omega)$ and we only stress that it is contained in the group of $C^1$ diffeomorphisms of $\Omega$. 
+We first prove a lemma that shows that the metric $G$ is a smooth and weak Riemannian metric on $\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$. %We then use O'Neill's formula on the space $\Dens_g^{s}(\Omega)$ of generalized densities that are also of $H^{s}$ regularity.
+\begin{lemma}\label{L2Norm}
+On $\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$, one has
+\begin{multline}\label{SimplifiedG}
+G(\varphi,\lambda)\left((X_\varphi,X_\lambda) , (X_\varphi,X_\lambda)\right) = \\ \frac{1}{2} \int_{\Omega} g(\varphi(x),\lambda(x))((X_\varphi(x),X_\lambda(x)),(X_\varphi(x),X_\lambda(x)))  \rho_0(x) \, \d \nu(x) \,,
+\end{multline}
+which is a smooth and weak Riemannian metric.
+\end{lemma}
+
+\begin{remark}
+The fact that the metric is weak is obvious.
+Recall that a metric is said to be weak in the sense of \cite{em70}  when the topology of $\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$ is stronger than the one given by the metric $G$. In other words, at a point in $\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$, the tangent space is not complete w.r.t. $G$. Since $G$ is only a weak Riemannian metric, the Levi-Civita connection does not necessarily exists as explained in \cite{em70} or in \cite{SobolevMetricsCurvature}. 
+\end{remark}
+
+
+\begin{proof}
+In the definition of the metric $G$, we make the change of variable by $\varphi^{-1}$, which is allowed since $\varphi \in \Diff^{s}(\Omega)$ and the definition of an \emph{admissible} metric to obtain formula \eqref{SimplifiedG}.
+Since $\Omega$ is compact, $\lambda$ attains its strictly positive lower bound. In addition, using the fact that $g$ is a smooth function and $H^s(\Omega)$ is a Hilbert algebra, the metric is also smooth.
+\end{proof}
+
+
+
+Note that the formulation \eqref{SimplifiedG} shows that this metric is an $L^2$ metric on the space of functions from $\Omega$ into $\Omega \times \R_+^*$ endowed with the Riemanian metric $g$. Then, the group $\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$ is an open subset of $H^s(\Omega, \Omega \times \R_+^*)$.
+%defined by $ \frac{1}{2} y \,\d x^2 + \frac{\delta^2}{2y} \d y^2$ for $(x,y) \in \Omega \times \R_+^*$. 
+%This is a key property in formulating the corresponding Monge formulation in section \ref{Monge}.
+%Thus, it is important to understand the geometry of this Riemannian metric to go further.
+These functional spaces have been studied in \cite{em70} as manifolds of mappings and they prove, in particular, the existence of a Levi-Civita connection for $\Diff^{s}(\Omega)$ endowed with an $L^2$ metric.
+
+\begin{theorem}\label{SectionalCurvature}
+Let $\Omega \times \R_+^*$ endowed with an \emph{admissible} Riemannian metric $g$ and $\rho$ be a density on $\Omega$. Let $X,Y$ be two smooth vector fields on $\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$ which are orthogonal for the $L^2(\Omega,\rho)$ scalar product on $H^s(\Omega, \Omega \times \R_+^*)$. Denoting $K_{p}$ the curvature tensor of $G$, one has\todo{G: I have trouble parsing this formula.}
+\begin{multline}\label{eq:SectionalCurvature}
+K_{p}(X_p,Y_p) = \\ \int_\Omega k_{p(x)}(X_p(x),Y_p(x)) (|X_p(x)|^2| |Y_p(x)|^2 - \langle X_p(x) , Y_p(x) \rangle) \, \rho(x) \d \nu(x) \,
+\end{multline}
+where \todo{$p$ was denoted $h$ before, I have the impression} $p=(\varphi,\lambda)$, $X_p \eqdef X(p)$ and $\langle \cdot , \cdot \rangle $ stands for the metric $g$\todo{G: isn't this writing a bit confusing, because $g$ depends on $x$ and $\rho(x)$?}\todo{G: $|a|^2$ stands for $\langle a,a \rangle$?}.  In addition, $k$ denotes the sectional curvature of $(\Omega \times \R_+^*,g)$.
+\end{theorem}
+
+\begin{proof}
+Since $M$\todo{$\Omega$?} is compact, the appendix in \cite{freed1989} can be applied and it gives the result.
+\end{proof}
+
+\begin{remark}\todo{G: I was not able to understand this remark, but I trust you on this.}
+It can be useful for the understanding of Formula \eqref{eq:SectionalCurvature} to \todo{recall?} some facts that can be found in \cite{em70} or \cite{MisiolekCurvature}.
+Let us denote $M\eqdef \Omega$ and $N \eqdef \Omega \times \R_+^*$. 
+The first step of the proof of \ref{SectionalCurvature} is the existence of the Levi-Civita connection which is a direct adaptation of \cite[Section 9]{em70}. Denoting $\pi_1: TTN \to TN$ be the canonical projection and $\mc{K}$ the connector associated with the Levi-Civita connection of $g$. As recalled in \cite[Section 2]{em70}, one has, for $M,N$ smooth compact manifold with smooth boundaries,
+\begin{align*}
+T_fH^s(M,N) &= \{  g \in H^s(M,TN) \, : \, \pi_1 \circ g = f\}\,, \\
+TTH^s(M,N) &= \{  Y \in H^s(M,TTN) \, : \, \pi_1 \circ Y \in TH^s(M,TN)\}\,.
+\end{align*}
+The Levi-Civita connection $\tilde \nabla$ on $H^s(M, N)$ endowed with the $L^2$ metric with respect to the metric $g$ on $N$ and the volume form $\mu_0$ on $M$ is given by: \todo{G: what is $TY$?}
+\begin{equation}
+\tilde \nabla_X Y = \tilde{\mc{K}} \circ TY \circ X\,.
+\end{equation}
+The result on the curvature tensor can be deduced directly from these facts. A careful detailed presentation of connectors can be found in \cite{ArthurBesse2}.
+\end{remark}
+%\begin{proof}
+%We apply this result to $M= \Omega$ and $N=\Omega \times \R_+^*$. The reason why it still holds for $N=\Omega \times \R_+^*$ although it is not compact is because $M$ is compact and therefore, locally on $H^s(\Omega,\Omega \times \R_+^*)$ the result applies.
+%An other difference with \cite{em70} is that the chosen density $\rho_0$ is not necessarily the Riemannian volume form, however since the result does not depend on the metric on $M$, the result still holds since using Moser's lemma, one can find a metric on $M$ whose volume form is $\rho_0$.
+%
+%
+%Then the curvature tensor is obtained following \cite{MisiolekCurvature}.
+%\end{proof}
+
+
+
+%\begin{remark}
+%Note that the distance differs from the $\WF$ distance  between Dirac distributions as proven in~\cite{ChizatOTFR2015}. The actual distance between Diracs can be computed using the Kantorovich formulation.
+%\end{remark}
+% In order to compute the curvature of $\Dens_g(\Omega)$, we will need the curvature of $\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$ whose computation relies on the existence of the Levi-Civita connection.
+We now apply the previous proposition to the Wasserstein-Fisher-Rao metric on a Euclidean domain and we give an explicit isometry between this group and a Hilbert space. This isometry is simply the pointwise extension of local isometries associated with the Euclidean cone. This is obviously a general fact for manifolds of mappings $H^s(M,N)$ with an $L^2$ metric.
+
+\begin{corollary}
+Let $\Omega$ be a compact domain in $\R^n$ \todo{G: $\R^d$ ?} endowed with the Euclidean metric.
+The group $\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$ endowed with the Wasserstein-Fisher-Rao metric $G$ defined in \eqref{WF} is flat for any $s> n/2+1$\todo{G: $n/2+1$?}.
+The isometry with a Hilbert space is given by generalized spherical coordinates, for $\delta = 1$,
+\begin{align*}& \Phi : \left( \Diff^{s}(\Omega) \times \Lambda^s(\Omega) , G \right) \mapsto \left(H^{s}(\Omega,\R^{n+1}),G_0\right)\\
+&\Phi(\varphi, \lambda) \eqdef (\sqrt{\lambda} \cos \varphi_1/2, \sqrt{\lambda} \sin \varphi_1/2\cos \varphi_2/2, \ldots, \sqrt{\lambda} \sin \varphi_1/2 \ldots \sin \varphi_{n}/2  )
+\end{align*}
+where the metric $G_0$ on $H^{s}(\Omega,\R^{n+1})$ is the $L^2$ scalar product w.r.t. $\rho_0$. 
+\end{corollary}
+
+\begin{proof}
+%We will use formula \eqref{SimplifiedG} to obtain the result and without loss of generality, we will assume that $\delta = 1$.
+%
+%We  consider the following map, which represents spherical coordinates on the $n$ dimensional sphere.
+%\begin{align*}& \Phi : \Diff^{s}(\Omega) \times \Lambda^s(\Omega) \mapsto H^{s}(\Omega,\R^{n+1})\\
+%&\Phi(\varphi, \lambda) \eqdef (\sqrt{\lambda} \cos \varphi_1/2, \sqrt{\lambda} \sin \varphi_1/2\cos \varphi_2/2, \ldots, \sqrt{\lambda} \sin \varphi_1/2 \ldots \sin \varphi_{n}/2  )
+%\end{align*}
+%and we consider the $L^2$ norm denoted by $G_0$ on $H^{s}(\Omega,\R^{n+1})$. 
+
+We have by direct computation, $\Phi^*G_0 = G$. Note that $G_0$ is again a weak Riemannian metric on $H^{s}(\Omega,\R^{n+1})$.
+
+
+We now show that $\Phi$ is a local diffeomorphism. Since $\lambda$ attains its lower bound on $\Omega$, there exists $\varepsilon >0 $ such that  $\lambda \geq \varepsilon$. We  compute the Jacobian of $\Phi$, which is given by the pointwise multiplication by the Jacobian matrix 
+%\begin{scriptsize}
+\begin{equation*}
+\frac{1}{2}
+\begin{bmatrix} & \frac 1 {\sqrt{\lambda}} c_1  &-\sqrt{\lambda} s_1 & 0  &\cdots  &0 
+\\
+&\frac 1 {\sqrt{\lambda}}  s_1 c_2  &\sqrt{\lambda} c_1 c_2 &-\sqrt{\lambda} s_1 s_2  &\ldots &0 \\
+& \vdots  &\vdots & \vdots & \vdots & \vdots \\
+ & \frac{1}{\sqrt{\lambda}} s_1 \ldots s_n &\sqrt{\lambda} c_1 \ldots s_n &\cdots &\cdots  &\sqrt{\lambda} s_1 \ldots c_n 
+\end{bmatrix}
+\end{equation*}
+%\end{scriptsize}
+where we defined $c_k \eqdef \cos(\varphi_k/2)$ and $s_k \eqdef \sin(\varphi_k/2)$.
+The determinant of this Jacobian matrix is $\frac 1{2^n} \lambda^{(n-1)/2}$. The inverse of the Jacobian is a bounded invertible linear operator on $H^{s}(\Omega,\R^{n+1}) $ due to the fact that $\lambda$ is bounded below by $\varepsilon$ and the fact that $H^s$ is a Hilbert algebra for $s>d/2$.
+
+
+%itself an $H^s_{loc}$ map since $\frac 1 {\sqrt{\lambda^{n-1}}} \in H^s$ due to the fact that
+Therefore, the Jacobian of $\Phi$ is locally invertible in the $H^s$ topology and the result follows. \end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection[Curvature of Dens\_g(Omega)]{Curvature of $\Dens_g(\Omega)$}
+
+\todo{Some sentences to explain/motivate what is done in this section would be welcome}
+
+The $\WF$ metric can be proven\todo{how? reference?} to be a smooth and weak Riemannian metric on the space of generalized densities of $H^s$ regularity. However, in this Sobolev setting, it can be proven that the Levi-Civita does not exist\todo{similarly, detail or put a reference?}. Moreover, in this context, the submersion defined in \thref{thm:Submersion} is not smooth due to a loss of regularity. The rest of the section will thus be formal computations.
+
+In order to apply O'Neill's formula\todo{ref?}, we need to compute the horizontal lift 
+of a vector field on  $\Dens_g(\Omega)$. In this case of a left action, there is a natural extension of the horizontal lift of a tangent vector at point $\rho \in \Dens_g(\Omega)$. Recall that the horizontal lift is defined by formula \eqref{HLift}. 
+The following proposition is straightforward:
+
+\begin{proposition}
+Let $\rho \in \Dens_g(\Omega)$ be a smooth \todo{why ``generalized''?}generalized density and $X_\rho \in C^\infty(\Omega,\R)$ %such that $X_\rho/\rho \in L^2(\rho)$ 
+be a smooth function that represents a tangent vector at the density $\rho$.
+The horizontal lift at $(\Id, 1)$ of $X_\rho$ is given by $(\nabla \Phi,\Phi)$ where $\Phi$ is the solution to the elliptic partial differential equation:
+\begin{equation}\label{EllipticEquation}
+-\nabla \cdot (\rho \nabla \Phi)  + \Phi \rho = X_\rho\,,
+\end{equation}
+with homogeneous Neumann boundary conditions.
+%If $\mu,X_\mu \in H^s(\Omega)$, then the solution $\Phi$ belongs to $H^{s+1}(\Omega)$.
+\end{proposition}
+
+\begin{proof}
+Using the formula \eqref{HLift}, the horizontal lift of the tangent vector $X_\rho$ is given by the minimization of the norm of a tangent vector $(v,\alpha)$ at $(\Id,1)$
+\begin{equation}\label{NormOnTheLieAlgebra}
+\inf_{v,\alpha} \frac{1}{2} \int_{\Omega} g((v,\alpha),(v,\alpha)) \rho \, \d \nu(x) \,,
+\end{equation}
+under the constraint $-\nabla \cdot (\rho v)  + \alpha \rho = X_\rho$.
+This is a standard projection problem for the space $L^2(\Omega,\R^d) \times L^2(\Omega,\R)$ endowed with the scalar product defined in \eqref{NormOnTheLieAlgebra} (recall that $\rho$ is positive on a compact manifold). The existence of a minimizer is thus guaranteed and there exists a Lagrange multiplier $\Phi \in L^2(\Omega,\R)$ such that the minimizer will be of the form $(\nabla \Phi,\Phi)$. Therefore, the solution to elliptic partial differential equation \eqref{EllipticEquation} is the solution. By elliptic regularity theory, the solution $\Phi$ is smooth.
+%This is a standard result for elliptic partial differential equations even though $\Omega = \R^d$. Indeed, existence is given by the Lax-Milgram theorem in $H^1(\rho)$ and regularity is given by the elliptic regularity theorem on bounded domains by restricting the problem to arbitrary bounded domains since $\rho$ is smooth and positive.%Note that the regularity is only one order above that of $X_\mu$ due to the presence of $\mu$ in the divergence operator.
+\end{proof}
+In order to compute the curvature, we only need to evaluate it on any horizontal lift that projects to $X_\rho$ at point $\rho$. There is a natural lift in this situation given by the right-invariant vector field on $\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$.
+\begin{definition}
+Let $(v,\alpha) \in T_{(\Id,1)}\Diff^{s}(\Omega) \ltimes_\Psi \Lambda^s(\Omega)$ be a tangent vector. The associated right-invariant vector field $\xi_{(v,\alpha)}$ is given by 
+\begin{equation}
+\xi_{(v,\alpha)}(\varphi,\lambda) \eqdef \left( (\varphi,\lambda) , (v \circ \varphi, \alpha \circ \varphi \, \lambda) \right)\,.
+\end{equation} 
+\end{definition}
+\begin{remark}
+Note that, due to the loss of smoothness of the right composition, this vector field $\xi_{(v,\alpha)}$ is smooth for the $H^s$ topology if and only if $(v,\alpha)$ is $C^\infty$.
+\end{remark}
+Last, we need the Lie bracket of the horizontal vector fields on the group. In the case of right-invariant vector fields on the group, their Lie bracket is the right-invariant vector field associated with the Lie bracket on the manifold. Therefore, we have:
+
+\begin{proposition}
+Let $(v_1,\alpha_1)$ and $(v_2,\alpha_2)$ be two tangent vectors at identity. Then,
+ \begin{equation}
+[\xi_{(v_1,\alpha_1)},\xi_{(v_2,\alpha_2)}] = \left( [v_1,v_2] , \nabla \alpha_1\cdot v_2 - \nabla \alpha_2\cdot v_1 \right)\,,
+\end{equation}
+where $ [v_1,v_2]$ denotes the Lie bracket on vector fields.
+\end{proposition}
+
+Thus, applying this formula to horizontal vector fields gives the following corollary. 
+
+\begin{corollary}
+Let $\rho$ be a smooth density and $X_1, X_2$ be two tangent vectors at $\rho$, $\Phi_1,\Phi_2$ be the corresponding solutions of \eqref{EllipticEquation} and we denote by $\xi_{\Phi_1},\xi_{\Phi_2}$ their corresponding right-invariant horizontal lifts. We then have
+ \begin{equation}
+[\xi_{\Phi_1},\xi_{\Phi_2}] = \left( [\nabla \Phi_1,\nabla \Phi_2] ,0 \right)\,.
+\end{equation} 
+\end{corollary}
+
+We formally apply O'Neill's formula to obtain a similar result to optimal transport. This formal computation could be probably made more rigorous following \cite{lott2008some} in a smooth context or following \cite{UserGuideOT}.
+
+\begin{proposition}
+	\thlabel{thm:curvature}
+Let $\rho$ be a smooth generalized density and $X_1, X_2$ be two orthonormal tangent vectors at $\rho$ and $\xi_{\Phi_1},\xi_{\Phi_2}$ their corresponding right-invariant horizontal lifts on the group.
+If O'Neill's formula can be applied, the sectional curvature of $\Dens_g(\Omega)$ at point $\rho$ is non-negative and is given by, 
+\begin{multline}\label{SectionalCurvatureONeill}
+K(\rho)(X_1,X_2) = \int_\Omega k_{p(x)}(X_p(x),Y_p(x)) w(X_p(x),Y_p(x)) \rho(x) \d \nu(x) \\+ \frac 34 \left\| [\xi_{\Phi_1},\xi_{\Phi_2}]^V \right\|^2
+\end{multline}
+where  $w(X_p(x),Y_p(x)) = (|X_p(x)|^2| |Y_p(x)|^2 - \langle X_p(x) , Y_p(x) \rangle)$ and $ [\xi_{\Phi_1},\xi_{\Phi_2}]^V$ denotes the vertical projection of $[\xi_{\Phi_1},\xi_{\Phi_2}]$ at identity and $\| \cdot \|$ denotes the norm at identity.
+\end{proposition}
+
+\begin{proof}
+This is the application of O'Neill's formula\todo{ref} and \thref{thm:Submersion} at the reference density $\rho$.
+\end{proof}
+
+\begin{remark}
+ It is important to insist on the fact that we only compute the ``local'' sectional curvature. We have seen that the geometry of space and mass is that of a Riemannian cone, in which the singularity concentrates curvature, although the Riemannian cone can be locally flat. Now, in this infinite dimensional context, the sectional curvature gives information in smooth neighborhoods of the density. However, the space of finite measures endowed with the Wasserstein-Fisher-Rao metric can be seen as an infinite product of Riemannian cones and the curvature also concentrates at the singularities. No information on global curvature properties is given by formula \eqref{SectionalCurvatureONeill}.
+ \end{remark}
+
+
+\begin{corollary}
+Let $\Omega$ be a compact domain in $\R^n$ endowed with the Euclidean metric.
+The sectional curvature of $(\Dens_g(\Omega),\WF)$ is non negative and it vanishes on $\xi_{\Phi_1},\xi_{\Phi_2}$ if and only if $ [\nabla \Phi_1,\nabla \Phi_2]=0$.
+\end{corollary}
+
+\begin{proof}
+The tangent vector $\left( [\nabla \Phi_1,\nabla \Phi_2] ,0 \right)$ is horizontal if and only if it is of the form $\xi_\Phi$, therefore, if and only if, $\xi_\Phi =0$ which gives the result.
+\end{proof}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Corresponding Monge Formulation} \label{Monge}
+
+In this section, we discuss a formal Monge formulation that will motivate the development of the corresponding Kantorovich formulation in Section~\ref{sec : general static problem}.
+ 
+Let us recall an important property of any Riemannian submersion $$\pi: (M,g_M) \mapsto (B,g_B)\,.$$ Every horizontal lift of a geodesic on the base space $B$ is a geodesic in $M$. In turn, given any two points $(p,q) \in B$, any length minimizing geodesic between the fibers $\pi^{-1}(p)$ and $\pi^{-1}(q)$ projects down onto a geodesic on $B$ between $p$ and $q$. From the point of view of applications, it can be either interesting to compute the geodesic downstairs and then lift it up horizontally or going the other way.
+
+In the context of this generalized optimal transport model, the Riemannian submersion property is shown in \thref{thm:Submersion}. Moreover, the metric on $\Diff(\Omega) \ltimes_\Psi \Lambda(\Omega)$ is an $L^2$ metric as proven in the lemma \ref{L2Norm}, which is particularly simple. Therefore, it is possible to formulate the corresponding Monge problem:
+\begin{equation}
+\WF(\rho_0, \rho_1) = \inf_{(\varphi,\lambda) } \left\{ \| (\varphi,\lambda) - (\Id,1)  \|_{L^2(\rho_0)} \, : \, \pfwdM{\varphi} (\lambda \rho_0 )= \rho_1 \right\}
+\end{equation}
+%Indeed, the horizontal lift of a geodesic on the space of densities is a geodesic between the fibers at $\mu$ and $\nu$ (i.e. the stabilizers of the measures under the action of the group).
+Let us denote by $d$ the distance on $\Omega \times \R_+^*$ associated with an \emph{admissible} Riemannian metric, then we have:
+\begin{equation}
+\| (\varphi,\lambda) - (\Id,1)  \|_{L^2(\rho_0)}^2 = \int_\Omega d\left( (\varphi(x),\lambda) , (x,1)\right)  \, \rho_0(x) \, \d \nu(x) \,.
+\end{equation}
+In the case of a standard Riemannian cone, Proposition \ref{RiemannianMetric} gives the explicit expression of the distance which gives
+\begin{equation}
+\| (\varphi,\lambda) - (\Id,1)  \|_{L^2(\rho_0)}^2 = \int_\Omega 1 + \lambda -2\sqrt{\lambda}  \cos \left(d(\varphi(x),x) \wedge \pi \right)  \, \rho_0(x) \,  \d \nu(x)\,.
+\end{equation}
+
+From a variational calculus point of view, it is customary to pass from the Monge formulation to its relaxation. So, instead of making rigorous statements on this Monge formulation, we will directly work on the Kantorovich formulation in the next sections. However, in the next sections, we do not restrict our study to Riemannian costs and we extend it to general dynamical costs that are introduced in Definition \ref{def: infinitesimal cost}. As a motivation for this generalization we can mention the case of $L^p$ norms for $p\geq 1$, namely:
+
+\begin{multline}
+G(\varphi,\lambda)\left((X_\varphi,X_\lambda) , (X_\varphi,X_\lambda)\right)= \frac{1}{2} \int_{\Omega} | v(x)  |^p \rho(x)  \d \nu(x) \,+\, \frac{\delta^2}{2} \int_{\Omega}   \alpha(x)^p  \rho(x)  \d \nu(x) \,.
+\end{multline}
+In Lagrangian coordinates, this gives rise to an $L^p$ metric on $\Omega \times \R_+^*$, namely if $y=m^{1/p}$, then $g(x,y)(v_x,v_y) = (y \|v_x\|)^p + \|v_y\|^p$. Note that the distance induced by the $L^p$ norm does not correspond to the standard $L^p$ norm on the Euclidean cone. However, it is possible to retrieve the standard $L^p$ norm on the cone in the general setting of Section \ref{sec:DynamicToStatic}, by pulling it back in spherical coordinates.
+
+
+

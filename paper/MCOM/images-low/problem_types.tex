@@ -1,0 +1,167 @@
+% !TEX root = ../EntropicNumeric.tex
+
+\pgfmathsetmacro{\x}{.8}
+\pgfmathsetmacro{\y}{1.8}
+
+\begin{subfigure}{0.45\linewidth} 
+\centering
+\resizebox{\linewidth}{!}{
+\begin{tikzpicture}
+\fill[color=black!30, fill=black!5] (-.8,\x-.3) rectangle (4.8,\y+.5);
+\draw[left]  (-1,\x/2+\y/2) node {$X$} ;
+\fill[color=black!30, fill=black!5] (-.8,-\x+.3) rectangle (4.8,-\y-.5);
+\draw[left]  (-1,-\x/2-\y/2) node {$Y$} ;
+
+\draw[color=black!80] (-.2,\y-.2) rectangle (4.2,\y+.2);
+\draw[right]  (4.15,\y) node {\small{$\mathcal{G}^X$}} ;
+\draw[color=black!80] (-.2,-\y+.2) rectangle (4.2,-\y-.2);
+\draw[right]  (4.15,-\y) node {\small{$\mathcal{G}^Y$}} ;
+
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(0,-\x)    	-- 	(0,\x);
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(1,-\x)    	-- 	(1,\x);
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(4,-\x)    	-- 	(4,\x);
+
+\draw (0,0) node [left] {$c_1$}; \draw (1,0) node [left] {$c_2$}; \draw (4,0) node [left] {$c_n$};
+\draw (0,\x/2+\y/2) node [left] {\small{$\phi^X_1$}}; 
+\draw (1,\x/2+\y/2) node [left] {\small{$\phi^X_2$}}; 
+\draw (4,\x/2+\y/2) node [left] {\small{$\phi^X_n$}};
+
+\draw (0,-\x/2-\y/2) node [left] {\small{$\phi^Y_1$}}; 
+\draw (1,-\x/2-\y/2) node [left] {\small{$\phi^Y_2$}}; 
+\draw (4,-\x/2-\y/2) node [left] {\small{$\phi^Y_n$}};
+
+\draw (2.7,\x) node [left] {$\dots$}; \draw (2.7,-\x) node [left] {$\dots$};
+\draw (2.7,\y) node [left] {$\dots$}; \draw (2.7,-\y) node [left] {$\dots$};
+
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(0,\x)    	-- 	(0,\y);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(0,-\x)    	-- 	(0,-\y);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(1,\x)    	-- 	(1,\y);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(1,-\x)    	-- 	(1,-\y);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(4,\x)    	-- 	(4,\y);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(4,-\x)    	-- 	(4,-\y);
+
+\draw  (0,-\x) node {$\circ$} ; \draw  (0,\x) node {$\circ$} ;
+\draw  (1,-\x) node {$\circ$} ; \draw  (1,\x) node {$\circ$} ;
+\draw  (4,-\x) node {$\circ$} ; \draw  (4,\x) node {$\circ$} ;
+
+\draw  (0,-\y) node {$\circ$} ; \draw  (0,\y) node {$\circ$} ;
+\draw  (1,-\y) node {$\circ$} ; \draw  (1,\y) node {$\circ$} ;
+\draw  (4,-\y) node {$\circ$} ; \draw  (4,\y) node {$\circ$} ;
+\end{tikzpicture}
+}
+\caption{}
+\end{subfigure}%
+\begin{subfigure}{0.25\linewidth} 
+\centering
+ \resizebox{!}{3.cm}{
+\begin{tikzpicture}
+%\draw  (-1,0) node {} ;\draw  (1,0) node {} ;
+\draw  (0,\y) node {} ;\draw  (0,-\y) node {} ;
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(0,-\x)    	-- 	(0,\x);
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(1,-\x)    	-- 	(1,\x);
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(2,-\x)    	-- 	(2,\x);
+
+\draw (0,0) node [left] {\small{$c_1$}}; \draw (1,0) node [left] {\small{$c_2$}}; \draw (2,0) node [left] {\small{$c_3$}};
+
+\draw  (0,-\x) node {$\circ$} ; \draw  (0,\x) node {$\bullet$} ;
+\draw  (1,-\x) node {$\circ$} ; \draw  (1,\x) node {$\bullet$} ;
+\draw  (2,-\x) node {$\circ$} ; \draw  (2,\x) node {$\bullet$} ;
+\draw  (.5,-\x) node {$=$} ; \draw  (1.5,-\x) node {$=$} ;
+\draw (0,\x) node [right] {\small{$\mu_1$}};
+\draw (1,\x) node [right] {\small{$\mu_2$}};
+\draw (2,\x) node [right] {\small{$\mu_3$}};
+\end{tikzpicture}
+}
+\caption{}
+\end{subfigure}%
+\begin{subfigure}{0.09\linewidth} 
+\centering
+ \resizebox{!}{3.cm}{
+\begin{tikzpicture}
+\draw (0,0) node [left] {$c$};
+\draw (0,\x/2+\y/2) node [left] {\small{$\phi^X$}};
+\draw (0,-\x/2-\y/2) node [left] {\small{$\phi^Y$}}; 
+\draw (0,\y) node [right] {\small{$\mu$}};
+\draw (0,-\y) node [right] {\small{$\nu$}}; 
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(0,-\x)    	-- 	(0,\x);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(0,\x)    	-- 	(0,\y);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(0,-\x)    	-- 	(0,-\y);
+\draw  (0,-\x) node {$\circ$} ; \draw  (0,\x) node {$\circ$} ;
+\draw  (0,-\y) node {$\bullet$} ; \draw  (0,\y) node {$\bullet$} ;
+\draw  (-.5,0) node {} ;
+\draw  (.5,0) node {} ;
+%\draw  (0,-2.5) node {} ;
+\end{tikzpicture}
+}
+\caption{}
+\end{subfigure}%
+\begin{subfigure}{0.25\linewidth} 
+\centering
+ \resizebox{!}{3.cm}{
+\begin{tikzpicture}
+\draw (0,0) node [left] {$c$};
+\draw (0,\x/2+\y/2) node [left] {\small{$\phi_{\KL}$}};
+\draw (0,-\x/2-\y/2) node [left] {\small{$\phi_{\KL}$}}; 
+\draw (0,\y) node [left] {\small{$\rho^1_k$}};
+\draw (0,-\y) node [left] {\small{$\rho^1$}}; 
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(0,-\x)    	-- 	(0,\x);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(0,\x)    	-- 	(0,\y);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(0,-\x)    	-- 	(0,-\y);
+\draw  (0,-\x) node {$\circ$} ; \draw  (0,\x) node {$\circ$} ;
+\draw  (0,-\y) node {$\circ$} ; \draw  (0,\y) node {$\bullet$} ;
+
+\draw (1,0) node [right] {$c$};
+\draw (1,\x/2+\y/2) node [right] {\small{$\phi_{\KL}$}};
+\draw (1,-\x/2-\y/2) node [right] {\small{$\phi_{\KL}$}}; 
+\draw (1,\y) node [right] {\small{$\rho^2_k$}};
+\draw (1,-\y) node [right] {\small{$\rho^2$}}; 
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(1,-\x)    	-- 	(1,\x);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(1,\x)    	-- 	(1,\y);
+\draw[dotted,shorten >=0.1cm,shorten <=.1cm] 	(1,-\x)    	-- 	(1,-\y);
+\draw  (1,-\x) node {$\circ$} ; \draw  (1,\x) node {$\circ$} ;
+\draw  (1,-\y) node {$\circ$} ; \draw  (1,\y) node {$\bullet$} ;
+
+\draw[color=black!80] (-.5,-\y+.25) rectangle (1.5,-\y-.25);
+\draw[right]  (1.5,-\y) node {\small{$\mathcal{G}$}} ;
+\draw  (-1,0) node {} ;
+\draw  (2,0) node {} ;
+\end{tikzpicture}
+}
+\caption{}
+\end{subfigure}%
+
+
+
+
+%%%% CODE FOR GradientFlows %%%%%%%%%%%%
+\iffalse
+\begin{tikzpicture}
+%\draw  (-1,0) node {} ;\draw  (1,0) node {} ;
+\draw  (0,\y) node {} ;\draw  (0,-\y) node {} ;
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(0,-\x)    	-- 	(0,\x);
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(1,-\x)    	-- 	(1,\x);
+\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(2,-\x)    	-- 	(2,\x);
+%\draw[<->,shorten >=0.1cm,shorten <=.1cm] 	(3,-\x)    	-- 	(3,\x);
+
+\draw (0,0) node [left] {\small{$c$}}; 
+\draw (1,0) node [left] {\small{$\epsilon c$}}; 
+\draw (2,0) node [left] {\small{$\epsilon^2c$}};
+
+\draw  (0,-\x) node {$\circ$} ; \draw  (0,\x) node {$\bullet$} ;
+\draw  (1,-\x) node {$\circ$} ; \draw  (1,\x) node {$\circ$} ;
+\draw  (2,-\x) node {$\circ$} ; \draw  (2,\x) node {$\circ$} ;
+\draw  (3,-\x) node {$\circ$} ;
+\draw  (.5,-\x) node {$=$} ; \draw  (2.5,-\x) node {$=$} ;
+\draw  (1.5,\x) node {$=$} ;  
+\draw  (3.,0) node {$\vdots$} ; 
+\draw (0,\x) node [above] {\small{$\rho_0$}};
+\draw (.5,-\x-.25) node [below] {\scriptsize{$(1+\epsilon)R(\rho_1)$}};
+\draw (1.5,\x+.25) node [above] {\scriptsize{$\epsilon(1+\epsilon) R(\rho_2)$}};
+\draw (2.5,-\x-.25) node [below] {\scriptsize{$\epsilon^2(1+\epsilon)R(\rho_3)$}};
+
+\draw[color=black!80] (-.2,-\x+.25) rectangle (1.2,-\x-.25);
+\draw[color=black!80] (.8,\x-.25) rectangle (2.2,\x+.25);
+\draw[color=black!80] (1.8,-\x+.25) rectangle (3.2,-\x-.25);
+
+\end{tikzpicture}
+\fi

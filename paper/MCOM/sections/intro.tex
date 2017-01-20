@@ -1,0 +1,161 @@
+% !TEX root = ../EntropicNumeric.tex
+
+\section{Introduction}
+
+
+Optimal transport (OT) is a standard way to lift a metric defined on some ``ground'' space $X$ to a metric on probability distributions (positive Radon measures with unit mass) $\Mm_+(X)$. Initially formulated by Monge~\cite{Monge1781} as a non-convex optimization problem over transport maps, its modern formulation as a linear program is due to Kantorovitch~\cite{Kantorovich42}, and it has been revitalized thanks to the groundbreaking work of Brenier~\cite{Brenier91}. We refer to the monographs~\cite{cedric2003topics,SantambrogioBook} for a more detailed background on the theory of OT. 
+
+While initially developed by theoreticians, OT is now becoming popular in applied fields, and we refer for instance to application for color manipulation in image processing~\cite{RabinPapadakisSSVM}, reflectance interpolation in computer graphics~\cite{Bonneel-displacement}, image retrieval in computer vision~\cite{RubTomGui00} and statistical inference in machine learning~\cite{Solomon-ICML}. A key limitation of classical OT is that it requires the input measures to be normalized to unit mass, which is a problematic assumption for many applications that require either to handle arbitrary positive measures and/or to allow for only partial displacement of mass. All these applications might indeed benefit from OT algorithms that can handle mass variation (creation or destruction) as well as mass transportation.
+
+While many proposals have been made to account for these ``unbalanced'' optimal transport problems, they used to be tailored for specific applications. There have been several recent works (reviewed below) that try to put all these proposals (and some new ones) into a common generic framework. These emerging theoretical advances call for algorithms that extend existing fast OT methods to these new unbalanced problems. It is precisely the goal of this paper to show how a popular numerical approach to OT -- namely entropic regularization -- does extend in a very natural and efficient way to solve a variety of unbalanced problems, including unbalanced OT, barycenters and gradient flows. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Previous Works}
+\label{sec: previous works}
+%%%
+\paragraph{Algorithms for optimal transport.}
+
+The Kantorovitch formulation of OT as a linear program, when restricted to sums of Diracs, can be directly tackled using simplex or interior point methods. For the special case of optimal linear assignment (i.e.\  for sums of the same number of uniform-mass Diracs) one can also use combinatorial algorithms such as the Hungarian method~\cite{Burkard09} or the auction algorithm~\cite{Bertsekas-OptimalTransport-1989}. The time complexity of these algorithms is roughly cubic in the number of Diracs, and hence they do not scale to very large problems.
+
+In the specific case of the squared Euclidean cost, it is possible to make use of the geodesic structure of the OT distance, and reparametrize this as a convex optimization problem, as proposed by Benamou and Brenier~\cite{benamou2000computational}, see also~\cite{2014-papadakis-siims} for a discussion on the use of first order non-smooth optimization schemes.
+In \cite{SchmitzerShortCuts2015} a multi-scale algorithm is developed that consistently leverages the structure of geometric transport problems to accelerate linear program solvers.
+
+A last class of approaches deals with semi-discrete problems, when one measure has a density, and the second one is a weighted sum of Dirac masses. For this problem, when using the squared Euclidean cost, it is possible to use geometric methods~\cite{AurenhammerHA98} (see also~\cite{Merigot11} for the development of efficient algorithms using methods from computational geometry and~\cite{Levy3d} for 3-D computations).
+
+
+%%%%
+\paragraph{Entropic transport.}
+
+These computational methods thus cannot cope with large scale problems with arbitrary transportation costs. A recent class of approaches, initiated and revitalized by the paper of Marco Cuturi~\cite{CuturiSinkhorn}, proposes to compute an approximate transport coupling using entropic regularization. This idea has its origins in many different fields, most notably it is connected with Schr\"odinger's problem in statistical physics~\cite{Schroedinger31,LeonardSchroedinger} and with the iterative scaling algorithm by Sinkhorn~\cite{Sinkhorn64} (also known as IPFP~\cite{DemingStephanIPFP}). 
+%
+This entropic smoothing can be interpreted as a strictly convex barrier for positivity, but its main computational advantage is that it leads to very simple closed form expressions for all steps of the algorithm, which would not be possible when using different regularization functionals. 
+%
+Several follow-up articles~\cite{CuturiBarycenter,2015-benamou-cisc} to~\cite{CuturiSinkhorn} have shown that the same strategy can also be used to tackle the computation of barycenters for the Wasserstein distance (as initially formulated by~\cite{agueh2015optimal}), and for solving OT problems on geometric domains (such as regular grids or triangulated meshes) using convolution and the heat diffusion kernel~\cite{2015-solomon-siggraph}. 
+%
+Some theoretical properties of this regularization are studied in~\cite{2015-carlier-convergence}, including the $\Gamma$-convergence of the regularized problem toward classical transport when regularization vanishes. 
+
+%%
+\paragraph{Optimization with Bregman divergences.}
+
+The success of this entropic regularization scheme is tightly linked with use of the Kullback-Leibler (KL) divergence as a natural Bregman divergence~\cite{bregman1967relaxation} for the optimization on the space of positive Radon measures. Not only is this divergence quite natural, but it also leads to simple formulas for the computation of projectors and so-called proximal operators (see below for a definition) for many functions typically involved in OT.  
+%
+The most simple algorithm, which is actually at the heart of Sinkhorn's iterations, is the iterative projection on affine subspaces for the KL divergence.
+%
+A refined version of these iterations, which works for arbitrary convex sets (not just affine spaces) is the so-called Dykstra's algorithm~\cite{Dykstra83}, which can be interpreted (just like iterative projections) as an iterative block-coordinates minimization on a dual problem.  
+%
+Dykstra's algorithm is known to converge when used in conjunction with Bregman divergences~\cite{bauschke-lewis,CensorReich} (see~\cite{2015-Peyre-siims} for details on the underlying idea for sums of two arbitrary functions).
+%
+Many other first order proximal methods for Bregman divergences exists. The most simple one is the proximal point algorithm~\cite{EcksteinProxPoint}, but most proximal splitting schemes have been extended to this setting, such as for instance ADMM~\cite{WangBanerjee-ADMM}, primal-dual schemes~\cite{ChambollePock-div} and forward-backward~\cite{NguyenFB2015}.
+
+The algorithm we propose in this article can be seen as special instance of Dykstra's iterations, but with an extremely simple (both conceptually and algorithmically) structure, which we refer to as a ``scaling'' algorithm. It extends Sinkhorn's iterations to more complex problems. This structure is due to the fact that the functions involved in OT problems make use of the marginals of the couplings that are being optimized. 
+
+%%%%
+\paragraph{Unbalanced transport: from theory to numerics.}
+
+
+There has been a large number of proposals to extend OT methods to arbitrary ``unbalanced'' positive measures. Let us for instance quote the Kantorovitch-Rubinstein dual-Lipschitz norms~\cite{hanin1992kantorovich}, optimal partial transport~\cite{figalli2010optimal} and geodesic computations with source terms~\cite{piccoli2014generalized}. All these approaches, and much more, can be seen as special instances of a generic class of OT-like problems, that have been proposed independently in~\cite{LieroMielkeSavareLong} and~\cite{2015-chizat-unbalanced}.
+%
+These unbalanced problems can be formulated in several ways, that are equivalent (under some restrictive conditions on the cost): a geodesic (dynamic) formulation with a source term~\cite{kondratyev2015,2015-chizat-interpolating,LieroMielkeSavareShort}, a static formulation with two semi-couplings~\cite{2015-chizat-unbalanced} and a static formulation with approximate marginal constraints~\cite{LieroMielkeSavareLong}. 
+%
+From a numerical perspective, the last formulation (approximate marginals constraints) is the most simple to handle, since, as we show in the following section, it only involves a minor modification of the initial linear program, that has to be turned into a convex problem involving $\phi$-divergences (see Definition \ref{def_divergence}). This is the one that we consider in this article. 
+% 
+Note that the use of such a relaxed formulation, in conjunction with entropic smoothing has been introduced, without proof of convergence, in~\cite{FrognerNIPS} for application in machine learning.  
+
+
+%%%
+\paragraph{Gradient flows.}
+
+Beyond OT problems and barycenter problems, a popular use of Wasserstein distances is to study gradient flows, following the formalism of ``minimizing movements'' detailed in~\cite{ambrosio2006gradient}. This corresponds to discrete implicit stepping (i.e.\ proximal maps) for the Wasserstein distance (instead of more common Euclidean or Hilbertian metrics). In some cases, these time-discrete flows can be shown to converge to continuous flows that solve a suitable PDE, as the temporal stepsize tends to 0. The most famous example is the gradient flow of the entropy for the Wasserstein metric, which solves the diffusion equation~\cite{jordan1998variational}. Non-linear PDEs are considered for example in~\cite{otto2001geometry}. An application to imaging can be found in~\cite{Burger-JKO}. Another use of these implicit steps is to construct minimizing flows of non-smooth functionals, for instance to model crowd motions~\cite{maury2010macroscopic}. 
+
+A large variety of dedicated numerical schemes has been proposed for spatial discretization and solving of these time-discrete flows, such as for instance finite differences~\cite{burger2010mixed}, finite volumes~\cite{CarrilloFiniteVolume} and Lagrangian schemes~\cite{JDB-JKO}. A bottleneck of these schemes is the high computational complexity due to the resolution of an OT-like problem at each time step. The use of entropic regularization has been proposed recently in~\cite{2015-Peyre-siims} and studied theoretically in~\cite{2015-carlier-convergence}. A chief advantage of this approach is that each step can be solved efficiently on a regular grid with fast Sinkhorn iterations involving only Gaussian convolutions, but this comes at the price of additional diffusivity introduced by the approximation, which makes it unsuitable to capture sharp features of solutions. 
+
+It is possible to extend these gradient flows by replacing the Wasserstein distance by more general unbalanced distances. This allows to define flows over arbitrary positive measures, hence involving creation and destruction of mass, which is crucial to model growth phenomena, such as for instance the Hele-Shaw model of tumor evolution~\cite{PerthameTumor}. An analysis of such flows based on a splitting scheme has been recently provided in~\cite{GallouetMonsaingeon2015}. It is one of the goals of this article to propose a versatile algorithm, based on iterative scalings, to approximate numerically these unbalanced flows.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Contributions and Outline}
+The main contribution of this article is to define a class of iterative scaling algorithms to solve the entropic approximation of a variety of unbalanced optimal transport problems. 
+%
+\iffalse
+More precisely, these convex optimization schemes can be used to minimize the sum of a linear cost and several other convex functions that depends only on the marginals of the optimized couplings. 
+%
+This includes as special case classical OT, unbalanced OT, unbalanced barycenters and unbalanced gradient flows. 
+%
+The main advantages of this approaches are that it is simple (it only involves matrix multiplication and pointwise elementary operations), quite generic (it applies to most known OT-like problems), enjoy fast convergence (linear convergence is observed, and known to hold for classical OT), is highly parallelisable, and can benefit from special structure of the domain (such as for instance axis-separability on squared regular grid, where iterations are thus one order of magnitude faster).
+%
+We showcase the application of these methods to color transfer, 2-D shapes deformations and to the dynamics of tumor growth.
+\fi
+%
+First, in Section \ref{sec-ot-like}, we exhibit a common structure to most optimization problems related to OT: a nonnegativity constraint, a linear transport cost and convex functions acting on the marginals of the optimized couplings. 
+%
+For solving the entropic regularization of these problems, we then introduce in Section \ref{sec_algorithm_analysis} a generic ``scaling'' algorithm which is a direct generalization of Sinkhorn's algorithm. 
+%
+In a continuous setting, we show under some assumptions that the iterates are well defined and correspond to alternating optimization on the dual and we prove linear convergence in a particular key case. 
+%
+In a discrete setting, we show in Section \ref{sec-algorithm} that this algorithm converges as soon as the dual problem is well-posed. We also give a simple description of the algorithm, introduce a stabilization scheme to reach very small values of the regularization parameter and sketch a generalization of this algorithm.
+%
+Finally, in Section \ref{sec_applications}, we showcase the application of these methods to 1-D and 2-D unbalanced optimal transport, generalizations of Wasserstein barycenters and gradient flows with growth.
+%
+The main advantages of our approach are that it is simple (it only involves matrix multiplication and pointwise elementary operations), quite generic (it applies to most known OT-like problems), enjoys fast convergence (linear convergence is observed, and show in particular cases) and is highly parallelizable.
+%
+The code to reproduce the results of this article is available online\footnote{\url{https://github.com/lchizat/optimal-transport}}.
+%
+Note also that an efficient numerical implementation of the scaling algorithm developed in this paper is studied
+further in~\cite{SchmitzerScaling2016}, see
+Section~\ref{sec:RelationSparseScaling} for a  discussion.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Notation}
+\label{sec_notation}
+%
+The space of nonnegative finite Radon measures\footnote{Borel measures which are inner regular. If $T$ is Polish, all Borel measures are inner regular.}  on a (Hausdorff) topological space $T$ is denoted by $\Mm_+(T)$, and the vector space it generates by $\Mm(T)$. For a measure on a product space $\mu\in \Mm(X \times Y)$, $P^X_\# \mu$ (or sometimes $P^1_\# \mu$ if $X=Y$) denotes its first marginal and $P^Y_\# \mu$ (or $P^2_\# \mu$) its second marginal.
+%
+
+We denote by $\d t, \d x, \dots$ the reference measures on some measurable spaces $T,X,\dots$. They are not assumed to be the Lebesgue measure (but most of the time, they are probability measures). If $(T,\d t)$ is a measured space, we denote by $\Lun(T)$ and $\Linf(T)$ the usual spaces of equivalence classes of measurable functions from $T$ to $\RR$ which are, respectively, absolutely integrable and essentially bounded. When there is a subscript $+$ appended to the name of a space of functions, it refers to the cone of nonnegative functions in that space.
+
+Divergence functionals (or $\phi$-divergences) are denoted by a calligraphic letter $\Divergm$ when they act on measures (as defined in Definition \ref{def_divergence}), by straight letters $\Diverg$ when they act on functions (as defined in \eqref{eq_divergencefunctions}) and with an overline $\ol{\Diverg}$ when they act on two real numbers (as in \eqref{eq_divergencefunctions}). More generally, functionals on measures are denoted by calligraphic letters ($\mathcal{F}, \mathcal{G},\dots$) and functionals on functions by straight capital letters ($F,G,\dots$).
+
+The same convention holds for the Kullback-Leibler divergence (which is just a particular case of divergence functionals) thus denoted by $\KLm$, $\KL$ or $\ol{\KL}$ depending on the nature of its arguments. Moreover, we generalize the definition of $\KL$ to families of functions as follows: if $(X, \d x)$ and $(Y,\d y)$ are two measured spaces and $r,s : X\times Y \to \RR^n$ are families of measurable functions, the KL-divergence is defined as
+\eql{
+\label{eq_KLdens}
+\KL(r|s) \eqdef \sum_i \int_{X\times Y} \left[ \log \left(\frac{r_i(x,y)}{s_i(x,y)} \right) r_i(x,y) -r_i(x,y) +s_i(x,y) \right]\d x \d y 
+}
+(with $0\log(0/0)=0$) if $r,s\geq0$ a.e.\ and $(s_i(x,y)=0) \Rightarrow (r_i(x,y)=0)$ a.e., and $\infty$ otherwise.
+
+The generalization of some notations to families of functions is often implicit. For instance, if $(r_i)_{i=1}^n$ and $(s_i)_{i=1}^n$ are two families of functions,  we write
+\eq{
+\langle r,s \rangle \eqdef \sum_{i=1}^n \int_{X \times Y} r_i(x,y)\, s_i(x,y) \d x \d y
+}
+and the projection operators are defined component-wise, for $i\in \{1,\dots,n\}$, as
+\eql{\label{eq_ProjectionDens}
+(P^X_\# r)_i (x) = \int_Y r_i(x,y) \d y \qandq (P^Y_\# r)_i (y) = \int_X r_i(x,y) \d x  \, .
+}
+
+If $X$ and $Y$ are finite spaces (i.e.\ contain only a finite number of points), we represent functions on $X$ by vectors denoted by bold letters $\mathbf{a}$ and functions on $X\times Y$ by matrices denoted by capital bold letters $\mathbf{A}$. In this context the notations $\mathbf{a}\odot\mathbf{b}$ and $\mathbf{a}\oslash\mathbf{b}$ denote, respectively entrywise multiplication and entrywise division with convention $0/0=0$ between vectors.
+
+The conjugate of a convex function $f$ is denoted by $f^*$ and its subdifferential is denoted by $\partial f$. Some reminders on convex analysis are given in Appendix \ref{sec:ApxConvex}. The indicator of some convex set $C$ is 
+\eq{
+	\iota_C(a) = \choice{
+		0 \qifq a \in C, \\
+		+\infty \quad \text{otherwise}.
+		}
+}
+
+Finally, the proximal operator plays a central role in this article. In full generality, if $E$ a set, $\Diverg: E\times E\to \RR_+\cup \{\infty\}$ is a divergence which measures ``closeness'' between points in $E$, it is defined for $F:E\to \RR\cup \{\infty\}$ and $x\in E$ as
+\eq{
+\prox^D_F(x) = \argmin_{y\in E} F(y) + \Diverg(y|x)\, .
+}
+%proximal
+%\paragraph{Proximal map.}
+%For a function $f : \Mm_+(X) \rightarrow \RR \cup \{+ \infty\}$, its proximal operator with respect to the KL divergence is
+%\eq{
+%	\prox^{\KL}_{f}(\mu) \eqdef \uargmin{\nu\in \Mm_+(X) } \KL(\nu|\mu) + f(\nu).
+%}
+%The same definition is used to define the proximal operator of functions defined on $\Mm_+(X \times X)$.
+
+

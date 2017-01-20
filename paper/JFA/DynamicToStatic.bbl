@@ -1,0 +1,227 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{DOI~\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{DOI~\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem{Carlier_wasserstein_barycenter}
+Agueh, M., Carlier, G.: Barycenters in the {W}asserstein space.
+\newblock SIAM J. on Mathematical Analysis \textbf{43}(2), 904--924 (2011)
+
+\bibitem{ambrosio2000functions}
+Ambrosio, L., Fusco, N., Pallara, D.: Functions of bounded variation and free
+  discontinuity problems, vol. 254.
+\newblock Clarendon Press Oxford (2000)
+
+\bibitem{UserGuideOT}
+Ambrosio, L., Gigli, N.: A user's guide to optimal transport.
+\newblock Lecture Notes in Mathematics. Springer Berlin Heidelberg (2013)
+
+\bibitem{benamou2003numerical}
+Benamou, J.D.: Numerical resolution of an ``unbalanced'' mass transport
+  problem.
+\newblock ESAIM: Mathematical Modelling and Numerical Analysis \textbf{37}(05),
+  851--868 (2003)
+
+\bibitem{benamou2000computational}
+Benamou, J.D., Brenier, Y.: A computational fluid mechanics solution to the
+  {M}onge-{K}antorovich mass transfer problem.
+\newblock Numerische Mathematik \textbf{84}(3), 375--393 (2000)
+
+\bibitem{ArthurBesse2}
+Besse, A.L.: Manifolds all of whose geodesics are closed.
+\newblock Springer-Verlag Berlin ; New York (1978)
+
+\bibitem{bouchitte1988integral}
+Bouchitt{\'e}, G., Valadier, M.: Integral representation of convex functionals
+  on a space of measures.
+\newblock Journal of functional analysis \textbf{80}(2), 398--420 (1988)
+
+\bibitem{GammaConvergenceBraides2002}
+Braides, A.: Gamma-Convergence for Beginners.
+\newblock Oxford University Press (2002)
+
+\bibitem{BruverisVialard}
+Bruveris, M., Vialard, F.X.: On groups of diffeomorphisms.
+\newblock Preprint  (2013)
+
+\bibitem{MetricGeometryBurago}
+Burago, D., Burago, Y., Ivanov, S.: A course in metric geometry.
+\newblock American Mathematical Soc.  (2001)
+
+\bibitem{caffarelli2010free}
+Caffarelli, L., McCann, R.J.: Free boundaries in optimal transport and
+  {M}onge-{A}mpere obstacle problems.
+\newblock Annals of mathematics \textbf{171}(2), 673--730 (2010)
+
+\bibitem{ChizatOTFR2015}
+Chizat, L., Schmitzer, B., Peyr\'e, G., Vialard, F.X.: An interpolating
+  distance between optimal transport and {Fisher-Rao}.
+\newblock http://arxiv.org/abs/1506.06430 (2015)
+
+\bibitem{DelanoeGeometryOT}
+Delano\"e, P.: Differential geometric heuristics for riemannian optimal mass
+  transportation.
+\newblock In: B.~Kruglikov, V.~Lychagin, E.~Straume (eds.) Differential
+  Equations - Geometry, Symmetries and Integrability, \emph{Abel Symposia},
+  vol.~5, pp. 49--73. Springer Berlin Heidelberg (2009)
+
+\bibitem{em70}
+Ebin, D.G., Marsden, J.E.: Groups of diffeomorphisms and the motion of an
+  incompressible fluid.
+\newblock Ann. of Math \textbf{92}, 102--163 (1970)
+
+\bibitem{figalli2010optimal}
+Figalli, A.: The optimal partial transport problem.
+\newblock Archive for rational mechanics and analysis \textbf{195}(2), 533--560
+  (2010)
+
+\bibitem{freed1989}
+Freed, D.S., Groisser, D.: The basic geometry of the manifold of riemannian
+  metrics and of its quotient by the diffeomorphism group.
+\newblock Michigan Math. J. \textbf{36}(3), 323--344 (1989)
+
+\bibitem{FrognerNIPS}
+Frogner, C., Zhang, C., Mobahi, H., Araya-Polo, M., Poggio, T.: Learning with a
+  wasserstein loss.
+\newblock Preprint 1506.05439, Arxiv (2015)
+
+\bibitem{Gallot1979}
+Gallot, S.: {\'E}quations diff{\'e}rentielles caract{\'e}ristiques de la
+  sph{\`e}re.
+\newblock Annales scientifiques de l'Ecole Normale Superieure \textbf{12}(2),
+  235--267 (1979)
+
+\bibitem{GramfortMICCAI}
+Gramfort, A., Peyr\'e, G., Cuturi, M.: Fast optimal transport averaging of
+  neuroimaging data.
+\newblock In: Proc. IPMI'15 (2015)
+
+\bibitem{guittet2002extended}
+Guittet, K.: Extended {K}antorovich norms: a tool for optimization.
+\newblock Tech. rep., Tech. Rep. 4402, {INRIA} (2002)
+
+\bibitem{hanin1999extension}
+Hanin, L.: An extension of the {K}antorovich norm.
+\newblock Contemporary Mathematics \textbf{226}, 113--130 (1999)
+
+\bibitem{kantorovich1958space}
+Kantorovich, L., Rubinshtein, G.: On a space of totally additive functions.
+\newblock Vestn Lening. Univ. \textbf{13}, 52--59 (1958)
+
+\bibitem{khesin2008geometry}
+Khesin, B., Wendt, R.: The geometry of infinite-dimensional groups, vol.~51.
+\newblock Springer Science \&amp; Business Media (2008)
+
+\bibitem{new2015kondratyev}
+Kondratyev, S., Monsaingeon, L., Vorotnikov, D.: A new optimal transport
+  distance on the space of finite {R}adon measures.
+\newblock Tech. rep., Pre-print (2015)
+
+\bibitem{Lang1999}
+Lang, S.: Fundamentals of differential geometry, \emph{Graduate Texts in
+  Mathematics}, vol. 191.
+\newblock Springer-Verlag, New York (1999)
+
+\bibitem{LieroMielkeSavareLong}
+{Liero}, M., {Mielke}, A., {Savar{\'e}}, G.: {Optimal Entropy-Transport
+  problems and a new Hellinger-Kantorovich distance between positive measures}.
+\newblock ArXiv e-prints  (2015)
+
+\bibitem{LieroMielkeSavareShort}
+{Liero}, M., {Mielke}, A., {Savar{\'e}}, G.: {Optimal transport in competition
+  with reaction: the Hellinger-Kantorovich distance and geodesic curves}.
+\newblock ArXiv e-prints  (2015)
+
+\bibitem{lombardi2013eulerian}
+Lombardi, D., Maitre, E.: Eulerian models and algorithms for unbalanced optimal
+  transport (2013).
+\newblock <hal-00976501v3>
+
+\bibitem{lott2008some}
+Lott, J.: Some geometric calculations on {W}asserstein space.
+\newblock Communications in Mathematical Physics \textbf{277}(2), 423--437
+  (2008)
+
+\bibitem{OTmaasrumpf}
+Maas, J., Rumpf, M., Sch{\"o}nlieb, C., Simon, S.: A generalized model for
+  optimal transport of images including dissipation and density modulation
+  (2015).
+\newblock ArXiv:1504.01988
+
+\bibitem{SobolevMetricsCurvature}
+Micheli, M., Michor, P.W., Mumford, D.: Sobolev metrics on diffeomorphism
+  groups and the derived geometry of spaces of submanifolds.
+\newblock Izvestiya: Mathematics \textbf{77}(3), 541 (2013)
+
+\bibitem{Michor2008b}
+Michor, P.W.: Topics in Differential Geometry, \emph{Graduate Studies in
+  Mathematics}, vol.~93.
+\newblock American Mathematical Society, Providence, RI (2008)
+
+\bibitem{MisiolekCurvature}
+Misiolek, G.: Stability of flows of ideal fluids and the geometry of the group
+  of diffeomorphisms.
+\newblock Indiana Univ. Math. J. \textbf{42}(1), 215 -- 237 (1993)
+
+\bibitem{Omori1978}
+Omori, H.: On {B}anach-{L}ie groups acting on finite dimensional manifolds.
+\newblock T\^ohoku Math. J. \textbf{30}(2), 223--250 (1978)
+
+\bibitem{ODE}
+O'Regan, D.: Existence Theory for Nonlinear Ordinary Differential Equations.
+\newblock Springer (1997)
+
+\bibitem{OttoPorousMedium}
+Otto, F.: The geometry of dissipative evolution equations: The porous medium
+  equation.
+\newblock Communications in Partial Differential Equations \textbf{26}(1-2),
+  101--174 (2001)
+
+\bibitem{pele2008linear}
+Pele, O., Werman, M.: A linear time histogram metric for improved sift
+  matching.
+\newblock In: European Conference on Computer Vision, ECCV 2008, pp. 495--508
+  (2008)
+
+\bibitem{piccoli2013properties}
+Piccoli, B., Rossi, F.: On properties of the {G}eneralized {W}asserstein
+  distance (2013).
+\newblock ArXiv:1304.7014
+
+\bibitem{piccoli2014generalized}
+Piccoli, B., Rossi, F.: Generalized {W}asserstein distance and its application
+  to transport equations with source.
+\newblock Archive for Rational Mechanics and Analysis \textbf{211}(1), 335--358
+  (2014)
+
+\bibitem{rockafellar1971integrals}
+Rockafellar, R.: Integrals which are convex functionals. {II}.
+\newblock Pacific Journal of Mathematics \textbf{39}(2), 439--469 (1971)
+
+\bibitem{rockafellar2015convex}
+Rockafellar, R.: Convex analysis.
+\newblock Princeton university press (2015)
+
+\bibitem{rubinov2013abstract}
+Rubinov, A.: Abstract convexity and global optimization, vol.~44.
+\newblock Springer Science \& Business Media (2013)
+
+\bibitem{rubner1997earth}
+Rubner, Y., Guibas, L., Tomasi, C.: The earth mover's distance,
+  multi-dimensional scaling, and color-based image retrieval.
+\newblock In: Proceedings of the ARPA Image Understanding Workshop, pp.
+  661--668 (1997)
+
+\bibitem{cedric2003topics}
+Villani, C.: Topics in optimal transportation.
+\newblock 58. American Mathematical Soc. (2003)
+
+\bibitem{villani2009oldnew}
+Villani, C.: Optimal Transport: Old and New, \emph{Grundlehren der
+  mathematischen Wissenschaften}, vol. 338.
+\newblock Springer (2009)
+
+\end{thebibliography}

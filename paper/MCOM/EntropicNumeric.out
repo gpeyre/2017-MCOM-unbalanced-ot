@@ -1,0 +1,33 @@
+\BOOKMARK [1][-]{section.1}{1. Introduction}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{1.1. Previous Works}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{1.2. Contributions and Outline}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{1.3. Notation}{section.1}% 4
+\BOOKMARK [1][-]{section.2}{2. Unifying Formulation of Transport-like Problems}{}% 5
+\BOOKMARK [2][-]{subsection.2.1}{2.1. Divergence Functionals}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.2}{2.2. Balanced Optimal Transport}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.3}{2.3. Unbalanced Optimal Transport}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.4}{2.4. Barycenter Problem and Extensions}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.5}{2.5. Gradient Flows}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.6}{2.6. Generic Formulation}{section.2}% 11
+\BOOKMARK [1][-]{section.3}{3. Entropic Regularization and Iterative Scaling Algorithm}{}% 12
+\BOOKMARK [2][-]{subsection.3.1}{3.1. Entropic Regularization}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.2}{3.2. Reformulation using Densities and Duality}{section.3}% 14
+\BOOKMARK [2][-]{subsection.3.3}{3.3. Scaling Algorithm}{section.3}% 15
+\BOOKMARK [2][-]{subsection.3.4}{3.4. Existence of the iterates for integral functionals}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.5}{3.5. Convergence Analysis}{section.3}% 17
+\BOOKMARK [1][-]{section.4}{4. Algorithm for Discrete Measures}{}% 18
+\BOOKMARK [2][-]{subsection.4.1}{4.1. Convergence}{section.4}% 19
+\BOOKMARK [2][-]{subsection.4.2}{4.2. Numerical Algorithm for Discrete Measures}{section.4}% 20
+\BOOKMARK [2][-]{subsection.4.3}{4.3. Log-domain Stabilization}{section.4}% 21
+\BOOKMARK [2][-]{subsection.4.4}{4.4. Comments on Implementation}{section.4}% 22
+\BOOKMARK [2][-]{subsection.4.5}{4.5. Generalization: more spaces and pushforward operators}{section.4}% 23
+\BOOKMARK [1][-]{section.5}{5. Applications}{}% 24
+\BOOKMARK [2][-]{subsection.5.1}{5.1. Balanced and Unbalanced Optimal Transport}{section.5}% 25
+\BOOKMARK [2][-]{subsection.5.2}{5.2. Unbalanced Barycenters}{section.5}% 26
+\BOOKMARK [2][-]{subsection.5.3}{5.3. Gradient Flows and Evolution of Densities}{section.5}% 27
+\BOOKMARK [1][-]{section*.20}{Acknowledgements}{}% 28
+\BOOKMARK [1][-]{appendix.A}{Appendix A. Appendix}{}% 29
+\BOOKMARK [2][-]{subsection.A.1}{A.1. Reminders on Convex Analysis}{appendix.A}% 30
+\BOOKMARK [2][-]{subsection.A.2}{A.2. Properties of Divergence Functionals}{appendix.A}% 31
+\BOOKMARK [2][-]{subsection.A.3}{A.3. Proof of the Iterates for the Barycenter Problems}{appendix.A}% 32
+\BOOKMARK [1][-]{section*.21}{References}{}% 33

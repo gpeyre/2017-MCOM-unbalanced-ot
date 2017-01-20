@@ -1,0 +1,468 @@
+% !TEX root = ../EntropicNumeric.tex 
+
+
+\section{Entropic Regularization and Iterative Scaling Algorithm}
+\label{sec_algorithm_analysis}
+%
+In this section, we introduce and describe an iterative scaling algorithm which solves a regularized version of the generic variational problem \eqref{eq-general}. This analysis is carried out in a continuous setting.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Entropic Regularization}
+\label{subsec:EntropicRegularization}
+
+Following several recent articles, discussed in Section~\ref{sec: previous works}, we consider an approximation of problem \eqref{eq-general} where an entropy term is used in place of the nonnegativity constraint on $\gamma$.
+%
+Let $\d x$ and $\d y$ be reference probability measures on $X$ and $Y$ and assume that the product measure $\d x \d y$ is the reference measure on $X\times Y$ (one could consider more general reference measures on $X\times Y$ but this would require to invoke the concept of disintegration of measures).
+%
+We define (minus) the entropy of a family of couplings $(\gamma_k)_{k=1}^n$ as 
+\eq{
+\mathcal{H}(\gamma) \eqdef \sum_{k=1}^n \int_{X\times Y} r_k(\log(r_k)-1)\d x \d y\, .
+}
+if each $\gamma_k$ admits a density $r_k$ w.r.t. $\d x \d y$ (with the convention $0\log 0 = 0$) and $\infty$ otherwise.
+%
+Note that each term is, up to a constant, the Kullback-Leibler divergence $\KLm$ of $\gamma_i$ with respect to $\d x \d y$, as defined in Example \ref{ex_KLdiv}.
+%
+Given a small regularization parameter $\epsilon>0$, we consider 
+\eql{\label{eq-general-regul}
+	\umin{\gamma \in \Mm^n(X \times Y)}
+		 \mathcal{J}(\gamma)
+		 + \epsilon \, \mathcal{H}(\gamma),
+}
+which can be rewritten up to a constant as
+\eql{\label{eq-general-regul_bis}
+	\umin{\gamma \in \Mm^n(X \times Y)}
+		 \mathcal{F}_1(P^X_\# \gamma) + \mathcal{F}_2(P^Y_\# \gamma)
+		 + \epsilon \sum_{k=1}^n \KLm(\gamma_k|e^{-c_k/\epsilon}\d x \d y),
+}
+%
+Adding the entropy term can be interpreted in the following ways, detailed for $n=1$ for simplicity.
+
+\paragraph{Interpretation 1.}
+The resolution of~\eqref{eq-general-regul} can be understood as a regularization scheme, since the term $\epsilon\, \mathcal{H}(\gamma)$ makes the problem strictly convex. In the limit $\epsilon \rightarrow 0$, the unique solution to~\eqref{eq-general-regul} should converge to a solution of the original problem. This is shown in the case of balanced transport~\eqref{eq-ot} in~\cite{2015-carlier-convergence,leonard2012schrodinger}. 
+In our setting, a general result is beyond the scope of this article. Nevertheless, the finite dimensional case is insightful: if $\d x \d y$ has full support, then one recovers the minimizer of $\mathcal{J}$ of minimal entropy.
+%
+\begin{proposition}
+\label{prop_converg_regul}
+Consider the case where $n=1$ (one coupling) and $X$ and $Y$ are finite spaces. Assume that $\mathcal{J}$ is convex, lower semicontinuous and that $A = \argmin_{\gamma \ll \d x \d y} \mathcal{J}(\gamma)$ is nonempty. Let $(\epsilon_k)_{k\in \NN}$ be a sequence of strictly positive real numbers converging to $0$. Then the sequence $(\gamma_k)_{k\in \NN}$ of minimizers of \eqref{eq-general-regul} is well defined and converges to $\argmin_{\gamma \in A} \mathcal{H}(\gamma)$.
+\end{proposition}
+%
+\begin{proof}
+Since the objective function in \eqref{eq-general-regul} is coercive, strictly convex, lower semicontinuous and its domain is nonempty, there exists a unique minimizer $\gamma_k$ of \eqref{eq-general-regul} associated to $\epsilon_k$ for all $k \in \NN$. Now, let $\bar{\gamma}\in A$. For all $k\in \NN$, the optimality of $\gamma_k$ implies
+\[
+\gamma_k \in \enscond{ \gamma \in \Mm_+(X \times Y)}{\mathcal{H}(\gamma) \leq \mathcal{H}(\bar{\gamma}) }
+\]
+where $\mathcal{H}(\bar{\gamma})$ is finite since it is a finite sum of real numbers. As $\mathcal{H}$ is coercive and lower semicontinuous, this set is compact. This implies the existence of cluster points for $(\gamma_k)$: let $\gamma^*$ be one of them. 
+%
+One has that $\gamma^*$ belongs to $A$ since  for all $k$, $|\mathcal{J}(\gamma_k)-\mathcal{J}(\bar{\gamma})|\leq 2\epsilon_k \mathcal{H}(\bar{\gamma}) \to 0$ and $\mathcal{J}(\gamma^*) \leq \liminf_{k \to \infty} \mathcal{J}(\gamma_k)$. 
+%
+Moreover, as $\mathcal{H}(\gamma^*) \leq \mathcal{H}(\bar{\gamma})$ and $\bar{\gamma}$ is arbitrarily chosen in $A$, it holds $\gamma^* \in \argmin_{\gamma \in A} \mathcal{H}(\gamma)$. 
+%
+By strict convexity, this cluster point is unique and $\gamma_k \to \gamma^*$.
+\end{proof}
+%
+
+\paragraph{Interpretation 2.}
+A second way to interpret~\eqref{eq-general-regul} is as a proximal step for the Kullback-Leibler divergence. Indeed, by denoting $\gamma^{(0)}\eqdef\d x \d y$ and $\gamma^{(1)}$ the solution to~\eqref{eq-general-regul}, one has
+$\gamma^{(1)} = \prox^{\KL}_{\mathcal{J}/\epsilon}(\gamma^{(0)})$. It is possible to iterate this relation and define%\todo{G: use rather the iteration notation $^{(\ell)}$ than $_\ell$}
+\eq{
+	\gamma^{(\ell+1)} \eqdef  \prox^{\KL}_{\mathcal{J}/\epsilon}(\gamma^{(\ell)}).
+}
+which is the so-called proximal-point algorithm for the $\KL$ divergence, known to converge to the solution of~\eqref{eq-general} under the same conditions as in Proposition \ref{prop_converg_regul} (see \cite{EcksteinProxPoint}).
+%
+It is a simple exercise to show, that for balanced optimal transport performing $\ell$ proximal steps with stepsize $\epsilon$ corresponds to a single step with stepsize $\epsilon/\ell$.
+While this precise relation is not true for the more general transport problems discussed here, we still find in practice that with small enough $\epsilon$ a single iteration yields sufficient accuracy (see Section \ref{sec:LogDomain} for numerical handling of small $\epsilon$ values).
+%
+\paragraph{Choice of the reference measure.}
+The choice of $\d x$ and $\d y$ is critical for obtaining the weak convergence to the solution of \eqref{eq-general-regul} when $\epsilon \to 0$. A necessary condition is that the support of $\d x \d y$ should contain the support of an optimizer of the unregularized problem \eqref{eq-general}.
+%  
+For instance, when solving an unbalanced optimal transport problem between $\mu$ and $\nu$, the choice $\d x = \mu/\mu(X)$ and $\d y = \nu/\nu(Y)$ is not suitable if one of the divergences is not superlinear because  $\Divergm_\phi (\sigma | \mu)<\infty$ does not imply $\sigma\ll\mu$. Then the support of the reference measure $\d x \d y$ should contain the sets (well defined under the hypotheses of Proposition \ref{prop_UOT_existence})
+\eq{
+	\{ (x,\argmin_y c(x,y)) ; x\in X ), \qandq \{(\argmin_x c(x,y),y ) ; y\in Y \}\, .
+}
+%For numerical implementation, in the general case, we thus recommend to use reference measures $\d x$ and $\d y$ which are sum of uniformly distributed Dirac masses and not the marginals $\mu$ or $\nu$ as is customary for standard optimal transport.
+
+Also, for the barycenter \eqref{eq_barycenter} or the gradient flow problems~\eqref{eq-grad-flow}, one does not have access in general to a reference measure according to which an optimizer is absolutely continuous. For numerics, the choice of the reference measures then corresponds to the choice of a discretization grid on which we find approximate solutions to the original problem.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Reformulation using Densities and Duality}
+\label{sec_density_setting}
+%
+From the definition of the entropy $\mathcal{H}$, any feasible $\gamma$ of the generic problem \eqref{eq-general-regul} admits an $\Lun$ density with respect to the reference measure $\d x \d y$. Accordingly, for the convenience of the analysis, we reformulate \eqref{eq-general-regul_bis} as a variational problem on measurable functions:
+\eql{\label{eq-general-regul-KL}
+\tag{$P_{\epsilon}$}
+	\umin{r \in \Lun(X\times Y)^n} 
+		 F_1( P^X_\# r )
+		 + F_2( P^Y_\# r  )
+		 + \epsilon \KL(r |K).
+}
+where $F_1(s) \eqdef \mathcal{F}_1(s\d x)$, $F_2(s) \eqdef \mathcal{F}_2(s\d y)$, $K \in \Linf_+(X\times Y)^n$ is defined component-wise by
+\begin{equation}
+	\label{eq_GibbsKernel}
+	K_k(x,y) \eqdef e^{-\frac{c_k(x,y)}{\epsilon}}
+\end{equation}
+for $k\in \{1,\dots,n\}$, and with the convention $\exp (-\infty) = 0$, the projection operator acts on each component of $r$ and $\KL$ is the sum of the Kullback-Leibler divergences on each component (see the notations in Section \ref{sec_notation}).
+%
+In this Section, we only make the following general assumptions on the objects involved in \eqref{eq-general-regul-KL}:
+\begin{assumptions}\hfill
+% in case you really want this label here, assumptions environment must be numbered in mystyle.sty
+%\label{assumtions_main}
+\begin{enumerate}[(i)]
+\item $(X,\d x)$ and $(Y,\d y)$ are probability spaces (i.e.\ measured spaces with unit total mass). The product space $X\times Y$ is equipped with the product measure $\d x \d y \eqdef \d x \otimes \d y$;
+	\label{asp_reference_measure}
+\item $F_1 : \Lun(X)^n \to \RR \cup \{\infty\}$ and $F_2 : \Lun(Y)^n \to \RR \cup \{\infty\}$ are weakly lower semicontinuous, convex and proper functionals;
+\item $K\in \Linf_+(X\times Y)^n$ and $\epsilon>0$.
+\end{enumerate}
+\end{assumptions}
+%
+We begin with a general duality result, which is an application of Fenchel-Rockafellar Theorem (see Appendix \ref{sec:ApxConvex}):
+%
+\begin{theorem}[Duality]
+\label{prop_duality}
+	The dual problem of \eqref{eq-general-regul-KL} is
+		\eql{\label{eq-dual-pbm}
+		\tag{$D_{\epsilon}$}
+		\usup{ (u,v) \in \Linf(X)^n\times \Linf(Y)^n } - F_1^*(-u)-F_2^*(-v) - 
+		\epsilon \dotp{ e^{(u \oplus v)/\epsilon}-1}{ K  } 
+	}
+where $u \oplus v : (x,y) \mapsto u(x)+v(y)$. Strong duality holds, i.e.\
+$\min \eqref{eq-general-regul-KL} = \sup \eqref{eq-dual-pbm}$ and the minimum of \eqref{eq-general-regul-KL} is attained and unique. Moreover, $u$ and $v$ maximize \eqref{eq-dual-pbm} if and only if
+	\eql{\label{eq-primal-dual}
+	\begin{cases}
+		-u \in \partial F_1 (P^X_\# r) &\\
+		  -v \in \partial F_2 (P^Y_\# r) &
+	\end{cases}
+		 \qandq
+		r_k(x,y) = e^{\frac{u_k(x)}\epsilon} K_k(x,y) e^{\frac{v_k(x)}\epsilon}   
+	}%
+for $k\in \{1,\dots,n\}$ and then $r$ belongs to $\Lun(X\times Y)^n$ and minimizes \eqref{eq-general-regul-KL}.
+\end{theorem}
+%
+\begin{proof}
+In this proof, the spaces $\Linf$ and $(\Linf)^*$ are endowed with the strong and the weak* topology respectively.
+%
+As $\Lun(X\times Y)^n$ can be identified with a subset of the topological dual of $\Linf (X\times Y)^n$, the function $\KL(\cdot|K)$ can be extended on $(\Linf (X\times Y)^{n})^*$ as $G(r)=\KL(r|K)$ if $r\in \Lun(X\times Y)^n$ and $+\infty$ otherwise.
+%
+Its convex conjugate $G^*: \Linf(X\times Y)^n \to \RR$ is
+\eq{
+G^*(w)=\sum_{k=1}^n \int_{X\times Y}(e^{w_k(x,y)}-1)K_k(x,y) \d x \d y = \langle e^w-1,K \rangle \, .
+}
+and is everywhere continuous for the strong topology \cite[Theorem 4]{rockafellar1968integrals} (this property relies on the finiteness of $\d x \d y$ and the boundedness of $K$).
+%
+The linear operator $A: \Linf(X)^n \times \Linf(Y)^n \to \Linf(X \times Y)^n$ defined by $A(u,v) : (x,y)\mapsto u(x)+v(y)$ is continuous and its adjoint is defined on $(\Linf(X\times Y)^n)^*$ (identified with a subset of $\Mm(X\times Y)^n$) by $A^*(r) = (P^X_\# r , P^Y_\# r)$. 
+%
+Since $F_1$ and $F_2$ are convex, lower semicontinuous, proper and since $G^*$ is everywhere continuous on $\Linf(X\times Y)^n$, strong duality and the existence of a minimizer for \eqref{eq-general-regul-KL} is given by Fenchel-Rockafellar theorem. More explicitely, this theorem states that
+\eq{
+\sup_{(u,v) \in \Linf(X)^n\times \Linf(Y)^n }  -F_1^*(-u)-F_2^*(-v) - \epsilon G^* (A(u,v)/\epsilon) 
+}
+and 
+\eq{
+\min_{r \in (\Linf(X\times Y)^n)^* }  F_1(P^X_\# r)+F_2(P^Y_\# r) + \epsilon G (r) 
+}
+are equal, the latter being exactly \eqref{eq-general-regul-KL} since $G$ is infinite outside of $\Lun(X\times Y)^n$. It states also that if $(u,v)$ maximizes \eqref{eq-dual-pbm}, then any minimizer of \eqref{eq-general-regul} satisfies
+$r \in \partial G^*(A(u,v)/\epsilon)$ and the expression for the subdifferential of $G^*$ is an application of the result in Appendix \ref{sec:ApxDivergences}. Finally, uniqueness of the minimizer for \eqref{eq-general-regul-KL} comes from the strict convexity of $G$. 
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Scaling Algorithm}
+\label{sec:EntropyScaling}
+%
+The specific splitting of the problem~\eqref{eq-general-regul-KL} makes it suitable for the well-known Dykstra's algorithm (see Section~\ref{sec: previous works} for more background on this algorithm). Since the functions $F_1$ and $F_2$ operate on the marginals only, Dykstra's iterations take a very simple form which is related to the celebrated Sinkhorn algorithm. They are obtained as an alternating maximization on~\eqref{eq-dual-pbm}.
+
+%
+%One first need to decouple the variables $u$ and $v$ as they appear in \eqref{eq-dual-pbm}. 
+Let $\Gibbs$ and $\transp{\Gibbs}$ be the linear operators defined, for $a:X\to [0,\infty[^n$ and $b:Y\to [0,\infty[^n$ measurable, for $k=1,\dots,n$ as
+\begin{align}
+	\label{eq-gibbs-convolution}
+	(\Gibbs b)(x)_k \eqdef \int_Y K_k(x,y)  b_k(y) \d y \qandq
+	(\transp{\Gibbs} a)(y)_k \eqdef \int_X K_k(x,y) a_k(x) \d x\, .
+\end{align}
+%
+Given $\itz{v} \in \Linf(Y)^n$, alternating maximizations on the dual problem~\eqref{eq-dual-pbm} define, for $\ell=0,1,2,\ldots$, the iterates
+%
+\eql{
+\label{eq_alternating_max}
+\left\{\begin{aligned}
+\iiter{u}  &= \argmax_{u\in \Linf(X)^n} - F_1^*(-u) - \epsilon \langle e^{\frac{u}\epsilon}, \Gibbs e^{\frac{\iter{v}}\epsilon} \rangle_X \,, \\
+\iiter{v}  &= \argmax_{v\in \Linf(Y)^n} - F_2^*(-v) - \epsilon  \langle e^{\frac{v}\epsilon}, \transp{\Gibbs} e^{ \frac{\iiter{u}}\epsilon} \rangle_Y \,,
+\end{aligned}
+\right.
+}
+where we used the fact that, by Fubini-Tonelli, one has
+\eql{\label{eq_fubinigibbs}
+	\langle e^{(u\oplus v)/\epsilon}, K \rangle_{X \times Y}
+	= \langle e^{\frac{u}\epsilon}, \Gibbs e^{\frac{v}\epsilon}\rangle_X
+	= \langle e^{\frac{v}\epsilon}, \transp{\Gibbs} e^{ \frac{u}\epsilon} \rangle_{Y} \, .
+}
+%
+Conditions which ensure the existence of these iterates are given later in Theorem \ref{thm-sinkhorn-div}; for now, remark that by strict convexity, they are uniquely defined when they exist.
+%
+Given an initialization $b^{(0)}\in \Linf_+(Y)$, the main iterations of this paper are defined as follows, for $\ell =0,1,2,\ldots$:
+
+\bigskip
+\fbox{
+\begin{minipage}[c]{.9\textwidth} 
+\textbf{Scaling iterations:}\hfill
+	\begin{align}\label{eq-scaling-iterates}\tag{S}
+		\iiter{a} \eqdef \frac{ 
+				\prox^{\KL}_{F_1/\epsilon}(\Gibbs \iter{b})  
+			}{
+				\Gibbs \iter{b}
+			}
+			\, , \quad	
+		\iiter{b} \eqdef \frac{ 
+				\prox^{\KL}_{F_2/\epsilon}(\transp{\Gibbs} \iiter{a})  
+			}{
+				\transp{\Gibbs} \iiter{a}
+			}
+	\end{align}
+\end{minipage}
+}
+\bigskip
+
+where the proximal operator for the $\KL$ divergence is defined for $F_1$ (and similarly for $F_2$) as
+\eq{
+	\prox^{\KL}_{F_1/\epsilon}(z) \eqdef \argmin_{\substack{s :X \to \RR^n \\ \text{measurable}}} F(s) + \epsilon \KL(s|z) \, .
+}
+%
+The following Proposition shows that, as long as they are well defined, these iterates are related to the alternate dual maximization iterates.
+%
+\begin{proposition}
+\label{prop_alternating}
+Define $a^{(0)}=\exp (v^{(0)})$, let $(\iter{a},\iter{b})$ be the scaling iterates \eqref{eq-scaling-iterates} and $(\iter{u},\iter{v})$ the alternate dual maximization iterates defined in~\eqref{eq_alternating_max}.
+%
+If for all $\ell \in \NN$, either $\log \iter{a} \in \Linf (X)^n$ and $\log \iter{b} \in \Linf(Y)^n$, or $\iter{u}\in \Linf(X)^n$ and $\iter{v}\in \Linf(Y)^n$ then 
+	\eq{
+		(\iter{a},\iter{b})=(e^{\iter{u}/\epsilon},e^{\iter{v}/\epsilon}).
+	}
+\end{proposition}
+%
+The proof of this proposition makes use of the following Lemma. 
+%
+\begin{lemma}
+\label{lem_KL_L1}
+Let $(T,\d t)$ be a measure space and $v \in \Lun_{+}(T)$. For any $u : T \to \RR$ measurable, if $\KL(u|v)<\infty$ then $u\in \Lun_{+}(T)$.
+\end{lemma}
+\begin{proof}
+Without loss of generality, one can assume $v$ positive since for $\d t$-a.e. $t$, if $v(t)=0$ then $u(t)=0$. 
+%By finiteness of $\KL(u|v)$, we only need to deal with the case when $u$ is nonnegative. 
+The subgradient inequality at $1$ gives, for all $s\in \RR$, $s \leq \phi_{\KL}(s)+e^1-1$. 
+Consequently,
+\eq{
+\int_T u \d t = \int_T (u(t)/v(t))v(t) \d t \leq \int_T \left(\varphi_{\KL}(u(t)/v(t))+e^1-1\right) v(t) \d t < \infty \, .
+}
+\end{proof}
+
+\begin{proof}[Proof of Proposition \ref{prop_alternating}.]
+Suppose that $\iter{v} \in \Linf(Y)^n$ and that $\iter{b}=e^{\iter{v}/\epsilon}$. One has $\Gibbs \iter{b} \in \Lun(X)^n$ and from Lemma \ref{lem_KL_L1}, one can compute $\prox^{\KL}_{F_1/\epsilon}(\Gibbs \iter{b})$ in $\Lun(X)^n$.
+%
+The Fenchel-Rockafellar Theorem gives (see the proof of Theorem \ref{prop_duality} for more details): 
+\eq{
+\sup_{u \in \Linf(X)^n} -F_1^*(-u) - \epsilon \langle e^{\frac{u}\epsilon}, \Gibbs e^{\frac{\iter{v}}\epsilon} \rangle
+= \min_{s \in \Lun(X)^n} F_1(s) + \epsilon \KL (s|\Gibbs e^{\frac{\iter{v}}\epsilon})
+}
+and the optimality conditions state that $u^\star$ maximizes the problem on the right if and only if the minimizer $s^\star \eqdef \prox^{\KL}_{F_1/\epsilon}(\Gibbs e^{\frac{\iter{v}}\epsilon})$ of the problem on the left belongs to the subdifferential of $u \mapsto \langle e^{\frac{u}\epsilon}, \Gibbs e^{\frac{\iter{v}}\epsilon}\rangle$ at the point $u^\star$. 
+%
+That is (see Appendix \ref{sec:ApxDivergences}) if and only if for $\d x$ almost every $x\in X$, 
+\eq{
+s^\star(x) = e^{u^\star(x)/\epsilon} \cdot (\Gibbs e^{\iter{v}/\epsilon})(x)
+}
+Thus if $\epsilon \log \iiter{a}$ belongs to $\Linf(X)^n$ or if $u^\star\in \Linf(X)^n$ exists, then $u^\star=\epsilon \log \iiter{a}$. The rest of the proof is done by induction.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Existence of the iterates for integral functionals}
+
+Our next step is to give conditions on $F_1$ and $F_2$ that guarantee the existence of the scaling iterates \eqref{eq-scaling-iterates} and an equivalence with alternate maximization on the dual~\eqref{eq_alternating_max}. This is provided by Theorem \ref{thm-sinkhorn-div}, where it is required that $F_1$ and $F_2$ are integral functionals, as we define now. 
+
+\begin{definition}[Normal integrands and Integral functionals~\cite{rockafellar2009variational}]
+\label{def_integralfunctional}
+A function $f : X \times \RR^n \to \RR \cup \{\infty\}$ is called a \emph{normal integrand} if its epigraphical mapping $X \ni x \mapsto \epi f(x,\cdot)$ is closed-valued and measurable. A convex integral functional is a function $F:\Lun(X)^n\to \RR\cup \{\infty\}$ of the form
+\eq{
+\label{eq_F_separable}
+F (s) = I_{f}(s) \eqdef \int_X f(x,s(x)) \d x
+}
+where $f$ is a normal integrand and $f(x,\cdot)$ is convex for all $x\in X$. 
+%
+In this paper, $F$ is an \emph{admissible} integral functional if moreover for all $x\in X$, $f(x,\cdot)$ takes nonnegative values, has a domain which is a subset of $ [0,\infty[^n$ and if there exists $s\in \Lun(X)^n$ such that $I_f(s)<\infty$.
+\end{definition}
+The concept of normal integrands allows to deal conveniently with measurability issues. For finite dimensional problems (when $X$ and $Y$ have a finite number of points), integral functionals are simply sums of pointwise lower semicontinuous functions. The following proposition shows that for such functionals, conjugation and subdifferentiation can be performed pointwise.
+%
+\begin{proposition}\label{prop_normalconjug}
+If $F$ is an admissible integral functional associated to the convex normal integrand $f$, then $F$ is convex and weakly lower semicontinuous, $f^*$ is also a normal convex integrand, $F^*=I_{f^*}$ and
+\begin{align*}
+\partial F(s) &= \{ u \, ; \, u(x) \in \partial f(x,s(x)), \d x \text{ a.e.}\},  \\
+\partial F^*(u) &= \{ s \, ; \, s(x) \in \partial f^*(x,u(x)), \d x \text{ a.e.}\}, 
+\end{align*}
+where conjugation and subdifferentiation on $f$ are w.r.t.\ the second variable.
+\end{proposition}
+\begin{proof}
+This property can be found in~\cite{rockafellar1976integral} under the assumption of existence of a feasible point $s^\star\in \Lun(X)^n$ for $I_f$ and a feasible point $u^\star\in\Linf(X)^n$ for $I_{f^*}$. Our admissibility criterion requires the existence of $s^\star$ and one has 
+\eq{
+I_{f^*}(0) = \int_X f^*(x,0) \d x = - \int_X  \inf_{s\in \RR^n} f(x,s) \d x <\infty
+}
+since $\inf_s f(x,s) \in [0, f(x,s^\star(x))]$.
+\end{proof}
+%
+We now prove a general result on the ``separability'' of the $\KL$ proximal operator.
+%
+The Kullback-Leibler divergence between two vectors $s$ and $z$ in $\RR^n$ is defined as 
+\eql{
+\label{eq_KLpointwise}
+\KLp(s|z) \eqdef \sum_{k=1}^n s_k \log \left( \frac{s_k}{z_k} \right)-s_k + z_k
+}
+if $(z_k=0) \Rightarrow (s_k=0)$, and $+\infty$ otherwise, with the convention $0 \log(0/0)=0$. While we use a separate notation for the sake of clarity, this definition is actually consistent with the definition of $\KL$ if one interprets $s$ and $z$ as vector densities on a space $(X,\d x)$ which is a singleton with unit mass. 
+%
+\begin{proposition}
+\label{prop_proxKLcont}
+Let $s : X \to \RR^n$ be measurable. If $F=I_f$ is an admissible integral functional then for almost all $x\in X$,
+\eq{
+\big(\prox^{\KL}_{\frac{1}{\epsilon}F}(s)\big)(x) = \prox^{\KLp}_{\frac{1}{\epsilon}f(x,\cdot)}(s(x)) \, .
+}
+%Thus $\prox^{\KL}_{\frac{1}{\epsilon}F}(s)$ is non-empty (and is a singleton) if and only if for almost every $x\in X$, there exists $\alpha(x) \in \dom f(x,\cdot)$ such that
+%\eql{\label{eq_feasibleprox}
+% 	(s_i(x)=0) \Rightarrow (\alpha_i(x) =0), \forall i\in \{1,\ldots,n\}\, .
+%}
+%
+%In this case the proximal set is the singleton $\tilde{s} : X\to \RR^n$ which satisfies $\d x$ a.e.\ and for all $i\in \{1,\dots,n\}$,
+%\eq{
+%\begin{cases}
+%0 =  \tilde{s}_i(x)  & \text{if $i\in I_0(x)$} \\
+%0 = u_i(x) + \epsilon \log (\tilde{s}_i(x)/s_i(x)) & \text{otherwise,}
+%\end{cases}
+%}
+%for some $u(x)\in \partial (f(x,\cdot) \circ Z_x) (\tilde{s}(x))$, where $Z_x$ is the operator which sets to zero the components of indices in $I_0(x)$ and leave the other unchanged. \todo{G: possible to express directly without ``$\Rightarrow$'' ? also maybe use an equation to define $I_0$} The set $I_0(x)$ is the union of (i) the indices $i$ such that $s_i(x)=0$ and (ii) the coordinates $j$ such that $f(x,\alpha)<\infty \Rightarrow \alpha_j = 0$ for all $\alpha$ as in \eqref{eq_feasibleprox}. 
+\end{proposition}
+\begin{proof}
+The problem which defines the proximal operator is that of minimizing $ I_f(z) + \KL (z|s)\eqdef I_g(z)$ over measurable functions $z:X\to \RR^n$ with
+\eq{
+	g : (x,z)\in X\times \RR^n \mapsto f(x,z) + \KLp(z|s(x))\, .
+}
+The function $(x,z) \mapsto \KLp(z|s(x))$ is a convex normal integrand by~\cite[Prop. 14.30 and 14.45c]{rockafellar2009variational}. Thus $g$ is itself a normal convex integrand, as the sum of normal convex integrands~\cite[Prop. 14.44]{rockafellar2009variational}.  Then a minimization interchange result~\cite[Thm. 14.60]{rockafellar2009variational}] states that minimizing $I_g$ is the same as minimizing $g$ pointwise. 
+%
+%Finally, the description of the proximal set is done by looking at pointwise optimality conditions: the coordinates which vanish must do so for feasibility. Then the operator $Z_x$ allows to build a sub-problem for which there is a feasible point at which $\KLp(\cdot|s(x))\circ Z_x$ is continuous. The subdifferential operator thus distributes over sums of functions and we conclude by writing the first order optimality condition.
+\end{proof}
+%
+By Proposition \ref{prop_normalconjug}, if $F_1$ and $F_2$ are admissible integral functionals then $F^*_1$ and $F^*_2$ are also integral functionals. So the alternating optimization on \eqref{eq-dual-pbm} can be relaxed to the space of measurable functions and still have a meaning:
+\eql{
+\label{eq_alternating_max_point}
+\left\{\begin{aligned}
+\iiter{u}  &= \argmax_{u:X\to \RR^n} - I_{f_1^*}(-u) - \epsilon \langle e^{\frac{u}\epsilon}, \Gibbs e^{\frac{\iter{v}}\epsilon} \rangle_X \\
+\iiter{v}  &= \argmax_{v:Y\to \RR^n} - I_{f_2^*}(-v) - \epsilon  \langle e^{\frac{v}\epsilon}, \transp{\Gibbs} e^{ \frac{\iiter{u}}\epsilon} \rangle_Y\, .
+\end{aligned}
+\right.
+}
+%
+The following Theorem gives existence, uniqueness of this iterates and a precise relation with the scaling iterates \eqref{eq-scaling-iterates}.
+%
+\begin{theorem}
+\label{thm-sinkhorn-div}
+Let $F_1$ and $F_2$ be admissible integral functionals as in Definition~\eqref{def_integralfunctional} associated to the normal integrands $f_1$ and $f_2$.
+%
+Assume that for all $x\in X$ and $y\in Y$, there exists points $s_1$ and $s_2$ with strictly positive coordinates such that $f_1(x,s_1)<\infty$ and $f_2 (y,s_2)<\infty$ and that $K$ takes positive values.
+%
+Define $a^{(0)}=1$ and let $(\iter{a},\iter{b})$ be the scaling iterates \eqref{eq-scaling-iterates}.
+%
+Then, with initialization $v^{(0)}=0$, the iterates $(\iter{u},\iter{v})$ in~\eqref{eq_alternating_max_point} are uniquely well-defined and for all $\ell \in \NN$ one has $(\iter{a},\iter{b}) = (e^{\frac{\iter{u}}{\epsilon}},e^{\frac{\iter{v}}{\epsilon}})$.
+%
+%Moreover, the iterations are left unchanged if the cost $c$ is replaced by 
+%	\eq{
+%	\tilde{c} : (x,y) \mapsto c(x,y) + \iota_{\{\dom f_1(x,\cdot) \neq \{0 \}\}}(x) + \iota_{\{\dom f_2(y,\cdot) \neq \{0 \}\}}(y)\, .
+%	}
+%	Denoting $\tilde{K}(x,y) \eqdef e^{-\tilde{c}(x,y)/\epsilon}$, $\tilde{X} \eqdef \{ x\in X \, ; \, P^X_\# \tilde{K} (x)>0\}$ and $\tilde{Y} \eqdef \{y\in Y \, ; \, P^Y_\# \tilde{K} (y)>0\}$, it holds for $\ell\geq1$,
+%	\eq{
+%	\iter{a}(x)>0 \Leftrightarrow x \in \tilde{X}
+%	\qandq
+%	\iter{b}(y)>0 \Leftrightarrow y \in \tilde{Y}\, .
+%	}
+\end{theorem}
+%
+\begin{proof}
+Suppose that $\iter{v}: Y\to \RR^n$ is a well-defined measurable function and that $\iter{b}=e^{\iter{v}/\epsilon}$. As $K$ is positive, $\Gibbs \iter{b}$ is positive $\d x$ a.e. Let $\iiter{a}$ be computed with  \eqref{eq-scaling-iterates}. Thanks to Proposition \ref{prop_proxKLcont}, the proximal operator can be decomposed as pointwise optimization problems and our assumptions allows to apply Fenchel-Rockafellar (see Appendix~\ref{sec:ApxConvex}) in the case where both problems reach their optima
+\eq{
+\max_{u\in \RR^n} - f_1^*(x,-u) - \epsilon \langle e^{u/\epsilon}, \Gibbs \iter{b} \rangle 
+= \min_{s\in \RR^n} f_1(x,s) + \epsilon \KLp(s|\Gibbs \iter{b}(x))
+}
+with the relation between optimizers: $e^{u/\epsilon} = s/\Gibbs \iter{b}(x)$. 
+This formula guarantees that the function of pointwise maximizers $x\mapsto u(x)$ is measurable since the function of pointwise minimizers $x\mapsto s(x)$ is uniquely well-defined and measurable by \cite[Thm. 14.37]{rockafellar2009variational}. Indeed, the minimized function is a strictly convex normal integrand because it is shown in Appendix \ref{sec:ApxDivergences} that $\KLp(\cdot|\Gibbs \iter{b}(x))$ is a normal integrand and sum of normal integrands are normal \cite[Prop. 14.44]{rockafellar2009variational}.
+%since there exists a measurable selection $t\mapsto s(t)$ of pointwise minimizer (from the property of normal integrands). 
+This shows that $\iiter{a}=e^{\frac{\iiter{u}}{\epsilon}}$ and one concludes by induction.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Convergence Analysis}
+This Section gives a fixed point result and a convergence result for a particular case. The finite dimensional case is postponed to the next Section.
+
+The following proposition sheds some light on the name ``scaling'' given to iterations~\eqref{eq-scaling-iterates}. It comes from the fact that these iterations allow to recover a solution to~\eqref{eq-general-regul-KL} by multiplying the kernel $K$ with positive functions, interpreted as scalings.
+
+%
+\begin{proposition}
+\label{prop_fixpoint}
+Under the assumptions of Theorem \ref{thm-sinkhorn-div}, if the scaling iterations \eqref{eq-scaling-iterates} admit a fixed point $(a,b)$ such that $\log a \in\Linf(X)^n$ and $\log b \in \Linf(Y)^n$ then $(\epsilon \log a,\epsilon \log b)$ is the unique solution of \eqref{eq-dual-pbm} and the function $r$ defined for each $k=1,\ldots,n$ by $r_k(x,y)= a_k(x) K_k(x,y) b_k(y)$ is the unique solution of \eqref{eq-general-regul-KL}.
+\end{proposition}
+\begin{proof}
+As a consequence of Proposition \ref{prop_proxKLcont}, on can write the optimality condition of a fixed point of \eqref{eq_alternating_max_point} for almost every $x\in X$ as
+\eq{
+u_k(x) = \epsilon \log \left(\frac{a_k(x)\cdot \Gibbs b_k(x)}{\Gibbs b_k(x)} \right)
+}
+for some $u (x)\in -\partial f_1(x,a(x)\cdot\Gibbs b(x))$. Thus $-\epsilon \log(a) \in \partial I_{f_1}(P^X_\# r)$ because $P^X_\# r = a \cdot \Gibbs b$ (the dot denotes component wise multiplication). Similar derivations for $b$ show that the couple $(\epsilon \log a,\epsilon \log b)$ and $r$ satisfies the primal dual optimality conditions \eqref{eq-primal-dual}.
+\end{proof}
+
+Sinkhorn's algorithm (the special case of he scaling iterations \eqref{eq-scaling-iterates} obtained when $F_1=\iota_{\{p\}}(s)$ and $F_2 = \iota_{\{q\}}(s)$ are the convex indicators of equality constraints) is known to converge at a linear rate. This property is usually shown (see for instance~\cite{franklin1989scaling}) by using the contraction property of the operator $\Gibbs$ for the Hilbert metric (a projective metric on the cone of nonnegative functions).
+%
+Using a similar approach, based on the related \textit{Thompson} metric, we now show the linear convergence of the scaling iterates \eqref{eq-scaling-iterates} in another special case, which is central in unbalanced optimal transport: when $F_1$ and $F_2$ are $\KL$ divergences with respect to fixed densities. 
+
+An approach involving the Hilbert metric would still be possible, but the use of the Thompson metric allows for a very short proof and a convergence rate which does not depend on a bound on the cost. This metric is defined as follows.
+%
+\begin{definition}[Thompson part metric on $\Linf_{+}$~\cite{thompson1963certain}]
+For $r,s \in \Linf_+(X)$, let $ M(r/s) \eqdef \inf \enscond{ \alpha \geq 0}{r \leq \alpha s}$ (or $\infty$ if that set is empty). The Thomson part metric is defined by 
+\eq{
+d(r,s) = \max \{ \log M(r/s), \log M(s/r) \}\, .
+}
+\end{definition}
+%
+Key properties of this metric are:
+\begin{itemize}
+\item if $T: \Linf(X) \to \Linf(Y)$ is a $z$-homogeneous order-preserving (or order-reversing) operator, then $d(Tx,Ty) \leq |z|\cdot d(x,y)$;
+\item the equivalence relation $r \sim s \Leftrightarrow d(r,s)<+ \infty$ generates a partition of $(\Linf(X),d)$ and each part is a complete metric space. 
+In particular, the set $\enscond{ s \in \Linf_+(X)}{\log s \in \Linf(X)}$ endowed with the Thompson metric form a complete metric space.
+\end{itemize}
+%
+\begin{theorem}\label{th_convergenceKL}
+Let $p$ and $q$ be such that $\log p \in \Linf(X)$ and $\log q \in \Linf(Y)$ and define
+\eq{
+F_1 = \lambda_1 \KL(\cdot |p) \qandq F_2 = \lambda_2 \KL(\cdot |q)
+} 
+for some $\lambda_1, \lambda_2>0$. Assume that the kernel $K$ is lower bounded by a positive real number.
+%
+If $(\iter{a},\iter{b})$ are the scaling iterates \eqref{eq-scaling-iterates} initialized with $b^{(0)}=1$, then $(x,y)\mapsto \iter{a}(x)K(x,y)\iter{b}(y)$ converges at a linear rate (for the Thompson metric) to a solution of \eqref{eq-general-regul-KL}.
+\end{theorem}
+%
+%\begin{remark}
+%On Figure \ref{fig_fdiv} (left), one can interpret the fact that the iteration is contractant for the Thompson metric by the fact that the slope is everywhere strictly smaller than $1$ for the plain lines. Note that, as the graph suggests, it is possible to show that the iterations are in general non-expansive for the Thomson metric.
+%\end{remark}
+%
+\begin{proof}
+Let $z_i \eqdef \lambda_i/(\lambda_i + \epsilon) \in \, ]0,1[$ for $i\in\{1,2\}$ and let $b^{(0)}= 1$. Following a simple application of Proposition \ref{prop_proxKLcont} (or see Table
+\ref{table_proximalexplicit}) the iterates in this specific case read 
+\eq{
+\iiter{a} = \left( \frac{p}{\Gibbs \iter{b}} \right)^{z_1} \qandq \iiter{b} = \left( \frac{q}{\Gibbs \iiter{a}} \right)^{z_2}\, .
+}
+%
+Our assumptions are such that $d(b^{(1)},b^{(0)})$ and $d(a^{(1)},a^{(0)})$ are finite (this is direct since the logarithms of $b^{(0)}$, $K$, $p$ and $q$ are bounded).
+%
+Using the properties of the Thompson metric, it holds
+\begin{eqnarray*}
+d( \iiter{a},\iter{a}) 
+= z_1. d(\Gibbs \iter{b}, \Gibbs \ter{b} ) 
+ \leq z_1. d(\iter{b},\ter{b}) \, ,
+\end{eqnarray*}
+since $\Gibbs$ is an order preserving linear operator. In a similar fashion, we obtain $d(\iiter{b},\iter{b}) \leq z_2. d(\iter{a},\iter{a})$. Thus the application $\iter{a} \mapsto \iiter{a}$ is contractant of factor $z_1.z_2 <1$ and $(\iter{a}, \iter{b})_{\ell}$ converges linearly to some $(a^\star,b^\star) \in \Linf_+(X) \times \Linf_+(Y)$ which is a fixed point of the iterations.
+% 
+Moreover, $|\log a^\star|$ is bounded because $d(a^{(0)},a^\star)<\infty$, and so is $|\log b^\star|$.
+The result follows then by Proposition \ref{prop_fixpoint}.
+\end{proof}
+

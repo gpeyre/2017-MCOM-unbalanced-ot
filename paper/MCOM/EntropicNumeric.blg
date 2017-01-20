@@ -1,0 +1,57 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: EntropicNumeric.aux
+The style file: amsplain.bst
+Database file #1: EntropicNumeric.bib
+Warning--missing pages in JDB-JKO
+Warning--missing pages in Bonneel-displacement
+Warning--missing pages in ChambollePock-div
+Warning--missing pages in GallouetMonsaingeon2015
+Warning--missing pages in Levy3d
+Warning--missing pages in LieroMielkeSavareLong
+Warning--missing pages in LieroMielkeSavareShort
+Warning--missing pages in NguyenFB2015
+Warning--missing pages in RubTomGui00
+Warning--missing pages in WangBanerjee-ADMM
+You've used 70 entries,
+            2213 wiz_defined-function locations,
+            935 strings with 15000 characters,
+and the built_in function-call counts, 21396 in all, are:
+= -- 1940
+> -- 933
+< -- 7
++ -- 394
+- -- 302
+* -- 1900
+:= -- 3466
+add.period$ -- 70
+call.type$ -- 70
+change.case$ -- 365
+chr.to.int$ -- 0
+cite$ -- 80
+duplicate$ -- 817
+empty$ -- 1835
+format.name$ -- 302
+if$ -- 4364
+int.to.chr$ -- 0
+int.to.str$ -- 70
+missing$ -- 140
+newline$ -- 220
+num.names$ -- 136
+pop$ -- 440
+preamble$ -- 1
+purify$ -- 294
+quote$ -- 0
+skip$ -- 432
+stack$ -- 0
+substring$ -- 1524
+swap$ -- 106
+text.length$ -- 7
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 268
+warning$ -- 10
+while$ -- 224
+width$ -- 72
+write$ -- 607
+(There were 10 warnings)

@@ -1,0 +1,77 @@
+% SVJour2 DOCUMENT CLASS OPTION SVGLOV2 -- for standardised journals
+%
+% This is an enhancement for the LaTeX
+% SVJour2 document class for Springer journals
+%
+%%
+%%
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\ProvidesFile{svglov2.clo}
+              [2004/10/25 v2.1
+      style option for standardised journals]
+\typeout{SVJour Class option: svglov2.clo for standardised journals}
+\def\validfor{svjour2}
+\ExecuteOptions{final,10pt,runningheads}
+% No size changing allowed, hence a copy of size10.clo is included
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize{10.2pt}{4mm}%
+   \abovedisplayskip=3 mm plus6pt minus 4pt
+   \belowdisplayskip=3 mm plus6pt minus 4pt
+   \abovedisplayshortskip=0.0 mm plus6pt
+   \belowdisplayshortskip=2 mm plus4pt minus 4pt
+   \let\@listi\@listI}
+\normalsize
+\newcommand\small{%
+   \@setfontsize\small{8.7pt}{3.25mm}%
+   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus2\p@
+   \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \parsep 0\p@ \@plus1\p@ \@minus\p@
+               \topsep 4\p@ \@plus2\p@ \@minus4\p@
+               \itemsep0\p@}%
+   \belowdisplayskip \abovedisplayskip
+}
+\let\footnotesize\small
+\newcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\newcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\newcommand\large{\@setfontsize\large\@xiipt{14pt}}
+\newcommand\Large{\@setfontsize\Large\@xivpt{16dd}}
+\newcommand\LARGE{\@setfontsize\LARGE\@xviipt{17dd}}
+\newcommand\huge{\@setfontsize\huge\@xxpt{25}}
+\newcommand\Huge{\@setfontsize\Huge\@xxvpt{30}}
+%
+%ALT% \def\runheadhook{\rlap{\smash{\lower5pt\hbox to\textwidth{\hrulefill}}}}
+\def\runheadhook{\rlap{\smash{\lower11pt\hbox to\textwidth{\hrulefill}}}}
+\AtEndOfClass{\advance\headsep by5pt}
+\if@twocolumn
+\setlength{\textwidth}{17.6cm}
+\setlength{\textheight}{230mm}
+\AtEndOfClass{\setlength\columnsep{4mm}}
+\else
+\setlength{\textwidth}{11.7cm}
+\setlength{\textheight}{517.5dd} % 19.46cm
+\fi
+%
+\AtBeginDocument{%
+\@ifundefined{@journalname}
+ {\typeout{Unknown journal: specify \string\journalname\string{%
+<name of your journal>\string} in preambel^^J}}{}}
+%
+\endinput
+%%
+%% End of file `svglov2.clo'.

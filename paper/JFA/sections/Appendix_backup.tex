@@ -1,0 +1,35 @@
+% !TEX root = ../DynamicToStatic.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDIX
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+%\begin{appendix}
+\section{Auxiliary Proofs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% COMMENTED %
+\iffalse
+\subsection[Continuity of WF]{Continuity of $\WF$}
+\begin{lemma}
+\thlabel{th : continuity of WF}
+The distance $\WF$ is continuous for the weak* topology on $\mathcal{M}_+(\Omega)$.
+\end{lemma}
+
+\begin{proof}
+By the triangle inequality, we only need to show that if $\rho_n \rightharpoonup^* \rho$ then $\WF(\rho_n,\rho) \to 0$.
+If $\rho = 0$, then $\WF(\rho, \rho_n) = \sqrt{2 \rho_n(\Omega)} \to 0$. Now assume $\rho \neq 0$ and also $\rho_n \neq 0$ (since it is true eventually).
+We have 
+\[
+\WF(\rho, \rho_n) \leq \WF(\rho_n, \mnorm (\rho_{n})) + \WF(\rho,\mnorm (\rho_{n}))
+\]
+where $\mnorm (\rho_{n})$ is such that there exists $\alpha_n \in [0, + \infty[$, $\mnorm (\rho_{n})= \alpha_n \rho_{n}$ and $\mnorm (\rho_{n})(\Omega)=\rho(\Omega)$. Note that, by weak* convergence, we have that $\alpha_n \to 1$ and $W_2(\mnorm (\rho_{n}),\rho) \to 0$. But $\WF$ is upper bounded by Fisher-Rao and by $(1/2)W_2$, since those two metrics are obtained by taking the infimum of the same functional by adding the constraint $\omega=0$ and $\zeta=0$, respectively. Thus,
+\[
+\WF(\rho, \rho_{n}) \leq \delta|\sqrt{\alpha_n}-1|\sqrt{2 \rho_{n}(\Omega)} + (1/2) W_2(\mnorm (\rho_{n}),\rho) \to 0 \, . \qedhere
+\]
+\end{proof}
+\fi
+
+

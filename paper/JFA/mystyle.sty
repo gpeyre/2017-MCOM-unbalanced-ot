@@ -1,0 +1,109 @@
+% MATHS (AMS)
+\usepackage{amsmath,amssymb}
+%\usepackage{amsfonts} 
+%\usepackage{amssymb}
+%\usepackage{amsthm}
+
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{corollary}[theorem]{Corollary}
+
+% \usepackage{amsmath,amsthm} %equations, environments...
+
+\usepackage[mathscr]{eucal} % yet another nice calligraphic font (\masthscr{})
+
+
+% \usepackage[a4paper, margin=1.5in]{geometry} % for choosing the margin easily
+
+\usepackage{graphicx} %\graphicspath{ {images/} } %tells where the images are 
+\usepackage{enumerate}
+%\usepackage{tikz}
+
+
+%\usepackage{pgfplots} % for drawing functions, even 3d plots;
+%\pgfplotsset{width=10cm,compat=1.9} % add this for compatibility
+
+
+%\usepackage{theoremref}
+%\newcommand{\thref}{Theorem~\ref}
+%\renewcommand{\thlabel}{\label} % BUG WITH ARMA STYLE
+
+
+\usepackage{hyperref} % crossreferences
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,  
+    urlcolor=cyan,%,
+    pdftitle={An Interpolating distance between Optimal Transport and Fisher-Rao},
+    pdfauthor={L.CHIZAT, G. PEYRE, F.X. VIALARD and B. SCHMITZER},
+} 
+%links: \href{http://www.sharelatex.com}{Something Linky}
+
+
+\usepackage{caption}
+\usepackage{subcaption}% for subfigures: \begin{subfigure}{0.5\textwidth} [...] \end{...}
+%\usepackage{latexsym}
+%\usepackage{color}
+\usepackage{framed}
+\usepackage{mathrsfs}
+\usepackage[all]{xy}
+\usepackage{bm}
+\usepackage{picinpar}
+\usepackage[T1]{fontenc}
+%\usepackage[french,english]{babel}
+\usepackage[english]{babel}
+\usepackage[subnum]{cases}
+%\usepackage{breqn}
+
+
+
+%\renewcommand\qedsymbol{$\redsquare$} %changes the QED symbol
+\DeclareMathOperator*{\argmin}{argmin} %* for subscripts
+\newcommand{\mt}[1]{\mathbf{#1}}
+\newcommand{\ms}[1]{\mathbb{#1}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+\newcommand{\defeq}{\buildrel \text{d{}ef.}\over =}
+
+\newcommand{\R}{\mathbb{R}}
+%\newcommand{\F}{\mathfrak{F}}
+\newcommand\N{\mathbb{N}}
+
+% Notations:
+\newcommand{\Z}{\zeta} % source measure
+\newcommand{\M}{\omega}  %momentum measure
+\newcommand{\ccons}{\mathcal{CE}_0^1(\rho_0,\rho_1)} % continuity constraint
+\newcommand{\fonc}{f_{\delta}} % fonctional
+\newcommand{\foncN}{f} % fonctional (no index) 
+\newcommand{\ifonc}{D_{\delta}} % integral functional
+\newcommand{\ifoncN}{D} % integral functional (no index)
+\newcommand\D{\partial} %partial derivative
+\newcommand\Om{\Omega} %set
+\renewcommand\div{\textbf{div}} % discrete divergence operator
+\newcommand{\WF}{W\! \! F} % name of the interpolating distance
+\newcommand{\smallddt}{{\textstyle \frac{\d}{\d t}}}
+%\renewcommand\prox{}
+%
+\newcommand{\prox}{\mathop{}\mathopen{}\mathrm{Prox}}
+\newcommand{\proj}{\mathop{}\mathopen{}\mathrm{Proj}}
+
+
+% for derivatives
+\renewcommand{\d}{\mathrm{d}}
+\renewcommand{\t}{\mathrm{t}}
+\newcommand{\s}{\mathrm{s}}
+
+\DeclareMathOperator{\Id}{Id}
+\DeclareMathOperator{\Diff}{Diff}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Dens}{Dens}
+\DeclareMathOperator{\Aut}{Aut}
+\DeclareMathOperator{\Cone}{Cone}
+\renewcommand{\div}{\mathbf{div}}
+
+
+% push-forward
+\newcommand{\pfwd}[1]{#1_{\#}}
+% push-forward on a manifold
+\newcommand{\pfwdM}[1]{#1_{*}}
+

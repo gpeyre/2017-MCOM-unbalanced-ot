@@ -1,0 +1,69 @@
+% \documentclass[11pt]{article} 
+\documentclass[runningheads,smallextended]{svjour2}  % ARMA
+
+
+% Be sure to use PDF Latex
+\pdfoutput=1
+\smartqed  % flush right qed marks, e.g. at end of proof
+
+\journalname{Archive for Rational Mechanics and Analysis}
+
+\renewcommand{\makeheadbox}{} % To remove title of journal
+
+\usepackage{mystyle}
+\usepackage{url}
+\usepackage{LatexDefinitions}
+\usepackage{LatexDefinitions_Thm}
+
+\newcommand{\mnorm}{\mc{N}}
+\newcommand{\srho}{\hat{\rho}}
+\newcommand{\trucos}{{\ol{\cos}}}
+\newcommand{\dens}[2]{\textstyle{\frac{#1}{#2}}}
+\numberwithin{equation}{section}
+
+
+\begin{document}
+\title{Unbalanced Optimal Transport}
+\subtitle{Geometry and Kantorovich Formulation}
+
+\author{L\'ena\"ic~Chizat         \and
+		Gabriel~Peyr\'e			\and
+        Bernhard~Schmitzer 		\and
+       Fran\c{c}ois-Xavier~Vialard
+}
+\date{}
+%\author{
+%\begin{tabular}{c}
+%	L\'ena\"ic Chizat \qquad Gabriel Peyr\'e\\
+%	Bernhard Schmitzer  \qquad Fran\c{c}ois-Xavier Vialard\\[2mm]
+%	Ceremade, Universit\'e Paris-Dauphine \\
+%	\texttt{\small\{chizat,peyre,schmitzer,vialard\}@ceremade.dauphine.fr}
+%\end{tabular} }
+
+\institute{Ceremade, Universit\'e Paris-Dauphine\\
+              \email{\{chizat,peyre,schmitzer,vialard\}@ceremade.dauphine.fr}      
+}
+
+
+\maketitle
+
+%\setcounter{tocdepth}{1}
+%\tableofcontents
+
+\input{sections/Abstract}
+\input{sections/Introduction}
+%\input{sections/Geometry}
+\input{sections/Geometry_copie}
+\input{sections/Static}
+\input{sections/Dynamic}
+\input{sections/WF}
+%\input{sections/Geodesics}
+\input{sections/Conclusion}
+\input{sections/Appendix}
+
+\bibliographystyle{spmpsci}
+\bibliography{SecOrdLandBig,SecOrdLand,bibchizat,references}
+
+%\input{sections/Appendix}
+
+\end{document}

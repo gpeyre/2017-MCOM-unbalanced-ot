@@ -1,0 +1,186 @@
+\begin{thebibliography}{10}
+
+\bibitem{ambrosio2006gradient}
+L.~Ambrosio, N.~Gigli, and G.~Savar{\'e}.
+\newblock {\em Gradient flows: in metric spaces and in the space of probability
+  measures}.
+\newblock Springer Science \& Business Media, 2008.
+
+\bibitem{2012arXiv1207.6736A}
+N.~Ay, J.~Jost, H.~V. L{\^e}, and L.~Schwachh{\"o}fer.
+\newblock Information geometry and sufficient statistics.
+\newblock {\em Probability Theory and Related Fields}, 162(1):327--364, 2015.
+
+\bibitem{Bauer:2014aa}
+M.~Bauer, M.~Bruveris, and P.~W. Michor.
+\newblock Uniqueness of the {F}isher--{R}ao metric on the space of smooth
+  densities.
+\newblock {\em Bull. Lond. Math. Soc.}, 48(3):499--506, 2016.
+
+\bibitem{beg2005computing}
+M.~F. Beg, M.~I. Miller, A.~Trouv{\'e}, and L.~Younes.
+\newblock Computing large deformation metric mappings via geodesic flows of
+  diffeomorphisms.
+\newblock {\em International journal of computer vision}, 61(2):139--157, 2005.
+
+\bibitem{benamou2003numerical}
+J.-D. Benamou.
+\newblock Numerical resolution of an ``unbalanced'' mass transport problem.
+\newblock {\em ESAIM: Mathematical Modelling and Numerical Analysis},
+  37(05):851--868, 2003.
+
+\bibitem{benamou2000computational}
+J.-D. Benamou and Y.~Brenier.
+\newblock A computational fluid mechanics solution to the {M}onge-{K}antorovich
+  mass transfer problem.
+\newblock {\em Numerische Mathematik}, 84(3):375--393, 2000.
+
+\bibitem{benamou2001mixed}
+J.-D. Benamou and Y.~Brenier.
+\newblock Mixed {L2}-{W}asserstein optimal mapping between prescribed density
+  functions.
+\newblock {\em Journal of Optimization Theory and Applications},
+  111(2):255--271, 2001.
+
+\bibitem{bouchitte1990new}
+G.~Bouchitt{\'e} and G.~Buttazzo.
+\newblock New lower semicontinuity results for nonconvex functionals defined on
+  measures.
+\newblock {\em Nonlinear Analysis: Theory, Methods \& Applications},
+  15(7):679--692, 1990.
+
+\bibitem{caffarelli2010free}
+L.~Caffarelli and R.~J. McCann.
+\newblock Free boundaries in optimal transport and {M}onge-{A}mpere obstacle
+  problems.
+\newblock {\em Annals of mathematics}, 171(2):673--730, 2010.
+
+\bibitem{Cardaliaguet:2012aa}
+P.~Cardaliaguet, G.~Carlier, and B.~Nazaret.
+\newblock Geodesics for a class of distances in the space of probability
+  measures.
+\newblock {\em Calculus of Variations and Partial Differential Equations},
+  48(3-4):395--420, 2013.
+
+\bibitem{combettes2011proximal}
+P.~Combettes and J.-C. Pesquet.
+\newblock Proximal splitting methods in signal processing.
+\newblock In {\em Fixed-point algorithms for inverse problems in science and
+  engineering}, pages 185--212. Springer, 2011.
+
+\bibitem{combettes2007douglas}
+P.~L. Combettes and J.-C. Pesquet.
+\newblock A {D}ouglas--{R}achford splitting approach to nonsmooth convex
+  variational signal recovery.
+\newblock {\em Selected Topics in Signal Processing, IEEE Journal of},
+  1(4):564--574, 2007.
+
+\bibitem{dolbeault2009new}
+J.~Dolbeault, B.~Nazaret, and G.~Savar{\'e}.
+\newblock A new class of transport distances between measures.
+\newblock {\em Calculus of Variations and Partial Differential Equations},
+  34(2):193--231, 2009.
+
+\bibitem{figalli2010optimal}
+A.~Figalli.
+\newblock The optimal partial transport problem.
+\newblock {\em Archive for rational mechanics and analysis}, 195(2):533--560,
+  2010.
+
+\bibitem{figalli2010new}
+A.~Figalli and N.~Gigli.
+\newblock A new transportation distance between non-negative measures, with
+  applications to gradients flows with dirichlet boundary conditions.
+\newblock {\em Journal de math{\'e}matiques pures et appliqu{\'e}es},
+  94(2):107--130, 2010.
+
+\bibitem{guittet2002extended}
+K.~Guittet.
+\newblock Extended {K}antorovich norms: a tool for optimization.
+\newblock Technical report, Tech. Rep. 4402, {INRIA}, 2002.
+
+\bibitem{haker2004optimal}
+S.~Haker, L.~Zhu, A.~Tannenbaum, and S.~Angenent.
+\newblock Optimal mass transport for registration and warping.
+\newblock {\em International Journal of computer vision}, 60(3):225--240, 2004.
+
+\bibitem{hanin1992kantorovich}
+L.~G. Hanin.
+\newblock {K}antorovich-{R}ubinstein norm and its application in the theory of
+  {L}ipschitz spaces.
+\newblock {\em Proceedings of the American Mathematical Society},
+  115(2):345--352, 1992.
+
+\bibitem{jimenez2008dynamic}
+C.~Jimenez.
+\newblock Dynamic formulation of optimal transport problems.
+\newblock {\em Journal of Convex Analysis}, 15(3):593, 2008.
+
+\bibitem{Kantorovich42}
+L.~Kantorovich.
+\newblock On the transfer of masses (in russian).
+\newblock {\em Doklady Akademii Nauk}, 37(2):227--229, 1942.
+
+\bibitem{new2015kondratyev}
+S.~Kondratyev, L.~Monsaingeon, and D.~Vorotnikov.
+\newblock A new optimal transport distance on the space of finite {R}adon
+  measures.
+\newblock Technical report, Pre-print, 2015.
+
+\bibitem{lombardi2013eulerian}
+D.~Lombardi and E.~Maitre.
+\newblock Eulerian models and algorithms for unbalanced optimal transport.
+\newblock {\em ESAIM: M2AN}, 49(6):1717 -- 1744, 2015.
+
+\bibitem{OTmaasrumpf}
+J.~Maas, M.~Rumpf, C.~Sch{\"o}nlieb, and S.~Simon.
+\newblock A generalized model for optimal transport of images including
+  dissipation and density modulation.
+\newblock {\em ESAIM: M2AN}, 49(6):1745--1769, 2015.
+
+\bibitem{papadakis2014optimal}
+N.~Papadakis, G.~Peyr{\'e}, and E.~Oudet.
+\newblock Optimal transport with proximal splitting.
+\newblock {\em SIAM Journal on Imaging Sciences}, 7(1):212--238, 2014.
+
+\bibitem{piccoli2013properties}
+B.~Piccoli and F.~Rossi.
+\newblock On properties of the {G}eneralized {W}asserstein distance.
+\newblock arXiv:1304.7014, 2013.
+
+\bibitem{piccoli2014generalized}
+B.~Piccoli and F.~Rossi.
+\newblock Generalized {W}asserstein distance and its application to transport
+  equations with source.
+\newblock {\em Archive for Rational Mechanics and Analysis}, 211(1):335--358,
+  2014.
+
+\bibitem{radhakrishna1945information}
+C.~Rao.
+\newblock Information and accuracy attainable in the estimation of statistical
+  parameters.
+\newblock {\em Bulletin of the Calcutta Mathematical Society}, 37(3):81--91,
+  1945.
+
+\bibitem{rockafellar1967duality}
+R.~Rockafellar.
+\newblock Duality and stability in extremum problems involving convex
+  functions.
+\newblock {\em Pacific Journal of Mathematics}, 21(1):167--187, 1967.
+
+\bibitem{rockafellar1971integrals}
+R.~Rockafellar.
+\newblock Integrals which are convex functionals. ii.
+\newblock {\em Pacific Journal of Mathematics}, 39(2):439--469, 1971.
+
+\bibitem{Metamorphosis2005}
+A.~Trouv\'e and L.~Younes.
+\newblock Metamorphoses through lie group action.
+\newblock {\em Foundations of Computational Mathematics}, 5(2):173--198, 2005.
+
+\bibitem{cedric2003topics}
+C.~Villani.
+\newblock {\em Topics in optimal transportation}.
+\newblock Number~58. American Mathematical Soc., 2003.
+
+\end{thebibliography}

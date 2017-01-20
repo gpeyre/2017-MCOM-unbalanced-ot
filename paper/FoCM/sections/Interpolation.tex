@@ -1,0 +1,438 @@
+% !TEX root = ../InterpolatingOTFR.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Interpolation properties}
+\label{sec-interpolation}
+
+In this section we study the effect of varying $\kappa$ on geodesics. This allows us to explain to which extent our metric really interpolates between optimal transport and Fisher-Rao.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Change of scale}
+
+Intuitively, the smaller $\kappa$, the finer the scale at which mass creation and removal intervene to make initial and final measures match. Accordingly, we show in the following Proposition that changing $\kappa$ amounts to changing the scale of the problem.
+
+\begin{proposition}[Space rescaling]
+\thlabel{rescaling}
+Let $T: (t,x) \in \R \times \R^d \mapsto (t,s\, x)$ be the spatial scaling by a factor $s>0$, and $\kappa \in ]0,+\infty[$. If $\mu=(\rho,\M,\Z)$ is a minimizing triplet for the distance $\WF_{\kappa}(\rho_0,\rho_1)$, then $\hat{\mu}=(T_{\#}\rho,s\, T_{\#}\M,T_{\#}\Z)$ is a minimizing triplet for the distance $\WF_{s\, \kappa}(T_{\#}\rho_0,T_{\#}\rho_1)$.
+\end{proposition}
+
+\begin{proof}
+It is easy to check that $\hat{\mu}=(\hat{\rho},\hat{\M},\hat{\Z})$ satisfies the continuity equation with Neumann boundary conditions on $T(\Om)$ between $T_{\#}\rho_A$ and $T_{\#}\rho_B$. Also, we can write
+\[
+\ifoncN_{s\kappa}(\hat{\mu}) 
+= \int_{T([0,1]\times \Om)} \foncN_{s\kappa} \left( \frac{d\hat{\mu}}{d\hat{\lambda}} \right) \d\hat{\lambda}
+\]
+where $\hat{\lambda}=T_{\#} \lambda$ and $\lambda$ is any non-negative Borel measure satisfying $|\mu| \ll \lambda$. By denoting $ \frac{\d\mu}{\d\lambda} =(\rho^{\lambda},\M^{\lambda},\Z^{\lambda})$ we have $\frac{d\hat{\mu}}{d\hat{\lambda}}(t,x)=(\rho^{\lambda}(t,x/s),s\M^{\lambda}(t,x/s),\Z^{\lambda}(t,x/s))$. Thus by the change of variables formula, we obtain
+\begin{eqnarray*}
+\ifoncN_{s\kappa}(\hat{\mu}) 
+&=& \int_{[0,1]\times \Om} \foncN_{s\kappa}\left(\rho^{\lambda},s\, \M^{\lambda},\Z^{\lambda} \right) \d\lambda\\
+&=& s^2 \ifoncN_{\kappa}(\mu) \, .
+\end{eqnarray*}
+This shows that if $\mu$ minimizes $\ifonc$ then $\hat{\mu}$ minimizes $D_{s\kappa}$ and vice versa, hence \thref{rescaling}.
+\end{proof}
+
+\begin{remark}
+The proof of \thref{rescaling} holds true as soon as $f_{\kappa}$ is of the form $f_1(\rho,\M,\Z)+ \kappa^p f_2(\rho,\Z)$ where $f_1$ is p-homogeneous in $\M$ and $f_2$ is independent of $\M$. Hence the choice of $\kappa^p$ as an interpolation factor when introducing the various models in Section \ref{previous works}: in this way, $\kappa$ can be interpreted as a spatial scale.
+\end{remark}
+
+The following result is closely related and will be used later to prove uniqueness of geodesics between remote Dirac measures.
+\begin{proposition}[Monotonicity of the distance w.r.t.\ rescaling]
+\thlabel{monotonicity of the distance}
+Using the same notations as in the previous result, if $s<1$, then $D_{\kappa}(\hat{\mu}) \leq D_{\kappa}(\mu)$ and thus $\WF_{\kappa}(T_{\#}\rho_0,T_{\#}\rho_1) \leq \WF_{\kappa}(\rho_0, \rho_1)$. Moreover, if $s<1$ and the momentum associated to a geodesic between $\rho_0$ and $\rho_1$ is not zero, these inequalities are strict.
+\end{proposition}
+
+\begin{proof}
+We use the same change of variables as in the proof of \thref{rescaling} and remark that $\fonc$ is strictly increasing w.r.t.\ its second variable.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Two variational problems on non-negative measures}
+
+The main Theorem of section \ref{sec:limit metrics} states that the geodesics of the quadratic Wasserstein and the Hellinger distances are both recovered (in a suitable sense) when letting the parameter $\kappa$ go to $+\infty$ and $0$, respectively. We start by defining two variational problems, before showing their connections to $\WF_{\kappa}$ in the next subsection.
+
+Let us introduce
+\[
+D_{BB} : (\rho,\M) \mapsto \ifonc(\rho,\M,0) \quad \text{and} \quad D_{FR} : (\rho,\Z) \mapsto \frac{1}{\kappa^2}\ifonc(\rho,0,\Z).
+\]
+Those real valued functionals represent respectively the Benamou-Brenier and the Fisher-Rao terms in the interpolating functional $\ifonc$. They do not depend on $\kappa$ and are defined such that $\ifonc (\rho,\M,\Z)= D_{BB}(\rho,\M)+ \kappa^2 D_{FR}(\rho,\Z)$.
+
+\begin{definition}[Generalized Benamou-Brenier transport problem]
+\thlabel{def gBB}
+Given $(\rho_0,\rho_1)$ $\in \mathcal{M}_+(\Om)$, we introduce the time dependent \emph{rate of growth}
+\begin{equation}
+\label{rate of growth}
+g: (t,x) \mapsto 
+\begin{cases}
+0 &\text{ if $\rho_0(\Om)=\rho_1(\Om)$} \\
+\frac{2}{t-t_0} & \text{otherwise}
+\end{cases}
+\end{equation}
+with $t_0=\sqrt{\rho_0(\Om)}\left( \sqrt{\rho_0(\Om)}-\sqrt{\rho_1(\Om)}\right)^{-1}$. The generalized Benamou-Brenier transport problem is defined as
+\begin{eqnarray} %
+\label{eq gBB}
+& \underset{\rho,\M}{\inf} &D_{BB}(\rho,\M) \\
+& \text{subject to}  & (\rho,\M,g \rho) \in \ccons\, . 
+\end{eqnarray}
+and we denote by $d_{gBB}(\rho_0,\rho_1)$ the square-root of the infimum.
+\end{definition}
+
+Notice that $d_{gBB}$ belongs to the class of models for unbalanced transport of \cite{lombardi2013eulerian} which prescribe the source term $\Z$ as a function of $\rho$. In order to picture what is happening, consider $(\rho_0,\rho_1)\in \mathcal{M}_+(\Om)$ such that $\rho_0(\Om) < \rho_1(\Om)$: in that case, $t_0<0$ and the rate of growth $g$ is positive, constant in space and decreasing in time.
+%
+While $d_{gBB}$ does not define a metric as it does not satisfy the triangle inequality, we prove below that it is closely related to the quadratic Wasserstein metric.
+%
+\begin{proposition}[Relation between $d_{gBB}$ and $W_2$]
+\thlabel{th link gBB}
+Let $\rho_0,\, \rho_1 \in \mathcal{M}_+(\Om)$. We introduce $\tilde{\rho}_0, \, \tilde{\rho}_1$ the rescaled measures whose masses are the geometric mean between $\rho_0(\Om)$ and $\rho_1(\Om)$, i.e.\ such that for $i\in \{0,1\}$, $\tilde{\rho}_i(\Om)=\sqrt{\rho_0(\Om)\rho_1(\Om)}$ and $\tilde{\rho_i} = \alpha_i \rho_i$ for some $\alpha_i \geq 0$. It holds
+\[
+d_{gBB}(\rho_0,\rho_1) = \frac12 W_2(\tilde{\rho}_0,\tilde{\rho}_1) \, ,
+\]
+Moreover, the minimum in \eqref{eq gBB} is attained and minimizers can be built explicitly from the geodesics of $W_2(\tilde{\rho}_0,\tilde{\rho}_1)$.
+\end{proposition}
+
+\begin{proof}
+If $\rho_0=0$ or $\rho_1=0$, the minimum is attained if and only if $\M=0$ and thus $d_{gBB}(\rho_0,\rho_1)=0$. If $\rho_0(\Om)=\rho_1(\Om)$ then $g = 0$ and the conclusion follows directly.
+%
+Otherwise, we have $t_0 \notin [0,1]$ and we will reduce the problem to the case of a standard Benamou-Brenier problem by a rescaling and a change of variables in time, similarly as in \cite[Proposition 7]{lombardi2013eulerian}. Consider 
+\begin{align*}
+\mathcal{S} &= \left\{ (\rho,\M) : (\rho,\M,g\rho) \in \mathcal{CE}_0^1(\rho_0,\rho_1), \, |\M| \ll \rho \right\} \\
+%\intertext{and} 
+\text{and} \quad
+\mathcal{S}_0 &= \big\{ (\rho,\M) : (\rho, \M, 0) \in  \mathcal{CE}_0^1(\rho_0,\frac{\rho_0(\Om)}{\rho_1(\Om)}\rho_1),  \, |\M| \ll \rho  \big\}\, .
+\end{align*}
+%
+Take $\mu=(\rho,\M)$ in $\mathcal{S}$. It satisfies (weakly) the ordinary differential equation $\D_t \rho_t(\Om) = g(t) \rho_t(\Om)$ and so $\rho_t(\Om) = \left( \frac{t_0-t}{t_0}\right)^2 \rho_0(\Om)$ a.e.\ in $[0,1]$. We define the rescaling
+\begin{align*}& R : \mathcal{S} \mapsto  \mathcal{S}_0, \\
+& R(\rho,\M) =  \left( \frac{t_0}{t_0-t}\right)^2 (\rho,\M) \, .
+\end{align*}
+which is a bijection as $t_0 \notin [0,1]$.
+%
+Writing $D_{BB}(R(\rho,\M))$ yields a Benamou-Brenier functional with a time varying metric;  we now counterbalance the latter by a change of variables in time.
+%
+Consider the strictly increasing map $\s: t \mapsto t\frac{t_0-1}{t_0-t}$ which satisfies $\s(0)=0$, $s(1)=1$ and $\s'(t)=\frac{t_0-1}{t_0}\left( \frac{t_0}{t_0-t} \right)^2>0$. Let $\t = \s^{-1}$ and introduce
+\begin{align*}& T: \mathcal{S}_0 \mapsto  \mathcal{S}_0 \\
+&T(\rho,\M) = (\rho \circ \t(s), \t'(s) \cdot \M \circ \t(s))\,
+\end{align*}
+which is a bijection (see \cite[Lemma 8.1.3]{ambrosio2006gradient}).
+The rescaling followed by the change of variables in time induces a bijection $T\circ R : \mathcal{S} \to \mathcal{S}_0$. Of course, the expression for $\s$ has been chosen after an analysis of its effect on the $D_{BB}$ functional. 
+%
+Take $(\tilde{\rho},\tilde{\omega}) = R(\rho,\omega) \in \mathcal{S}_0 $ and $(\hat{\rho},\hat{\omega}) = T \circ R(\rho,\omega) \in \mathcal{S}_0 $. All those measures can be disintegrated in time from the definition of $\mathcal{S}$ and $\mathcal{S}_0$. In order to alleviate notations, we introduce $f_{BB}(\rho_t,\M_t)=\int_{\Omega} \fonc \left(\frac{\d \rho}{\d \lambda}, \frac{\d \M_t}{\d \lambda_t},0 \right) \d \lambda_t $,  where $\lambda_t \in \mathcal{M}_+(\Omega)$ satisfies $|(\rho_t, \M_t)|\ll \lambda_t$. We have
+\begin{align*}
+\int_0^1 f_{BB}(\hat{\rho}_s, \hat{\M}_s) \d s
+&= \int_0^1 (\t' \circ \s (t))^2 f_{BB}(\tilde{\rho}_t, \tilde{\M}_t) \s'(t) \d t \\
+&= \int_0^1 \frac{f_{BB}(\tilde{\rho}_t, \tilde{\M}_t)}{\s'(t)} \d t \\
+&= \frac{t_0}{t_0-1} \int_0^1 \left(\frac{t_0-t}{t_0} \right)^2 f_{BB}(\tilde{\rho}_t, \tilde{\M}_t) \d t \\
+&= \left(\frac{\rho_0(\Om)}{\rho_1(\Om)}\right)^{1/2} \int_0^1 f_{BB}(\rho,\M) \d t
+\end{align*}
+Hence the relation
+\[
+D_{BB}(\rho,\M) = \left(\frac{\rho_1(\Om)}{\rho_0(\Om)}\right)^{1/2} D_{BB}(T \circ R (\rho,\M))   \, ,
+\]
+from which we deduce $d_{gBB}(\rho_0,\rho_1) = \frac12 \left(\frac{\rho_1(\Om)}{\rho_0(\Om)}\right)^{1/4} W_2(\rho_0,\frac{\rho_0(\Om)}{\rho_1(\Om)} \rho_1)$, as the minimum of the standard Benamou-Brenier problem is attained in $\mathcal{S}_0$. Finally, by remarking that $W_2(\alpha \rho_0, \alpha \rho_1) = \sqrt{\alpha}W_2(\rho_0,\rho_1)$ for $\alpha\geq0$, we obtain the formulation of \thref{th link gBB}.
+\end{proof}
+
+
+\begin{definition}[Hellinger distance]
+\thlabel{def FR}
+Given $(\rho_0,\rho_1) \in \mathcal{M}_+(\Om)$, the Hellinger distance is defined as
+\begin{eqnarray*}
+d_{FR}^2(\rho_0,\rho_1) \defeq & \underset{\rho,\Z}{\inf} & D_{FR} (\rho,\Z) \\
+&\text{subject to} & (\rho,0,\Z) \in \ccons \, .
+\end{eqnarray*}
+\end{definition}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% UNIQUENESS FR
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We now prove uniqueness of Hellinger geodesics and give their explicit expression. This result is well known in a positive, smooth setting.
+\begin{theorem}
+\thlabel{uniqueness FR}
+The geodesics for the Hellinger distance are unique and have the explicit expression 
+\begin{equation}
+\label{FR geodesic}
+\rho = (t\sqrt{\rho_1} + (1-t)\sqrt{\rho_0})^2 \otimes  \d t\, .
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+First notice that the expression \eqref{FR geodesic} is not ambiguous since it is positively homogeneous as a function of $(\rho_0,\rho_1)$. The fact that $d_{FR}$ defines a metric is proven using the same arguments as in \thref{WF defines a metric}. As for the proof of uniqueness of geodesics, we organize the proof as follows. Using convex duality, we show that \eqref{FR geodesic} is a geodesic among geodesics dominated at all times by some measure $\nu \in \mathcal{M}_+(\Om)$: this allows to exhibit an isometric injection (the square root) into $L^2(\d\nu)$, from which we deduce uniqueness. 
+
+\paragraph{i. Duality.}
+Written explicitly, the constraint in \thref{def FR} is equivalent to
+\begin{equation}
+\label{continuity FR}
+\int_0^1 \int_{\Omega} \partial_t \varphi \d \rho + \int_0^1 \int_{\Omega} \varphi \d \Z = \int_{\Omega}  \varphi(1,\cdot) \d \rho_1 - \int_{\Omega} \varphi(0,\cdot)\d  \rho_0 \, 
+\end{equation}
+for all test functions $\varphi \in C^1( [0,1] \times \Omega)$.
+%
+Similarly as in \thref{existence}, we obtain that the problem defining the Hellinger metric is the dual of
+\[
+\sup_{\varphi \in C^1( [0,1] \times \Omega)} \int_{\Omega} \varphi(1,\cdot) \d\rho_1 - \int_{\Omega} \varphi(0,\cdot) \d\rho_0 
+\]
+subject to, for all $(t,x)\in [0,1] \times \Omega$,
+\[
+ (\partial_t \varphi(t,x), \varphi(t,x))\in B_{FR}  \quad \text{where} \quad  B_{FR} = \left\{ (a,b) : a+\frac12 b^2 \leq 0 \right\}  \, .
+\]
+By Fenchel-Rockafellar Theorem, we obtain the existence of minimizers and standard arguments based on reparametrization (see \cite[Theorem 5.4]{dolbeault2009new} for instance) show that geodesics are constant speed and that $d_{FR}$ defines a metric on $\mathcal{M}_+$.
+
+%\paragraph{ii. Stability of geodesics.} 
+%Take $\mu=(\rho,\Z)$ a minimizer for the problem defining $d_{FR}(\rho_0,\rho_1)$. Since the functional $D_{FR}$ evaluated at \eqref{FR geodesic} (with its associated source) is finite, it holds $D_{FR}(\mu)< + \infty$ and thus $\Z \ll \rho$. As a consequence, we can disintegrate $\mu$ in time. For each $t\in [0,1]$, write the Lebesgue decomposition of $\mu_t$ w.r.t.\ $\nu \defeq \rho_0 + \rho_1$ as $\mu_t = (r(t,\cdot)\nu+\rho^{\perp}_t, z(t,\cdot)\nu+\Z^{\perp}_t)$ where $r(t,\cdot), \, z(t,\cdot) \in L^1(\d \nu)$ are the relative densities. We remark that $(r(t,\cdot) \nu, z(t,\cdot) \nu)$ satisfies the constraints \eqref{continuity FR} and is thus a minimizer. Thus, $\Z^{\perp} = 0$ because $\mu$ is also a minimizer and consequently, $\rho^{\perp} = 0$ by condition \eqref{continuity FR}. Thus, $\mu= (r,z) \nu \otimes \d t$.
+
+\paragraph{ii. Value of $d_{FR}$.} Let $\nu \in \mathcal{M}_+(\Om)$ be any measure which dominates $\rho_0$ and $\rho_1$ and denote $\rho_0 = r_0 \nu$, $\rho_1 = r_1 \nu$. Assume for the moment that there exists $\kappa>0$ such that $\nu$ a.e.,
+\[
+\frac{1}{\kappa} \leq \frac{r_0}{r_1} \leq \kappa\, . \tag{A1}
+\]
+%
+ Consider $\mu=(\rho,\Z)$ where $\rho$ is defined as in \eqref{FR geodesic}, i.e.
+ \begin{align*}
+ \rho &= (t\sqrt{r_1} +(1-t)\sqrt{r_0})^2 \nu \otimes \d t\\
+ \Z    &= 2(\sqrt{r_1}-\sqrt{r_0})(t\sqrt{r_1}-(1-t) \sqrt{r_0}) \nu \otimes \d t\, .
+ \end{align*}
+ This couple satisfies the constraints \eqref{continuity FR} and $D_{FR}(\mu)=2\int_{\Omega}(\sqrt{\rho_1}-\sqrt{\rho_0})^2$. 
+%
+Now consider 
+\[
+\tilde{\varphi} \defeq \zeta/\rho= 
+\begin{cases}
+0 & \text{if $r_0(x) = r_1(x)$,} \\
+\frac{2}{t-t_0(x)} & \text{otherwise.}
+\end{cases}
+\] with $t_0(x)=\sqrt{r_0}\left( \sqrt{r_0}-\sqrt{r_1} \right)^{-1}$. Under the assumption (A1), there exists $\epsilon>0$ such that for all $x\in \Omega$, $t_0(x) \notin [-\epsilon,1+\epsilon]$ and thus, for all $t\in[0,1]$, $\tilde{\varphi}(t,\cdot)$ is bounded and belongs to $L^1(\d \nu)$. Also, for all $x\in \Omega$, $\tilde{\varphi}(\cdot,x)\in C^1([0,1])$. But, in general, $\tilde{\varphi} \notin C^1( [0,1] \times \Omega)$ as it lacks regularity w.r.t.\ the space variable.
+%
+
+We introduce thus its regularized version: $\varphi^{\epsilon} \defeq \eta^{\epsilon} \ast \tilde{\varphi}$, where $\eta^{\epsilon}(t,x)\defeq\epsilon^{-d}\alpha(x/\epsilon)$ with $\alpha \in C_c^{\infty}((-1/2,1/2)^d)$, $\alpha \geq 0$, $\int \alpha = 1$ and $\alpha$ even.
+%
+By convexity of $B_{FR}$, we have for all $(t,x)\in [0,1] \times \Om$, 
+$(\partial_t \tilde{\varphi}, \tilde{\varphi})(t,x) \in B_{FR} \Rightarrow (\eta^{\epsilon} \ast \partial_t \tilde{\varphi}, \eta^{\epsilon} \ast \tilde{\varphi})(t,x) \in B_{FR} \Rightarrow (\partial_t \varphi^{\epsilon}, \varphi^{\epsilon})(t,x)   \in B_{FR}$.
+Thus
+\begin{align*}
+d^2_{FR}(\rho_0,\rho_1) 
+&\geq \lim_{\epsilon \rightarrow 0} \int_{\Omega} \varphi^{\epsilon}(1,\cdot) \d \rho_1 - \int_{\Omega} \varphi^{\epsilon}(0,\cdot) \d \rho_0 \\
+&= \int_{\Omega} \tilde{\varphi}(1,\cdot) \d \rho_1 - \int_{\Omega} \tilde{\varphi}(0,\cdot) \d \rho_0 \\
+&= 2\int_{\Omega} (\sqrt{\rho_1}-\sqrt{\rho_0})^2\, .
+\end{align*}
+As this value is also an upper bound, this shows that, under (A1), $d^2_{FR}(\rho_0,\rho_1) = 2\int_{\Omega} (\sqrt{\rho_1}-\sqrt{\rho_0})^2$.
+%
+But this result remains true without any assumption on $\rho_0$ and $\rho_1$. Indeed, by introducing $\rho^{\epsilon}_1=\epsilon \rho_0 + (1-\epsilon) \rho_1$ and $\rho^{\epsilon}_0=\epsilon \rho_1 + (1-\epsilon) \rho_0$, the triangle inequality yields
+\[
+d_{FR}(\rho^{\epsilon}_0,\rho^{\epsilon}_1) - d_{FR}(\rho^{\epsilon}_1,\rho_{1}) \leq
+d_{FR}(\rho^{\epsilon}_0,\rho_{1}) \leq
+d_{FR}(\rho^{\epsilon}_0,\rho^{\epsilon}_1) + d_{FR}(\rho^{\epsilon}_1,\rho_{1}) 
+\]
+and $\lim_{\epsilon \rightarrow 0} d_{FR}(\rho^{\epsilon}_1,\rho_{1} ) = 0$ because we have a vanishing upper bound. Hence $d^2_{FR}(\rho^{\epsilon}_0,\rho_{1}) = 2\int_{\Omega} (\sqrt{\rho_1}-\sqrt{\rho_0^{\epsilon}})^2$.  Repeating this operation for $\rho_0^{\epsilon}\rightarrow \rho_0$ we have that $d^2_{FR}(\rho_0,\rho_1) = 2\int_{\Omega} (\sqrt{\rho_1}-\sqrt{\rho_0})^2$ for $\rho_0, \rho_1 \in \mathcal{M}_+(\Omega)$.
+
+
+\paragraph{iii. Isometric injection and uniqueness.} Finally, on the space $\mathcal{M}_{\nu} = \{ \rho \in \mathcal{M}_+(\Omega) : \rho \ll \nu\}$, the map  
+\[
+\left|
+\begin{array}{ccc}
+(\mathcal{M}_{\nu}, d_{FR}) & \rightarrow & (L^2(\d \nu), \Vert \cdot \Vert_2) \\
+\rho = \alpha\, \nu & \mapsto & \sqrt{2\alpha}
+\end{array}
+\right.
+\]
+is an isometric injection. As geodesics in $L^2(\d \nu)$ are unique, uniqueness holds for geodesics in $\mathcal{M}_{\nu}$. %However, there remains a step for uniqueness since there exists admissible couple $(\rho,\zeta)$ which cannot be written as a density with respect to a reference measure fixed in time. 
+%
+Now let $(\rho_t)_{t\in [0,1]}$ be any geodesic in $\mathcal{M}_+(\Omega)$ (finiteness of the functional implies that $\rho$ can be disintegrated in time). Fix a time $\tau\in [0,1]$, and let $\nu'\in \mathcal{M}_+(\Om)$ be a measure which dominates $\rho_0$, $\rho_1$, $\rho_\tau$ and $\lambda$. From the previous construction, and because geodesics are constant speed, one can construct (by concatenation and time reascaling) a geodesic which takes the value $\rho_\tau$ time $\tau$ and which is dominated by $\nu'$ at all times. By uniqueness of geodesics dominated by $\nu$, this geodesic is actually dominated by $\nu$ (because there exists one such geodesic). This shows that there is no other geodesic than \eqref{FR geodesic}.
+\end{proof}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The following Lemma motivates the expressions for $d_{gBB}$ and $d_{FR}$. It tells that one obtains $d_{gBB}$  by minimizing  a ``growth'' and a ``transport'' problem successively (and vice-versa for and $d_{FR}$), as opposed to $\WF$ where the minimization is performed ``simultaneously''.
+
+\begin{lemma}[Alternative characterizations]
+\thlabel{origin limit metrics}
+For all $(\rho_0,\rho_1)\in \mathcal{M}_+(\Om)$ we have
+\begin{align*}
+d_{gBB}(\rho_0,\rho_1)^2 &=  \min_{(\rho,\M)\in \mathcal{A}_{FR}}  D_{BB}(\rho,\M) \\
+d_{FR}  (\rho_0,\rho_1)^2 &=  \min_{(\rho,\Z)\in \mathcal{A}_{BB}}  D_{FR}(\rho,\Z) 
+\end{align*}
+where 
+\begin{equation}
+\label{argmin sets}
+\mathcal{A}_{FR} \defeq \argmin_{(\rho,\M,\Z) \in \ccons} D_{FR} (\rho,\Z)
+\quad \text{and} \quad
+\mathcal{A}_{BB} \defeq \argmin_{(\rho,\M,\Z) \in \ccons} D_{BB} (\rho,\M)\,.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+What we need to show is
+\begin{align*}
+\mathcal{A}_{BB} &= \left\{ (\rho,\Z) : (\rho,0,\Z) \in \ccons \right\} \\
+\mathcal{A}_{FR} &= \left\{ (\rho,\M) : (\rho,\M,g \rho) \in \ccons  \right\}\, ,
+\end{align*}
+where the \emph{rate of growth} $g$ is defined in \eqref{rate of growth}. The first equality is easy because $D_{BB}(\rho, \omega)=0$ if and only if $\omega=0$ a.e.
+
+The second equality requires slightly more work. In the case when $\rho_0(\Om)=\rho_1(\Om)$, $D_{FR}$ is minimized if and only if $\Z=0$ as previously. The case $\rho_0(\Om)=0$ or $\rho_1(\Om)=0$ is dealt with in \thref{rescaled measures} (case $\alpha=0$). Otherwise, let us determine $\mathcal{A}_{FR}$ by adapting the optimality condition in \thref{certificate}. The argument is clearer if we consider $D_{FR}$ as a function of  $\mu=(\rho,\M,\Z)$ instead of just $(\rho,\Z)$ as $\M$ is a variable of the problem. We thus introduce
+\[
+B_{FR} \defeq \left\{ (\alpha,\beta,\gamma)\in \R \times \R^d \times \R : \alpha +\frac{\gamma^2}{2} \leq 0, \; \beta =0 \right\}
+\]
+and it can be shown (similarly as in Section \ref{sec:optimality condition}) that $\D D_{FR} (\rho,\M,\Z)$ is equal to
+\[
+ \left\{ (\alpha,\beta, \gamma) \in C([0,T] \times \Om; B_{FR}) :
+\alpha+\frac{\gamma^2}{2} = 0 -\text{ $\rho$ a.e.\ and $\gamma \rho = \Z$ }
+\right\}.
+\]
+Adapting the sufficient optimality condition given in \thref{certificate}, it holds that if $\mu\in \ccons$ and if
+there exists $\varphi \in C^1([0,1] \times \Om)$ satisfying $(\D_t \varphi, \nabla \varphi, \varphi)\in \D D_{FR} (\mu) $ i.e.
+\[
+\begin{cases}
+ \D_t \varphi + \frac12 \varphi^2 \leq 0 &(\text{with equality $\rho$ a.e.}),\\
+\nabla \varphi = 0\, ,\\
+\varphi \rho = \Z \, .
+\end{cases}
+\] 
+then $\mu \in \mathcal{A}_{FR}$.
+%
+The equality $\rho$ a.e.\ is actually an equality $\d t$ a.e.\ in time since $\rho$ has a positive mass and $\varphi$ is constant in space. All solutions are thus of the form $\varphi : (t,x) \mapsto \frac{2}{t-t_0}$. The integration constant $t_0$ is found by integrating the variations of mass. As $t_0\notin [0,1]$, $\varphi$ is well defined and is equal to $g$ as introduced in \eqref{rate of growth}. Now we prove that this condition is actually necessary: take $(\rho,\M,\Z) \in \mathcal{A}_{FR}$. It holds
+\[
+D_{FR}(\rho,\M,\Z) \geq \int_0^1 \int_{\Omega} \D_t g \rho + g \Z = \int_{\Omega} g(1)\rho_1 - \int_{\Omega} g(0) \rho_0 = D_{FR}(\rho,\M,\Z)
+\]
+where we used successively: duality, the fact that $(\rho,\M,\Z)\in \ccons$ and the fact that the primal-dual gap vanishes at optimality. So, the first equality is an equality, and hence $(\D_t g,g)(t,x) \in \D f_1(\d \rho / \d |\rho| , 0, \d \Z / \d |\rho|)(t,x)$ for $|\rho|$ a.e.\ $(t,x)\in [0,1]\times \Om$, which implies that $\Z = g\rho$.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Convergence of geodesics}
+\label{sec:limit metrics}
+
+A rigorous treatment of the \emph{limit geodesics} requires some compactness for the set of geodesics when $\kappa$ varies. That is why we need the following bounds, adapted from \cite[Proposition 3.10]{dolbeault2009new}.
+
+\begin{lemma}
+\thlabel{estimates}
+Consider a triplet $\mu=(\rho,\M,\Z)\in \mathcal{M}^{d+2}$ such that $D_{BB}(\rho,\M) <+\infty$ and $D_{FR}(\rho,\Z)<+\infty$. For any non-negative Borel function $\eta$ on $[0,1] \times \Om$ we have
+\begin{equation}
+\int_{[0,1]\times\Om} \eta d|\M| \leq \sqrt2 D_{BB}(\rho,\M)^{\frac12} \left( \int_{[0,1]\times\Om} \eta^2 \d\rho \right)^{\frac12}
+\label{estimate1}
+\end{equation}
+and
+\begin{equation}
+\int_{[0,1]\times\Om} \eta d|\Z| \leq \sqrt2  D_{FR}(\rho,\Z)^{\frac12} \left( \int_{[0,1]\times\Om} \eta^2 \d\rho \right)^{\frac12}
+\,.\label{estimate2}
+\end{equation}
+Also, similar bounds can be written for $\mu_t$ (the disintegration of $\mu$ w.r.t.\ time) by integrating solely in space.
+\end{lemma}
+
+\begin{proof}
+Take $\lambda\in \mathcal{M}_+$ such that $|\mu| \ll \lambda$ and decompose $\d\mu$ as $(\rho^{\lambda}, \M^{\lambda}, \Z^{\lambda}) \d\lambda$. As $D_{BB}(\rho,\M)<+\infty$ and $D_{FR}(\rho,\Z)<+\infty$, we have $\M \ll \rho$ and $\Z \ll \rho$. It follows
+\begin{align*}
+\int_{[0,1]\times \Om} \eta \d |\M| 
+&=  \int_{[0,1]\times \Om} \left( 2 \eta^2 \fonc(\rho^{\lambda},\M^{\lambda},0)\rho^{\lambda} \right)^{\frac12} \d\lambda \\
+&\leq \sqrt2 \left( \int_{[0,1]\times \Om} \eta^2 \rho^{\lambda} \d\lambda \right)^{\frac12} 
+\left( \int_{[0,1]\times \Om} \fonc(\rho^{\lambda}, \M^{\lambda},0) \d\lambda \right)^{\frac12}
+\end{align*}
+by Cauchy-Schwartz inequality on the scalar product $\langle \cdot, \cdot \rangle_{L^2(\d\lambda)}$. Inequality \eqref{estimate1} follows and \eqref{estimate2} is derived similarly.
+\end{proof}
+
+
+%%%
+In the following lemma, we derive a total variation bound on $\mu$ which only depends on $D_{BB}(\mu)$ and $D_{FR}(\mu)$.
+
+\begin{lemma}[Uniform bound]
+\thlabel{upperbounds}
+Let $\rho_0, \rho_1 \in \mathcal{M}_+(\Om)$ and $M\in \R_+$. There exists $C\in \R_+$ satisfying  $|\mu|([0,1]\times \Om) < C$, for all $\mu=(\rho,\M,\Z)\in \ccons$ such that $D_{BB}(\rho,\M) <M$ and $D_{FR}(\rho,\Z) <M$.
+\end{lemma}
+
+\begin{proof}
+We start by giving a bound on $\rho([0,1] \times \Om)=\int_0^1 \rho_t(\Om) \d t$. Recall (from the remarks after \thref{continuity equation}) that the map $t \mapsto \rho_t(\Om)$ admits the distributional derivative $\rho'_t (\Om) = \zeta_t(\Om)$, for almost every $t\in[0,1]$. It follows, by \thref{estimates}
+\[
+\rho'_t (\Om) \leq |\zeta_t \vert(\Om) \leq \sqrt{2 D_{FR}(\rho_t,\Z_t) \rho_t(\Om)}
+\]
+where $D_{FR}(\mu_t)$ denotes $\frac{1}{\kappa^2} \int_{\Om} \fonc(\frac{d(\rho_t,0,\Z_t)}{\d\lambda_t})\d\lambda_t$ where $\lambda_t$ is such that $\mu_t \ll \lambda_t$. By integrating in time and applying the Cauchy-Schwartz inequality
+\[
+\rho_t(\Om)-\rho_0(\Om) 
+\leq \sqrt{2D_{FR}(\rho,\Z)} \sqrt{ \rho([0,1] \times \Om)} .
+\]
+We integrate again in time to obtain 
+\[  
+	\rho([0,1] \times \Om) \leq \rho_0 (\Om) + \sqrt{2D_{FR}(\rho,\Z)} \sqrt{ \rho([0,1] \times \Om)} 
+\]
+which implies that $ \rho([0,1] \times \Om)$ is bounded by a constant depending only on $D_{FR}(\rho,\Z)$ and $\rho_0(\Om)$. 
+The conclusion follows by bounding  $|\Z|([0,1]\times \Om)$ and $|\M|([0,1]\times \Om)$ thanks to \thref{estimates}.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Let us now recall a well known property of weighted optimization problems.
+%\marginpar{idéalement, trouver un bouquin pour ca, demander vincent}
+
+\begin{lemma}[Properties of weighted optimization problems]
+\thlabel{weighted optim}
+Let $f$ and $g$ be two proper l.s.c.\ functions on a compact set $\mathcal{C}$ with values in $\R\cup \{+\infty \}$ such that $h = f + \kappa g$ admits a minimum in $\mathcal{C}$ for all $\kappa \in ]0,\pm\infty[$. Let $(\kappa_n)_{n\in\N}$ be a sequence in $]0,+\infty[$ and $(x_n)_{n\in \N}$ a sequence of minimizers of $h_n = f+\kappa_n g$. We introduce $\mathcal{A}(f) \defeq \argmin_{x\in \mathcal{C}} f(x)$ and $\mathcal{A}(g)$ similarly.
+\begin{enumerate}
+\item For all $n\in \mathbb{N}$, $x^f\in \mathcal{A}(f)$ and $x^g\in \mathcal{A}(g)$ we have $f(x_n)\leq f(x^g)$ and $g(x_n) \leq g(x^f)$,
+\item If  $\kappa_n \underset{n \to \infty}{\to} 0$, then $(x_n)_{n\in \N}$ admits an accumulation point in $ \argmin_{\mathcal{A}(f)} g $,
+\item If  $\kappa_n \underset{n \to \infty}{\to} \infty$, then $(x_n)_{n\in \N}$ admits an accumulation point in $\argmin_{\mathcal{A}(g)} f$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Those results are derived using elementary inequality manipulations.
+\end{proof}
+\iffalse %% IF FALSE
+\begin{proof}
+Let us consider a sequence $(x_n)_{n\in \N}$ of minimizers of $h_n=f+\kappa_n g$. As this sequence lies in the compact set $\mathcal{C}$, we can extract a subsequence (again indexed by $n$) which converges to $x\in \mathcal{C}$. We have for all $n \in \N$ and $y\in \mathcal{C}$, $h_n(x_n)\leq h_n(y)$. To the limit, this inequality gives $\lim \inf_n f(x_n) \leq f(y)$. Moreover, $f$ is assumed l.s.c.\ thus $f(x)\leq f(y)$ which proves $x\in \mathcal{A}$.
+
+Now choose $y\in \mathcal{A}$ and note $f^*=\min_{x\in\mathcal{C}} f(x)$. We have $\forall n\in \N$ , 
+\[
+h_n(x_n) = f(x_n) + \kappa_n g(x_n) \leq h_n(y)=f^* + \kappa_n g(y)
+\]
+Therefore, for all $n$, $g(x_n)-g(y)\leq \frac{1}{\kappa_n}(f^*-f(x_n))\leq 0$. Taking the lim-inf and using the l.s.c.\ of $g$, we get $g(x) \leq \lim \inf g(x_n)\leq g(y)$. This proves $x\in \arg \min_{x\in\mathcal{A}} g(x)$. The last property is proven using the same scheme by letting $h_n=\frac{1}{\kappa_n}(f+\kappa_n g)$ and exchanging the role of $f$ and $g$.
+\end{proof}
+
+\fi % FI
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The following lemma gives total variation bounds on geodesics that are independent of $\kappa$, which will be helpful in order to explicit the limit models.
+
+\begin{lemma}[A relative compactness result]
+\thlabel{bound independant delta}
+Let $\rho_0$ and $\rho_1$ in $\mathcal{M}_+(\Om)$ and consider $\mathcal{G}_{\rho_0}^{\rho_1} \defeq  \bigcup_{\kappa >0} \arg \min \ifonc(\rho_0,\rho_1)$. For all $\mu=(\rho,\M,\Z)\in \mathcal{G}_{\rho_0}^{\rho_1}$, the following bounds, independent of $\kappa$, hold
+\begin{align}
+ D_{BB}(\rho,\M) & \leq d^2_{gBB}(\rho_0,\rho_1)\, ,
+\label{ineqonDBB}\\
+ D_{FR}(\rho,\Z) & \leq d^2_{FR}(\rho_0,\rho_1).
+\label{ineqonDFR}
+\end{align}
+Moreover, $\mathcal{G}_{\rho_0}^{\rho_1}$ is relatively compact.
+\end{lemma}
+
+\begin{proof}
+Inequalities \eqref{ineqonDBB} and \eqref{ineqonDFR} are direct applications of \thref{weighted optim}-1, to the characterizations of $d_{gBB}$ and $d_{FR}$ given in \thref{origin limit metrics}.
+As these inequalities do not depend on $\kappa$, we can deduce from \thref{upperbounds} a uniform TV bound on the elements of $\mathcal{G}_{\rho_0}^{\rho_1}$. More explicitly, there exists $C>0$ such that for all $\mu\in \mathcal{G}_{\rho_0}^{\rho_1}$,
+\[
+|\mu|([0,1] \times \Om) < C
+\]
+This implies that $\mathcal{G}_{\rho_0}^{\rho_1}$ is relatively compact for the weak* topology.
+\end{proof}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We can now state the main result of this section.
+
+\begin{theorem}[Limit models]
+%\marginpar{study unicity for those models}
+\thlabel{limitmodels}
+Let $\rho_0$ and $\rho_1$ in $\mathcal{M}_+(\Om)$ and let $(\rho^n,\M^n,\Z^n)_{n\in \N}$ be a sequence of minimizers for the distance $\WF_{\kappa_n}$ between $\rho_0$ and $\rho_1$ with $(\kappa_n)_n \in \R_+^{\N}$.
+
+A. If  $\kappa_n \underset{n \to \infty}{\to} +\infty$ then $(\rho^n,\M^n,\Z^n)_{n\in \N}$ weak* converges (up to a subsequence) to a minimizer for $d_{gBB}$.
+
+B. If  $\kappa_n \underset{n \to \infty}{\to} 0$ then $(\rho^n,\M^n,\Z^n)_{n\in \N}$ weak* converges (up to a subsequence) to a minimizer for $d_{FR}$.
+\end{theorem}
+
+\begin{proof}
+Let us review the hypothesis of \thref{weighted optim} .
+First, $D_{BB}$ and $D_{FR}$ are l.s.c. The existence of minimizers for $\ifonc$ has been shown in \thref{existence} for any positive value of $\kappa$. Moreover, as a consequence of \thref{bound independant delta}, those minimizers are in a compact set---just take any compact set which contains the closure of the relatively compact set of all minimizers. All conditions are gathered for \thref{weighted optim}-(2,3) to be applied, hence the result.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

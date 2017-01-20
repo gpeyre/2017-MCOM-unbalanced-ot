@@ -1,0 +1,296 @@
+% !TEX root = ../EntropicNumeric.tex 
+\section{Algorithm for Discrete Measures}
+\label{sec-algorithm}
+
+In this section, we take a closer look at the scaling iterations~\eqref{eq-scaling-iterates} in the specific case of discrete finite spaces. We give a convergence result, we adapt the notation to obtain an algorithm that can be implemented in a straightforward manner and also discuss how to numerically stabilize the algorithm for small values of the regularization parameter $\epsilon$, to reach a higher precision.
+
+\subsection{Convergence}
+The convergence of the scaling iterations~\eqref{eq-scaling-iterates} in finite dimension can be shown under quite general assumptions. Note that the given convergence rate is very pessimistic compared to that observed in practice (which is linear, see Figure \ref{fig_convergenceUOT}).
+
+\begin{theorem}
+\label{prop_convergencediscrete}
+Assume that $X$ and $Y$ are finite sets and that the dual problem \eqref{eq-dual-pbm} admits a maximizer.
+%
+Then the scaling iterates~\eqref{eq-scaling-iterates} converge to some $(a,b)$, the function $(x,y) \mapsto a(x).K(x,y).b(y)$ is a solution to \eqref{eq-general-regul-KL} and the optimal value of~\eqref{eq-dual-pbm} is approached with an error of order at most $O(1/\ell)$ by $(\epsilon \log \iter{a}, \epsilon \log \iter{b})$.
+\end{theorem}
+\begin{proof}
+Let $v^{(0)} : Y\to \RR^n$ be a feasible starting point for the alternate maximization~\eqref{eq_alternating_max}. We need to show that the term coupling the variables $(u,v)$ is uniformly Lipschitz in order to apply general results on alternate optimization. Let $C$ be the value of the dual problem \eqref{eq-dual-pbm} evaluated at $(u^{(1)},v^{(0)})$. The iterations are only sensitive to the behavior of \eqref{eq-dual-pbm} over functions $(u,v)$ satisfying
+\eq{
+F_1^*(-u)+F_2^*(-v)+\epsilon \langle e^{\frac{u\oplus v}{\epsilon}}, K\rangle \leq -C
+}
+because the dual functional is sequentially increased. Let us denote by $A$ the set of $(u,v)$ satisfying this inequality. By taking any feasible points $s_1 \in \Lun(X)^n$ and $s_2\in \Lun(Y)^n$ for $F_1$ and $F_2$, one has $F_1^*(-u)\geq \langle -u, s_1\rangle+\text{cste}$ and similarly $F_2^*(-v)\geq \langle -v, s_2\rangle+\text{cste}$. Thus, if $(u,v)\in A$ then
+\eq{
+\epsilon \langle e^{\frac{u\oplus v}{\epsilon}}, K\rangle \leq C'+\langle u, s_1\rangle+\langle v, s_2\rangle \,
+}
+for some other constant $C'$. Hence for any $(x,y)\in X\times Y$, either $(u\oplus v)(x,y)$ is bounded for $(u,v)\in A$ or $K(x,y)=0$.
+%
+Consequently, the function $(u,v)\mapsto \langle e^{\frac{u\oplus v}{\epsilon}}, K\rangle$ is uniformly Lipschitz on $A$. It is moreover smooth and thus general results on alternate maximization (such as \cite{beck2015convergence}) gives the convergence to the optimal value and the convergence rate.
+%
+Finally, the fact that the alternate maximization corresponds to the scaling iterates~\eqref{eq-scaling-iterates} is guaranteed by Proposition \ref{prop_alternating}. By strict convexity of \eqref{eq-dual-pbm}, the dual maximizer $(u,v)$ is unique so the iterates must converge to $(e^{u/\epsilon}, e^{v/\epsilon})$. The optimality of $r$ is given by the primal-dual relationships in Proposition~\ref{prop_duality}.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Numerical Algorithm for Discrete Measures}
+We now adopt a more ``implementation oriented'' point of view, which leads to algorithms which are straightforward to implement. For the sake of clarity, we focus on the case of a single unknown coupling (i.e.\ $n=1$, the extension to $n>1$ merely requires to add an index).
+
+Assume that $X = \{x_1,\ldots,x_I\}$ and $Y=\{y_1,\ldots,y_J\}$ are discrete finite spaces of cardinal $I$ and $J$ respectively, endowed with the reference probability measures $\d x$ and $\d y$ described by nonnegative vectors summing to one
+\eq{
+\mathbf{ \d x} \eqdef (\d x (\{ x_i\})_{i=1}^I\in \RR_+^I
+\qandq
+\mathbf{\d y} \eqdef (\d y (\{ y_j\})_{j=1}^J\in  \RR_+^J\, .
+}
+%
+In this context, one identifies functions $a : X\to \RR\cup \{\infty\}$ or $b:Y\to \RR \cup \{\infty\}$ to vectors $\mathbf{a} =(a(x_i))_{i=1}^I$ and $\mathbf{b} =(b(y_j))_{j=1}^J$ and functions on the product space $r : X\times Y \to \RR\cup \{\infty\}$ to matrices $\mathbf{R} = (r(x_i,y_j))_{i,j}$ (denoted with capital letters for a clearer distinction between vectors and matrices). 
+%
+This notation allows for a simple expression for the projections \eqref{eq_ProjectionDens} through
+\eq{
+P^X_\# \mathbf{R} = \mathbf{R}\, \mathbf{\d y}
+\qandq
+P^Y_\# \mathbf{R} = \transp{\mathbf{R}}\mathbf{\d x}
+}
+where $\transp{(\cdot)}$ denotes matrix transposition and $\mathbf{R}\,\mathbf{\d y}$ denotes the standard matrix-vector product. Finally, the notation $\odot$ denotes the entrywise product and $\oslash$ the entrywise division with convention $0/0=0$.
+
+Suppose we are given a cost function $c$ described by the $I\times J$ matrix $\mathbf{C}$ and two convex, lower semicontinuous and lower bounded functions $F_1$ and $F_2$ whose domain is nonempty and included in $\RR_+^I$ and $\RR_+^J$ respectively.
+The Gibbs kernel \eqref{eq_GibbsKernel} is then given by $\mathbf{K} = (e^{-\mathbf{C}_{i,j}/\epsilon})_{i,j}$ and the main variational problem \eqref{eq-general-regul-KL} reads
+\eql{
+\label{eq_primal_discr}
+\min_{\mathbf{R} \in \RR^{I\times J}} 
+F_1(\mathbf{R}\, \mathbf{\d y})
++F_2( \transp{\mathbf{R}}\mathbf{\d x})
++ \epsilon \sum_{ij} \KLp(\mathbf{R}_{i,j}| \mathbf{K}_{i,j}),
+}
+where $\KLp$ is the pointwise Kullback-Leibler divergence (defined in \eqref{eq_KLpointwise}).
+%
+Applying the operators $\Gibbs$ and $\transp{\Gibbs}$ defined in \eqref{eq-gibbs-convolution} amounts to
+\begin{align*}
+	\Gibbs\,\mathbf{b} = \mathbf{K}(\mathbf{b}\odot \mathbf{\d y})
+	\qandq 
+	\transp{\Gibbs}\,\mathbf{a} = \transp{\mathbf{K}}(\mathbf{a}\odot \mathbf{\d x})\, .
+\end{align*}
+%
+For computing the scaling iterates~\eqref{eq-scaling-iterates}, all the information we need about $F_1$ and $F_2$ can be condensed by the specification of functions $\proxdiv_{F_1} : \RR_+^I\times \RR_+ \to \RR_+^I$ and $\proxdiv_{F_2} : \RR_+^J\times \RR_+ \to \RR_+^J$ defined as
+\eql{
+\label{eq_proxdiv_a}
+\proxdiv_{F_i} : (\mathbf{s},\epsilon) \mapsto \prox^{\KL}_{F_i/\epsilon}( \mathbf{s})\oslash  \mathbf{s}\, .
+}
+Given this function, the scaling algorithm is straightforward to implement.
+%
+%In the following Section we discuss a scheme to numerically stabilize iterations, which becomes particularly relevant when working with small regularization parameters $\epsilon$.
+%
+\begin{algorithm}
+\caption{Scaling algorithm}\label{algo_scaling_discrete}
+\begin{algorithmic}[1]
+\Function{ScalingAlgo}{$\proxdiv_{F_1},\proxdiv_{F_2},\mathbf{K},\mathbf{\d x}, \mathbf{\d y}, \epsilon$}
+   \State $\mathbf{b} \gets \ones_J$
+   \Repeat
+	\State $\mathbf{a} \gets \proxdiv_{F_1} (\mathbf{K}(\mathbf{b} \odot \mathbf{\d y}), \epsilon)$
+	\State $\mathbf{b} \gets \proxdiv_{F_2} (\transp{\mathbf{K}}(\mathbf{a} \odot \mathbf{\d x}),\epsilon)$
+   \Until{stopping criterion}
+   \State \textbf{return} $(\mathbf{a}_i \mathbf{K}_{ij} \mathbf{b}_j)_{ij}$\Comment{The primal optimizer}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+%
+By virtue of Theorem \ref{prop_convergencediscrete}, Algorithm \ref{algo_scaling_discrete} is guaranteed to stop and to return an approximate minimizer of~\eqref{eq_primal_discr} if the dual problem admits a maximizer and if the stopping criterion is, say, a tolerance on the primal-dual gap.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Log-domain Stabilization}
+\label{sec:LogDomain}
+
+For small values of $\epsilon$ the entries of $\mathbf{K}$, $\iter{\mathbf{a}}$ and $\iter{\mathbf{b}}$ may become both very small and very large, leading to numerically imprecise values of their mutual products and overflow of the numerical range.
+On the other hand, executing the algorithm in the $\log$ domain (i.e.\ storing the logarithms of the entries of $\mathbf{K}$, $\iter{\mathbf{a}}$ and $\iter{\mathbf{b}}$) is not completely satisfying because then the computation of $\Gibbs \iter{\mathbf{b}}$ and $\Gibbs \iter{\mathbf{a}}$  entails many evaluations of the exponential function and the algorithm is considerably slowed down. We suggest a middle way, using a redundant parametrization of the iterates as follows:
+\begin{align}
+	\label{eq_stabilize_decompose}
+	\iter{\mathbf{a}} & = \iter{\tilde{\mathbf{a}}} \odot \exp(\iter{\tilde{\mathbf{u}}}/\epsilon), &
+	\iter{\mathbf{b}} & = \iter{\tilde{\mathbf{b}}} \odot \exp(\iter{\tilde{\mathbf{v}}}/\epsilon).
+\end{align}
+%
+%
+The idea is to keep $\iter{\tilde{\mathbf{a}}}$ and $\iter{\tilde{\mathbf{b}}}$ close to $1$ and to absorb the extreme values of $\iter{\mathbf{a}}$ and $\iter{\mathbf{b}}$ into the log-domain via $\iter{\tilde{\mathbf{u}}}$ and $\iter{\tilde{\mathbf{v}}}$ from time to time.
+
+Consider the stabilized kernels $\iter{\tilde{\mathbf{K}}}$ whose entries are given by 
+\eq{
+\iter{\tilde{\mathbf{K}}}_{ij} = \exp ((\iter{\tilde{\mathbf{u}}}_i + \iter{\tilde{\mathbf{v}}}_j-\mathbf{C}_{i,j})/\epsilon)
+}
+and remark that it holds, after direct computations,
+\eq{
+\Gibbs \iter{\mathbf{b}} = e^{-\frac{\iter{\tilde{\mathbf{u}}}}{\epsilon}} \odot \iter{\tilde{\mathbf{K}}}(\iter{\tilde{\mathbf{b}}} \odot \mathbf{\d y})
+\qandq
+\transp{\Gibbs} \iter{\mathbf{a}} = e^{-\frac{\iter{\tilde{\mathbf{v}}}}{\epsilon}} \odot \transp{(\iter{\tilde{\mathbf{K}}})}(\iter{\tilde{\mathbf{a}}} \odot \mathbf{\d x})\, .
+}
+%
+The scaling iterates~\eqref{eq-scaling-iterates} then read 
+\begin{align*}%\label{eq-sinkhorn-like-iterates-stabilized}
+	\iiter{\tilde{\mathbf{a}}} = 
+			\prox^{\KL}_{\tfrac{1}{\epsilon}F_1}(e^{-\frac{\iter{\tilde{\mathbf{u}}}}{\epsilon}} \odot \mathbf{s}_1)  
+		\oslash
+			\mathbf{s}_1
+		\, , \quad	
+	\iiter{\tilde{\mathbf{b}}}= 
+			\prox^{\KL}_{\tfrac{1}{\epsilon}F_2}(e^{-\frac{\iter{\tilde{\mathbf{v}}}}{\epsilon}} \odot \mathbf{s}_2)  
+		\oslash
+			\mathbf{s}_2	
+\end{align*}
+where $\mathbf{s}_1 = \iter{\tilde{\mathbf{K}}}(\iter{\tilde{\mathbf{b}}} \odot \mathbf{\d y})$ and $\mathbf{s}_2= \transp{(\iter{\tilde{\mathbf{K}}})}(\iter{\tilde{\mathbf{a}}} \odot \mathbf{\d x})$.
+
+For computing these iterates, all the information we need about $F_1$ and $F_2$ can be condensed by the specification of ``stabilized $\proxdiv$'' functions $\proxdiv_{F_1} : \RR^I\times \RR^I \times \RR_+ \to \RR^I$ and $\proxdiv_{F_2} : \RR^J\times \RR^J \times \RR_+ \to \RR^J$ defined as
+\eql{
+\label{eq_proxdiv}
+\proxdiv_{F_i} : (\mathbf{s},\mathbf{u},\epsilon) \mapsto \prox^{\KL}_{F_i/\epsilon}(e^{-\frac{\mathbf{u}}{\epsilon}} \odot \mathbf{s}) \oslash \mathbf{s}\, .
+}
+We adopt the same notation as in~\eqref{eq_proxdiv_a} because it is just the special case when $\mathbf{u}=0$.
+%where division is performed entrywise with the convention $0/0=0$. The notation $\proxdiv$ is intended to recall that (in the absence of absorption, i.e.\ when $u=0$) $\proxdiv$ is the pointwise ratio of the proximal operator over the identity operator, as used in \eqref{eq-sinkhorn-like-iterates}. 
+The main numerical algorithm thus obtained is displayed in Algorithm \ref{algo_scaling_stabilized}.
+
+\paragraph{Computing $\proxdiv$.}
+The issue of extreme numerical values is not completely remedied by the absorption steps in Algorithm \ref{algo_scaling_stabilized} since the $\sproxdiv$ operation still involves the potentially extreme factor $e^{-\mathbf{u}/\epsilon}$. In practice however, we find that for many problems $\sproxdiv$ can be computed without evaluating the exponential $e^{-\mathbf{u}/\epsilon}$ and the formula remains numerically stable in the limit of small $\epsilon$. Several examples for this are given in Section \ref{sec_applications}.
+
+\paragraph{Frequency of absorptions.}
+%Only applying stabilized iterations corresponds to the original algorithm.
+%Alternating stabilized and absorption iterations corresponds to parametrizing $(\iter{a},\iter{b})$ exclusively in the log-domain via $(\iter{\tilde{u}},\iter{\tilde{v}})$, effectively fixing $(\iter{\tilde{a}},\iter{\tilde{b}})$ to 1. While this is numerically more stable than the original algorithm, it also entails some computational overhead, as recomputing the kernels entails many evaluations of the exponential function.
+In practice, we recommend to run stabilized iterations and check for the extreme values of $(\iter{\tilde{\mathbf{a}}},\iter{\tilde{\mathbf{b}}})$ every couple of iterations. When they exceed a given threshold, an absorption step is performed. 
+%This allows to combine the numerical robustness of the stabilized variant with the simple matrix multiplications of the original algorithm.
+%
+\begin{algorithm}
+\caption{Scaling algorithm with stabilization}\label{algo_scaling_stabilized}
+\begin{algorithmic}[1]
+\Function{ScalingAlgo2}{$\sproxdiv_{F_1},\sproxdiv_{F_2},\mathbf{C},\mathbf{\d x},\mathbf{ \d y}, \epsilon$}
+   \State $(\mathbf{b},\mathbf{u},\mathbf{v}) \gets (\ones_J,0_I,0_J)$
+   \State $\tilde{\mathbf{K}}_{ij} \gets \exp(-\mathbf{C}_{ij}/\epsilon)$  \Comment{for all $i,j$.}
+   \Repeat
+   	%\Repeat \label{alg_line_scaling}
+		\State $\mathbf{a} \gets \sproxdiv_{F_1}(\tilde{\mathbf{K}}(\mathbf{b} \odot \mathbf{\d y}),\mathbf{u},\epsilon)$
+		\State  $\mathbf{b} \gets \sproxdiv_{F_2}(\transp{\tilde{\mathbf{K}}}(\mathbf{a} \odot \mathbf{\d x}),\mathbf{v},\epsilon)$
+	%	\Until{(or convergence)}
+		\If{a component of $|\log \mathbf{a}|$ or $|\log \mathbf{b}|$ is ``too big'' }
+	\State $(\mathbf{u},\mathbf{v}) \gets (\mathbf{u}+\epsilon \log \mathbf{a}, \mathbf{v} + \epsilon \log \mathbf{b})$\label{alg_line_uv}
+	%\State decrease $\epsilon$ \Comment{Optional}
+	\State $\tilde{\mathbf{K}}_{ij} \gets \exp((\mathbf{u}_i + \mathbf{v}_j-\mathbf{C}_{i,j})/\epsilon)$ \Comment{for all $i,j$.}\label{alg_line_Kup}
+	\State $\mathbf{b} \gets \ones_J$
+	\EndIf
+   \Until{stopping criterion}
+   \State \textbf{return} $(\mathbf{a}_i \tilde{\mathbf{K}}_{i,j} \mathbf{b}_j)_{i,j}$\Comment{The primal optimizer}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Comments on Implementation}
+\label{sec_implementation}
+
+We wish to emphasize the simplicity of Algorithm \ref{algo_scaling_discrete} and Algorithm \ref{algo_scaling_stabilized}. 
+When an optimization problem of the form \eqref{eq-general} is given one just has to (i) choose the reference measures (which also determines a discretization grid in practice) (ii) determine the functions $F_i$ by going to the space of densities and (iii) find a way to efficiently compute $\proxdiv_{F_i}$ or $\sproxdiv_{F_i}$ (in many cases, this operator has a closed form, or can be computed with a few parallelizable iterations). Let us briefly discuss some details on the practical implementation of Algorithm \ref{algo_scaling_stabilized}.
+
+%\paragraph{Handling infinite values}
+%Some
+
+
+\paragraph{Computing the matrix multiplications.}
+The size of the matrix $\mathbf{K}$ is $I\times J$ so the matrix-vector multiplication step or even merely storing $\mathbf{K}$ in memory can quickly become intractable as the sizes of $X$ and $Y$ increase.
+%
+For special problems it is possible to avoid dense matrix multiplication (and storage). For instance, when $X$, $Y$ are Cartesian grids in $\RR^d$ and $c(x,y) = |x-y|^2$ is the squared Euclidean distance, then $\mathbf{K}$ is the separable Gaussian kernel: multiplying by $\mathbf{K}$ can be done by successive ``1-D convolutions''. For more general geometric surfaces, $\mathbf{K}$ can also be approximated by the heat kernel~\cite{2015-solomon-siggraph}.
+%
+These methods however cannot be combined with Algorithm \ref{algo_scaling_stabilized}, as the ``stabilized kernels'' $\tilde{\mathbf{K}}$ lose the particular structure.
+%\todo{G: remove this.}
+%Combination of scaling algorithms with adaptive sparse solvers (see e.g.\ \cite{SchmitzerShortCuts2015}), to allow efficient solution of more general problems, is a challenging topic for future research and beyond the scope of this article. \todo{Should we remove this comment?}
+%
+\paragraph{Gradually decreasing $\epsilon$.}
+Strict convexity in \eqref{eq-general-regul-KL} is introduced by the Kull\-back-Leib\-ler regularization (the unregularized problem \eqref{eq-general} is not necessarily strictly convex). As $\epsilon \to 0$, the strict convexity becomes ``weaker'', and convergence of the alternating optimization on the dual tends to become slower (for the unregularized dual problem alternating optimization does in general not converge to an optimizer).
+
+Gradually decreasing $\epsilon$ during optimization, from an initial large value to the smaller final value, has been proposed in \cite{YuilleInvisibleHand1994} for the standard Sinkhorn algorithm, to accelerate convergence.
+In practice we also observe this to be very efficient for the more general algorithms discussed in this article and moreover allows to avoid issues due to machine precision when using Algorithm \ref{algo_scaling_stabilized}. Reduction of $\epsilon$ should be done between lines \ref{alg_line_uv} and \ref{alg_line_Kup} in Algorithm \ref{algo_scaling_stabilized}.
+
+
+\paragraph{Multiple couplings.}
+The general optimization problem in Section \ref{sec_algorithm_analysis} involved $n$ couplings, potentially $n>1$. For simplicity, throughout Section \ref{sec-algorithm} we focussed on the case $n=1$. However, the extension to $n>1$ is rather simple.
+%All the comments in this Section and Algorithm \ref{algo_scaling_stabilized} extend in a straightforward manner to this case.
+In particular, the variables $\mathbf{a},\mathbf{b},\mathbf{u},\mathbf{v}$ of the algorithm lie in $\RR^{n\times I}$ or $\RR^{n\times J}$, the kernel $\mathbf{K}$ is a $n$-family of $I\times J$ matrices, the entrywise operations (multiplication, division) are still performed entrywise and the matrix vector multiplications are performed ``coupling by coupling'', e.g.\ for $k\in \{1,\dots,n\}$ and $j\in \{1,\dots, J\}$:
+\eq{
+(\mathbf{K}\, \mathbf{b})_{k,i} = \sum_j \mathbf{K}_{k,i,j}\, \mathbf{b}_{k,j}\, .
+}
+
+\paragraph{Relation to \cite{SchmitzerScaling2016}.} 
+\label{sec:RelationSparseScaling}
+
+An efficient numerical implementation of Algorithm \ref{algo_scaling_stabilized} is studied further in \cite{SchmitzerScaling2016}. In addition to the log-domain stabilization and gradually decreasing $\epsilon$,
+it is proposed to approximate $\mathbf{K}$ by a sparse matrix, obtained by adaptive truncation.
+Thus, one can avoid storing of and multiplication by the dense kernel matrix, while keeping the inflicted truncation error negligible. This is more flexible than for instance the Gaussian convolution trick and can easily be extended to more general cost functions. In addition, this can be directly combined with the log-domain stabilization and therefore allows to solve larger problems with small regularization parameter (and hence, with little entropic blur).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Generalization: more spaces and pushforward operators}
+Scaling algorithms similar to Algorithm~\eqref{eq-scaling-iterates} can be formulated for solving problems of more general form than \eqref{eq-general-regul-KL}. There can be more than $2$ functionals, more than $2$ spaces involved and the projection operators $P^X_\#$ and $P^Y_\#$ can be replaced by more general linear operators, such as pushforwards of functions $t$ which are not necessarily projections (i.e. not of the form $t(x,y)= x$). 
+Several examples of such extensions can be found in \cite{2015-benamou-cisc} for the special case of classical optimal transport. Let us sketch this extension in the discrete setting and for the case of $n=1$ (one ``coupling'') so as to remain simple and to stick close to implementation concerns. For brevity, we limit ourselves to giving the ``scaling'' form of the alternate maximization on the dual and an example, without proof.
+
+Let $(X^k,\mathbf{\d x}^k)_{k=1}^N$ and $(Z,\mathbf{\d z})$ be finite measured spaces of respective cardinalities $(I_k)_{k=1}^N$ and $L$ and let $(t^k:Z\to X_k)_{k=1}^N$ be surjective maps. The space $Z$ plays the role of $X\times Y$ in the previous discussions, but in this generalization the structure of a product space is lost. For conciseness, in the notations, the maps $(t^k)_k$ act on indices of points instead of points, with an obvious meaning. Given $k\in \{1,\dots,N\}$, $\mathbf{R}\in \RR^L$ and $\mathbf{u}\in \RR^{I_k}$ the pushforward operator $t^k_\#$ and its adjoint $(t^k_\#)^*$ read
+\eq{
+t^k_\# \mathbf{R} = \big(\sum_{l\in (t^k)^{-1}(i)} \mathbf{R}_l\cdot \mathbf{\d z}_l\, /\, \mathbf{\d x}^k_i \big)_{i=1}^{I_k}
+\qandq
+(t^k_\#)^* \mathbf{u} = \big(\mathbf{u}_{t^k(l)}\big)_{l=1}^L\, . 
+}
+
+Given a nonnegative vector $\mathbf{K}\in \RR^L$ and $N$ convex, proper, lower semicontinuous functions $F_k:\RR^{I_k}\to \RR\cup\{\infty\}$, the generalization of \eqref{eq_primal_discr} is (up to a constant)
+\eq{\label{eq_pushforward_primal}
+\min_{\mathbf{R}\in \RR^L} \sum_{k=1}^N F_k(t^k_\# \mathbf{R}) +\epsilon \sum_{l=1}^L \mathbf{R}_l \cdot \big(\log(\mathbf{R}_l \, /\, \mathbf{K}_l)-1\big)\cdot \mathbf{\d z}_l 
+}
+with the convention $0\log (0/0) = 0$, and the dual reads
+\eql{\label{eq_pushforward_dual}
+\sup_{\substack{(\mathbf{u}^k)_{k=1}^N \in \RR^{\sum_k I_k}}} -\sum_{k=1}^N F_k^*(-\mathbf{u}^k) -\epsilon \sum_{l=1}^L \exp(\tfrac1\epsilon\sum_{k=1}^N \mathbf{u}^k_{t^k(l)})\cdot \mathbf{K}_l\cdot \mathbf{\d z}_l .
+}
+
+In order to perform alternate maximization on the dual as before, one needs a ``disintegration'' relation, in the spirit of \eqref{eq_fubinigibbs}. To this end, we define, for $(\mathbf{a}^n)_{n=1}^N \in \RR_+^{\sum_n I_n}$  and $k\in \{1, \dots, N\}$ the operator $\Gibbs^k$ as
+\eq{
+\Gibbs^k ((\mathbf{a}^n)_{n\neq k}) \eqdef
+\big(\sum_{l\in (t^k)^{-1}(i)} (\prod_{n\neq k}\mathbf{a}^n_{t^n(l)} )  \cdot  \mathbf{K}_l \cdot \mathbf{\d z}_l/\mathbf{\d x}_i ^k \big)_{i=1}^{I_k}
+}
+With those operators, the rightmost term of \eqref{eq_pushforward_dual} can be computed in a ``marginalized'' way, using the relation
+\eq{
+\langle \mathbf{a}^k\, , \, \Gibbs^k ((\mathbf{a}^n)_{n\neq k}) \rangle_{\mathbf{\d x}^k}
+=
+\sum_{l=1}^L (\prod_{n=1}^N \mathbf{a}^n_{t^n(l)} ) \cdot \mathbf{K}_l \cdot \mathbf{\d z}_l
+}
+valid for $k\in\{1,\dots,N\}$. The key feature for obtaining this relation is the fact that $((t^k)^{-1}(i))_{i=1}^{I_k}$ forms a partition of $Z$, and this explains why the scaling algorithm generalizes naturally to linear operators which are ``pushforward''. It is now simple, at least formally, to define the generalization of the scaling algorithm dispayed in Algorithm \ref{algo_scaling_generalized}, by writing the alternate optimization on the dual problem, and taking again the dual, in the spirit of Proposition \ref{prop_alternating}.
+%
+\begin{algorithm}
+\caption{Generalized scaling algorithm}\label{algo_scaling_generalized}
+\begin{algorithmic}[1]
+\Function{GeneralScalingAlgo}{$(\proxdiv_{F_k},\Gibbs^k, t^k)_{k=1}^n, \mathbf{K},\epsilon$}
+   \State $\mathbf{a}^k \gets \ones_{I_k}$ \Comment{for all $k=1,\dots,N$.}
+   \Repeat
+   \For{k=1,\dots,N}
+		\State $\mathbf{a}^k \gets \proxdiv(\Gibbs^k((\mathbf{a}^n)_{n\neq k}), \epsilon)$
+   \EndFor
+   \Until{stopping criteron}%\label{euclidendwhile}
+   \State \textbf{return} $\big( \mathbf{K}_l  \cdot \prod_{k=1}^N \mathbf{a}^k_{t^k(l)}\big)_{l=1}^L$\Comment{The primal optimizer}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+%Given a fixed point $(\mathbf{a}^k)_{k=1}^3$, a minimizer for \eqref{eq_pushforward_primal} (under some conditions analogous to Proposition \ref{prop_fixpoint}) can be retrieved through
+%\eq{
+%\big( \mathbf{K}_l  \cdot \prod_{k=1}^N \mathbf{a}^k_{t^k(l)}\big)_{l=1}^L \, .
+%}
+%%%%%%%%%%%%%%%%%
+As a simple illustration, consider, in the setting of equation \eqref{eq_primal_discr}, an extension where is added a function of the total mass
+\eq{
+\min_{\mathbf{R}\in\RR^{I\times J}} F_1(P^X_\# \mathbf{R}) + F_2(P^Y_\# \mathbf{R}) + F_3(m_\# \mathbf{R}) + \epsilon \KL(\mathbf{R}|\mathbf{K})\, .
+}
+where $m:(x,y) \to \{0\}$ ($m_\#$ returns the total mass) and $F_3:\RR\to \RR\cup \{\infty\}$ is a proper, lower semicontinuous and convex function.
+Applying the reasoning above, and after some rearrangement (here $Z$ is still a product space and thus it is convenient to store $\mathbf{R}$ as a matrix), one obtains Algorithm \ref{algo_scaling_mass}. If $F_{3}$ is the indicator of equality with a positive real number, this algorithm solves the partial optimal transport problem \cite{caffarelli2010free,figalli2010optimal} but more general $F_{3}$ can be considered such as, for instance, a range constraint on the total mass.
+
+\begin{algorithm}
+\caption{Scaling algorithm with a function on the total mass}\label{algo_scaling_mass}
+\begin{algorithmic}[1]
+\Function{MassScalingAlgo}{$(\proxdiv_{F_k})_{k=1}^3,\mathbf{K},\mathbf{\d x}, \mathbf{\d y}, \epsilon$}\Comment{$\mathbf{K}$ is a matrix.}
+   \State $\mathbf{b} \gets \ones_J$
+   \State $z \gets 1$
+   \Repeat
+		\State $\mathbf{a} \gets \proxdiv_{F_1}(z\cdot \mathbf{K}(\mathbf{b} \odot \mathbf{\d y}))$
+		\State  $\mathbf{b} \gets \proxdiv_{F_2}(z\cdot \transp{\mathbf{K}}(\mathbf{a} \odot \mathbf{\d x}))$
+		\State  $z \gets \proxdiv_{F_3}(\transp{(\mathbf{a} \odot \mathbf{\d x})}\mathbf{K}(\mathbf{b} \odot \mathbf{\d y}))$
+   \Until{convergence}%\label{euclidendwhile}
+   \State \textbf{return} $z\cdot(\mathbf{a}_i \mathbf{K}_{i,j} \mathbf{b}_j)_{i,j}$\Comment{The primal optimizer}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}

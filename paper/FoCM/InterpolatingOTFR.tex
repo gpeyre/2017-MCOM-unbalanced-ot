@@ -1,0 +1,66 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Article 
+% Version 1. (01/06/15)
+%
+% Created by:
+% Lénaïc Chizat
+% CERAMADE, université Paris Dauphine
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt]{article}
+
+%\documentclass[11pt]{amsart}
+
+% Be sure to use PDF Latex
+\pdfoutput=1
+
+\usepackage{mystyle}
+\usepackage{url}
+\providecommand{\keywords}[1]{\textbf{\textit{Keywords}} #1}
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+\newcommand{\todo}[1]{{\color{red}\textbf{TODO:} #1}}
+
+\begin{document}
+\title{An Interpolating Distance between\\Optimal Transport and Fisher-Rao metrics\blfootnote{2010 \emph{Mathematics subject classification. }49-XX}\blfootnote{Communicated by Hans Munthe-Kaas.}
+ }
+\author{Lenaic Chizat \and  Gabriel Peyr\'e \and Bernhard Schmitzer \and Fran\c{c}ois-Xavier Vialard\footnote{\texttt{vialard@ceremade.dauphine.fr}}\\
+CEREMADE, CNRS, Universit\'e Paris-Dauphine \\ INRIA, Project team Mokaplan}
+%\address{CEREMADE, CNRS, Universit\'e Paris-Dauphine \\ INRIA, Project team Mokaplan}
+%\email{chizat,peyre,schmitzer,vialard@ceremade.dauphine.fr}
+%\author{
+%\begin{tabular}{c}
+%	Lenaic Chizat \qquad Gabriel Peyr\'e \\
+%	Bernhard Schmitzer \qquad Fran\c{c}ois-Xavier Vialard\\[2mm]
+%	Ceremade, Universit\'e Paris-Dauphine \\
+%	\texttt{\small\{chizat,peyre,schmitzer,vialard\}@ceremade.dauphine.fr}
+%\end{tabular}
+%}
+
+
+\maketitle
+
+
+
+
+ 
+\input{sections/Abstract}
+\keywords{Unbalanced optimal transport $\cdot$ Wasserstein $L^2$ metric $\cdot$ Fisher-Rao metric $\cdot$ Positive Radon measures}
+\input{sections/Introduction}
+\input{sections/Theory}
+\input{sections/Interpolation}
+\input{sections/Geodesics}
+\input{sections/Numerics}
+\input{sections/Conclusion}
+
+
+\bibliographystyle{abbrv}
+\bibliography{bibchizat}
+\end{document}

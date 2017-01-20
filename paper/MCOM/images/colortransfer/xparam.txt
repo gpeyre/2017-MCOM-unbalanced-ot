@@ -1,0 +1,14 @@
+Color transfer 
+in the Lab (3d) domain, imbedded into [0,1]^3 discretized into 64x32x32 color bins
+(unbalanced) optimal transport with cost |x-y|^2 and 
+
+Parameters:
+epsilon= 2*10^(-3)
+niter  = 2000
+
+Marginal of the source exact (OT):
+
+Relaxed second marginal:
+For KL: 0.03*KL
+For RG: [0, 5] (i.e marginal belongs to [0, 5*mu]
+For TV: 0.2*TV

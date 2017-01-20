@@ -1,0 +1,338 @@
+% !TEX root = ../DynamicToStatic.tex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Examples
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section[Examples]{Examples}\label{sec:Examples}
+
+In this section we discuss some examples which fit into the framework developed in sections \ref{sec : general static problem} and \ref{sec:DynamicToStatic}. Optimal partial transport is first treated and then our initial motivating example: the Wasserstein-Fisher-Rao metric. In this section, $\Omega$ is a convex compact set in $\R^d$.
+
+\subsection{An Optimal Partial Transport Problem}
+\label{sec:ExamplesPartial}
+We consider an optimal transport problem with relaxed marginal constraints, which for $\rho_0,\rho_1 \in \mathcal{M}_+(\Omega)$ and $p\in \mathbb{N}$, $p\geq 2$, consists in solving
+ \begin{equation}\label{eq:WTV}
+ \inf_{\tilde{\rho}_0, \tilde{\rho}_1} \frac1p W_p^p(\tilde{\rho}_0,\tilde{\rho}_1) + \delta \cdot (|\rho_0- \tilde{\rho}_0|_{TV}+|\rho_1 - \tilde{\rho}_1|_{TV}) \, .
+ \end{equation}
+ \begin{proposition}\label{prop: constraints partial}
+The value of the infimum is left unchanged when adding the constraints $\tilde{\rho}_i \leq \rho_i$ ($i=0,1$).
+ \end{proposition}
+ \begin{proof}
+ Let $\gamma \in \mathcal{M}_+(\Omega^2)$ be any coupling between $\tilde{\rho}_0$ and $\tilde{\rho}_1$ and let $\gamma^* \in \mathcal{M}_+(\Omega^2)$ be such that $\gamma^* \leq \gamma$ and $(\Proj_0)_\# \gamma^* =\rho_0 \wedge (\Proj_0)_\# \gamma$. By construction, one has
+ \begin{align*}
+ |\rho_0-(\Proj_0)_\# \gamma| - |\rho_0-(\Proj_0)_\# \gamma^*| = &|(\Proj_0)_\# \gamma-(\Proj_0)_\# \gamma^*| = |\gamma-\gamma^*| \, ,\\
+  |\rho_1-(\Proj_1)_\# \gamma| - |\rho_1-(\Proj_1)_\# \gamma^*| \geq &- |(\Proj_1)_\# \gamma-(\Proj_1)_\# \gamma^*| = - |\gamma-\gamma^*|.
+ \end{align*}
+By denoting $F$ the functional in \eqref{eq:WTV} written as a function of  a coupling, it holds
+ \[
+ F(\gamma)-F(\gamma^*) \geq \int_{\Omega^2} (|y-x|^p/p)\d (\gamma-\gamma^*) \geq 0 \, .
+ \]
+A similar truncation procedure for the other marginal leads to the result.
+ \end{proof}
+%
+Problem \eqref{eq:WTV} is similar to the distances introduced in \cite{piccoli2013properties} and \cite{piccoli2014generalized} defined as the $p$-th root of 
+\begin{equation}\label{eq:PiccoliRossi}
+\inf_{\tilde{\rho}_0, \tilde{\rho}_1} W_p(\tilde{\rho}_0,\tilde{\rho}_1) + \delta(|\rho_0- \tilde{\rho}_0|_{TV}+|\rho_1 - \tilde{\rho}_1|_{TV})
+\end{equation}
+with the difference that the problem we consider is invariant under mass rescaling. The link between this problem and the optimal partial transport problem, i.e.\ an optimal transport problem where one chooses the amount of mass which is transported, was mentioned in \cite{ChizatOTFR2015} and is recalled below.
+%
+Note that what follows is also true for to the case $p=1$ and more general costs on $\Omega^2$, up to a slight adaptation of the duality formulas. 
+%
+The next proposition states that problem \eqref{eq:WTV} fits into our framework if we define the cost function as
+\begin{align}
+\label{eq:POT static cost}
+c(x_0,m_0,x_1,m_1) =
+\min \left( \frac{|x_1-x_0|^p}{p} ,2\delta\right) \cdot \min (m_0,m_1) + \delta |m_1-m_0|
+\end{align}
+which is l.s.c.\ and jointly sublinear in the variables $(m_0,m_1)$. 
+%
+\begin{proposition}[Link to our framework and optimal partial transport]
+Let $C_K$ be the static cost defined as in \eqref{eq: static problem}, with the cost function \eqref{eq:POT static cost}. Then it is equal to \eqref{eq:WTV} and one has
+\begin{equation}
+\label{partial OT Lagrangian}
+C_K(\rho_0,\rho_1) - \delta (\rho_0(\Om)+\rho_1(\Om)) = \inf_{\gamma \in \Gamma_{\leq}(\rho_0,\rho_1)}\int_{\Omega^2} \left( |x_1-x_0|^p/p - 2\delta \right) \d \gamma
+\end{equation}
+where $\Gamma_{\leq}(\rho_0,\rho_1)$ is the subset of $\mathcal{M}_+(\Omega^2)$ such that the first and second marginals are upper bounded by $\rho_0$ and $\rho_1$, respectively.
+\end{proposition}
+\begin{remark}
+The right-hand side of \eqref{partial OT Lagrangian} is the Lagrangian formulation of the optimal partial transport problem. In this formulation, one replaces the amount of mass $m$ to be transported by a Lagrangian multiplier, which corresponds to $2\delta$. It is clear that our problem computes an optimal partial transport for some $m$ (the total mass of the optimal $\gamma$) but in general, all values of $m$ cannot be recovered by making $\delta$ vary (think of atomic measures). This is however the case under the assumptions of \cite[Corollary 2.11]{caffarelli2010free}.
+\end{remark}
+\begin{proof}
+Let us denote by $C_{par}$ the infimum in the right-hand side of \eqref{partial OT Lagrangian}.
+%
+For $\rho_0, \rho_1 \in \mathcal{M}_+(\Omega)$ and any semi-couplings $(\gamma_0,\gamma_1)\in \Gamma(\rho_0,\rho_1)$, let $m_0$, $m_1$ be the densities of $\gamma_0$, $\gamma_1$ w.r.t.\ some $\gamma \in \mathcal{M}_+(\Omega^2)$ with $\gamma_0$, $\gamma_1 \ll \gamma$. Introduce $\bar{\gamma}=\min (m_0,m_1) \cdot \gamma|_{D}$ with $D=\{(x_0,x_1)\in \Om^2 : |x_1-x_0|^p/p\leq 2 \delta \}$. It holds $\bar{\gamma} \in \Gamma_{\leq}(\rho_0,\rho_1)$ and
+\begin{align*}
+J_K(\gamma_0,\gamma_1) &= \int_{\Omega^2} c(x_0,m_0,x_1,m_1) \d \gamma(x_0,x_1) \\
+&= \int_{\Omega^2} \frac1p |x_1-x_0|^p \d \bar{\gamma} + \delta \int_{\Omega^2} (\d |\gamma_0-\bar{\gamma} | + \d |\gamma_1-\bar{\gamma}|) \\
+&= \delta |\rho_0|_{TV}+ \delta |\rho_1|_{TV} + \int_{\Omega^2} \left(\frac1p |x_1-x_0|^p -2\delta \right) \d \bar{\gamma} \, .
+\end{align*}
+This implies $C_K -\delta (|\rho_0|_{TV}+|\rho_1|_{TV}) \geq C_{par}$.
+%
+The opposite inequality comes from the remark that the infimum defining $C_{par}$ is unchanged by adding the constraint $\text{supp} (\gamma)\subset D$. 
+%
+Let $\gamma \in \Gamma_{\leq}(\rho_0,\rho_1)$ be supported on $D$ and define for $i\in \{0,1\}$ $\mu_i =\rho_i-(\Proj_i )_\# \gamma \in \mathcal{M}_+(\Omega)$. Let us build a couple of semi-couplings 
+\[
+\gamma_i = \gamma + \diag_\# (\mu_0\wedge \mu_1) + \diag_\# (\mu_i- \mu_0 \wedge \mu_1), \, i \in \{0,1\},
+\]
+where $\diag : x \mapsto (x,x)$ lifts $\Omega$ to the diagonal in $\Omega^2$. Decomposed this way, one obtains directly
+\[
+J_K(\gamma_0,\gamma_1) = \delta |\rho_0|_{TV}+ \delta |\rho_1|_{TV} + \int_{\Omega^2} \left(\frac1p |x_1-x_0|^p -2\delta \right) \d \gamma \, ,
+\]
+Hence $C_K -\delta (|\rho_0|_{TV}+|\rho_1|_{TV}) \leq C_{par}$. Finally, one has $C_{par} + \delta (|\rho_0|_{TV}+|\rho_1|_{TV}) = \inf \eqref{eq:WTV}$ directly, by applying Proposition \ref{prop: constraints partial} and rewriting \eqref{eq:WTV} as a minimization on a variable $\gamma \in \Gamma_{\leq}(\rho_0,\rho_1)$.
+\end{proof}
+
+Now consider the infinitesimal cost
+\begin{align}
+\label{eq:POT dynamic cost}
+f : (\rho,\omega,\zeta) \mapsto 
+\begin{cases}
+\frac1p \frac{|\omega|^p}{\rho^{p-1}} + \delta |\zeta| & \tn{ if } \rho>0 \\
+\delta |\zeta|  & \tn{ if } \rho = |\omega| =0 \\
++ \infty & \tn{ otherwise .}
+\end{cases}
+\end{align}
+which satisfies the conditions of Definition \ref{def: infinitesimal cost} (it is implicitly independent of the space variable $x$) .
+
+
+\begin{proposition}[Cost on the path space]
+The static and dynamic costs defined in \eqref{eq:POT static cost} and \eqref{eq:POT dynamic cost} are related by
+\begin{equation}\label{eq: stat/dyn TV}
+	c (x_0,m_0,x_1,m_1) =
+	\inf_{ (x(t),m(t))}  \int_0^1 f(m(t),m(t) x'(t),m'(t)) \, \d t\,
+\end{equation}
+for $(x(\cdot),m(\cdot)) \in C^1([0,1],\Omega \times [0,+\infty[)$, $x(i) = x_i$ and $m(i)=m_i$, for $i= 0,1$.
+\end{proposition}
+
+\begin{proof}
+First, for any $C^1$ path $(x,m)$ we denote by $\bar{m} = \min_{t\in [0,1]} m(t)$ its minimum mass. It holds
+\begin{align*}
+\int_0^1 f(m(t),m(t)x'(t),m'(t)) \d t &= \int_0^1 \frac1p |x'(t)|^p m(t) \d t + \delta \int_0^1 |m'(t)| \d t \\
+&\geq \bar{m}  \int_0^1 \frac1p |x'(t)|^p\d t + \delta (|m_0-\bar{m} | + |m_1-\bar{m}| ) \\
+& \geq c(x_0,m_0,x_1,m_1) \, .
+\end{align*}
+For the opposite inequality, let us build a minimizing sequence. The infimum is clearly left unchanged when one considers piecewise $C^1$ trajectories. In the case where $|x_0-x_1|^p/p \leq 2\delta$, we divide the time interval into three segments $[0,\epsilon], [\epsilon, 1-\epsilon]$ and $[1-\epsilon, 1]$ and build a piecewise $C^1$ trajectory by making pure variation of mass (or staying on place) in the first and the third segment, and constant speed transport of the mass $\bar{m} = \min(m_0,m_1)$ during the second segment. This way, we obtain that the right-hand side of \eqref{eq: stat/dyn TV} is upper bounded by
+\[
+|m_1-m_0| + \lim_{\veps \to 0}  \int_\veps^{1-\veps} \frac1p |x'(t)|^p\bar{m} \d t = c(x_0,m_0,x_1,m_1)\, .
+\]
+In the case $|x_0-x_1|^p/p \geq 2\delta$, one obtain the same inequality by building a similar path, but by transporting only an amount $\veps$ of mass in the second segment. 
+\end{proof}
+
+\begin{theorem}\label{th:POT dyn/stat}
+The equivalence between the static and the dynamic formulations $C_D=C_K$ holds and $C_K^{1/p}$ defines a distance on $\mathcal{M}_+(\Omega)$ which is continuous under weak* convergence. We have the dual formulation
+\begin{align*}
+C_K(\rho_0,\rho_1) &=  \!\!\!\! \sup_{(\phi,\psi) \in C(\Omega)^2} \int_{\Omega} \phi \, \d \rho_0 + \int_{\Omega} \psi \, \d \rho_1
+\end{align*}
+subject to, for all $(x,y)\in \Omega^2$, $ \phi(x) + \psi(y) \leq \frac1p |y-x|^p$ and $\phi(x), \psi(y) \leq \delta$. Equivalently, 
+\begin{align*}
+C_K(\rho_0,\rho_1) &= \!\!\!\! \sup_{\varphi \in C^1([0,1]\times \Omega)} \int_{\Omega} \varphi(1,\cdot) \d \rho_1 - \int_{\Omega} \varphi(0,\cdot) \d \rho_0 \, ,
+\end{align*}
+subject to $ |\varphi| \leq \delta $ and $ \partial_t \varphi + \frac{p-1}{p} |\nabla \varphi|^\frac{p}{p-1} \leq 0 $ .
+
+\end{theorem}
+\begin{proof}
+We first prove that $c^\frac1p$ defines a metric on $\text{Cone}(\Omega)$. This is mainly a consequence of the inequality
+\[
+(a+c)^p+b+d \leq \left( (a^p+b)^\frac1p + (c^p+d)^\frac1p \right)^p
+\]
+which holds true for $(a,b,c,d)\in \R_+^4$ and $p\in\N^*$ (this becomes clear when the right-hand term is expanded). Thus, if we take $A=(x_0,m_0)$, $B=(x_1,m_1)$ and $C=(x_2,m_2)$, three points in $\Omega \times [0,+\infty[$ satisfying $\frac1p |x_2-x_0|^p\leq 2\delta$ (the other case is easy) and, without loss of generality, $1 = m_0 \leq m_2$. Remark that there always exists $\tilde{B}=(\tilde{x}_1,\tilde{m}_1)$ satisfying $|x_0-\tilde{x}_1|^p\leq2p\delta$, $|x_2-\tilde{x}_1|^p\leq 2p \delta$, $m_0\leq \tilde{m}_1 \leq m_2$ and $c(A,B)\geq c(A,\tilde{B})$, \, $c(C,B)\geq c(C,\tilde{B})$.
+We drop the $1/p$ factor for clarity and obtain
+\begin{align*}
+c(A,C) &\leq \left(|x_2-\tilde{x_1}|+|\tilde{x}_1-x_0| \right)^p+ (|m_2-\tilde{m}_1|+|\tilde{m}_1-m_0|)\\
+& \leq \left( \left( |x_2-\tilde{x}_1|^p+|m_2-\tilde{m}_1| \right)^\frac1p + \left( |\tilde{x}_1-x_0|^p+|\tilde{m}_1-m_0| \right)^\frac1p \right)^p \\
+& \leq \left( c(A,\tilde{B})^\frac1p + c(\tilde{B},C)^\frac1p \right)^p \leq \left( c(A,B)^\frac1p + c(B,C)^\frac1p \right)^p\, .
+\end{align*}
+  Thus $c$ satisfies all conditions of Theorem \ref{th : continuity continuous static}. This implies that $C_K$ is continuous in the weak* topology and thus Theorem \ref{th: continuous static general} applies. The duality results are consequences of Proposition \ref{prop: dynamic dual},  Theorem \ref{th: duality} and direct calculations.
+\end{proof}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection[A Static Formulation for WF]{A Static Formulation for $\WF$}
+\label{sec:equivalence WF}
+
+\begin{definition}[The $\WF$ distance \cite{ChizatOTFR2015,new2015kondratyev}]
+\label{def:WF}
+For a parameter $\delta \in ]0,+\infty[$ consider the convex, positively homogeneous, l.s.c.\ function
+\begin{equation}
+f : \R \times \R^d \times \R \ni (\rho,\omega, \zeta) \mapsto
+\begin{cases}
+\frac12 \frac{|\omega|^2+ \delta^2\, \zeta^2}{\rho} & \tn{if } \rho>0 \, ,\\
+0 & \tn{ if } (\rho,\omega,\zeta)=(0,0,0)\, , \\
++ \infty & \tn{ otherwise,} 
+\end{cases} 
+\end{equation}
+and define, for $\rho_0,\rho_1 \in \mathcal{M}_+(\Omega)$,
+\begin{equation}
+	\label{eq:WF}
+	\WF(\rho_0,\rho_1)^2 \eqdef 
+		\inf_{(\rho,\omega,\zeta) \in \mathcal{CE}_0^1(\rho_0,\rho_1)} \int_{[0,1] \times \Omega}
+		f\left( \dens{\rho}{\lambda},\dens{\omega}{\lambda},\dens{\zeta}{\lambda} \right)
+		\d \lambda
+\end{equation}
+where $\lambda \in \mathcal{M}_+([0,1] \times \Omega)$ chosen such that $\rho$, $\omega$, $\zeta \ll \lambda$. Due to the 1-homogeneity of $f$ the integral does not depend on the choice of $\lambda$.
+\end{definition}
+
+
+We now show that $\WF$ admits a static formulation, which belongs to the class of models introduced in Section \ref{sec : general static problem}. First, it is clear that $\WF$ fits into the previous framework if we choose the cost function $c$ to be $\WF(m_0 \delta_{x_0}, m_1 \delta_{x_1})^2$. This distance has been computed in~\cite{ChizatOTFR2015} and is given by
+	\begin{align}
+		\label{eq:GeneralizedCost:OTFR}
+		c(x_0,m_0,x_1,m_1) & = 2 \delta^2 \left( \vphantom{\sum} m_0 + m_1 - 2\sqrt{m_0\,m_1} \cdot \trucos(|x_0-x_1|/(2 \delta))\, .
+		\right) 
+		\end{align}
+where $\trucos : z \mapsto \cos(|z|\wedge \frac{\pi}{2})$.
+Remark that $c$ is a cost function and that its square root defines a distance on $\Omega \times \R_+$ (where we identify points with zero mass $\Omega \times \{0\}$) since it is derived from the $\WF$ distance restricted to Dirac measures. It is direct to see that $c$ satisfies the assumptions of Theorem \ref{th : continuity continuous static}, for $p=2$.
+%
+\begin{theorem}[Continuous static formulation]
+\label{th: continuous static}
+Choosing the cost function \eqref{eq:GeneralizedCost:OTFR}, it holds
+\begin{equation}
+\label{eq : continuous static}
+\WF^2(\rho_0,\rho_1) = \min_{(\gamma_0,\gamma_1) \in \Gamma(\rho_0,\rho_1)} J_K(\gamma_0,\gamma_1)\,.
+\end{equation}
+\end{theorem}
+\begin{proof}
+This is a particular case of Theorem \ref{th: continuous static general}.
+\end{proof}
+%
+\begin{remark}
+This theorem can be reformulated, in a nutshell, as
+\begin{align*}
+	& \frac{1}{2\delta^2} \WF^2(\rho_0,\rho_1) 
+		=  |\rho_0|_{TV} + |\rho_1|_{TV} + \\
+		& \qquad \inf_{(\gamma_0,\gamma_1) \in \Gamma(\rho_0,\rho_1)} - 2 \int_{|y-x|<\pi} \cos(|y-x|/(2\delta)) \d (\sqrt{\gamma_0 \gamma_1})(x,y)  \, .
+\end{align*}
+where $\sqrt{\gamma_0\gamma_1} \eqdef \left(\dens{\gamma_0}{\gamma} \dens{\gamma_1}{\gamma}\right)^\frac12 \gamma$ for any $\gamma$ such that $\gamma_0,\gamma_1 \ll \gamma$.
+\end{remark}
+%
+\begin{corollary}
+It holds
+\begin{align*}
+\label{eq : dual static}
+\frac{1}{2\delta^2} \WF^2(\rho_0,\rho_1) \quad =
+& \sup_{(\phi,\psi)\in C(\Omega)^2  }  \int_\Omega \phi(x) \d \rho_0 + \int_\Omega \psi(y) \d \rho_1 \\
+\tn{subject to, $\forall (x,y)\in \Omega^2$: }\quad
+& \phi(x) \leq 1\,, \quad \psi(y) \leq 1\, , \\
+&(1-\phi(x))(1-\psi(y)) \geq \trucos^2\left(|x-y|/(2\delta)\right)\, .
+\end{align*}
+\end{corollary}
+%
+\begin{proof}
+By direct computations we find that $c(x,\cdot,y, \cdot) = \iota^*_{Q(x,y)}$ with
+\[
+Q(x,y) = \left\{ (a,b)\in \R^2 : a,b\leq 1 \tn{ and } (1-a)(1-b)\geq \trucos^2\right(|y-x|/(2\delta)\left) \right\} \, 
+\]
+and apply Theorem \ref{th: duality}.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Gamma Convergence
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection[Gamma-convergence of Static WF]{$\Gamma$-convergence of Static $\WF$}
+\label{sec:StaticGamma}
+
+In~\cite{ChizatOTFR2015} the limit of the growth penalty parameter $\delta \rightarrow \infty$ of $\WF$ is studied and related to classical optimal transport. Here we give the corresponding result for the static problems in terms of $\Gamma$-convergence \cite{GammaConvergenceBraides2002}. Recall that this implies both convergence of the optimal values as well as convergence of minimizers.
+%
+We now denote by $c_\delta$ the cost defined in \eqref{eq:GeneralizedCost:OTFR} to emphasize its dependency on $\delta$.
+
+\begin{theorem}[(Almost) Classical OT as Limit of $\WF$]
+	\label{th:static gamma convergence}
+	Consider the following two generalized static optimal transport problems:
+	\begin{align}
+		\label{eq:modified static WF}
+		J_\delta(\gamma_0,\gamma_1) & = \int_{\Omega^2} c_\delta \big(x,y,\gamma_0(x,y),\gamma_1(x,y) \big)
+			\,\d x\,\d y - 2\,\delta^2 (\sqrt{\gamma_0(\Omega^2)}-\sqrt{\gamma_1(\Omega^2)})^2 \\
+		J_\infty(\gamma_0,\gamma_1) & = \begin{cases}
+			0 & \text{if } \gamma_0=0 \text{ or } \gamma_1 = 0\,, \\
+			\int_{\Omega^2} |x-y|^2 \d\gamma_0(x,y) \cdot  \frac{\sqrt{\alpha}}{2} & \text{if } \gamma_1 = \alpha \, \gamma_0 \text{ for some } \alpha>0 \,, \\
+			\infty & \text{otherwise.}
+			\end{cases}
+	\end{align}
+	Then $J_\delta$ $\Gamma$-converges to $J_\infty$ as $\delta \rightarrow \infty$.
+\end{theorem}
+\begin{remark}
+	One has $\lim_{\delta \rightarrow \infty} \WF(\rho_0,\rho_1) = \infty$ if $\rho_0(\Omega) \neq \rho_1(\Omega)$. Consequently, to properly study the limit, we subtract the diverging terms in \eqref{eq:modified static WF}. Conversely, we slightly modify the classical OT functional, to assign finite cost when the two couplings are strict multiples of each other. The corresponding optimization problem is solved by computing the optimal transport plan between normalized marginals and then multiplying by the geometric mean of the marginal masses.
+\end{remark}
+%
+\noindent The proof uses the following Lemma.
+\begin{lemma}[Sqrt-Measure]
+	\label{lemma:SqrtMeasure1}
+Let $A \subset \R^n$ be a compact set. The function
+\begin{align}
+	\mc{M}_+(A)^2 \ni \mu \mapsto -\sqrt{\mu_1 \cdot \mu_2}(A)
+\end{align}
+is weakly* l.s.c.\ and bounded from below by $\sqrt{\mu_1(A)} \cdot \sqrt{\mu_2(A)}$. The lower bound is only obtained, if $\mu_1=0$ or $\mu_2=0$ or $\mu_1 = \alpha \cdot \mu_2$ for some $\alpha > 0$.
+\end{lemma}
+\begin{proof}
+	With $f(x) = (\sqrt{x_1}-\sqrt{x_2})^2/2$ and a reference measure $\nu \in \mc{M}_+(A)$ with $\mu \ll \nu$ we can write
+	\begin{align*}
+		-\sqrt{\mu_1 \cdot \mu_2}(A) & = \int_A f\left( \frac{\mu}{\nu} \right)\,\d\nu - \mu_1(A)/2 - \mu_2(A)/2
+	\end{align*}
+	Since $f$ is 1-homogeneous, the evaluation does not depend on the choice of $\nu$. As $f$ is convex, l.s.c., bounded from below, $A$ is bounded, and total masses converge, lower semi-continuity of the functional now follows from \cite[Thm.~2.38]{ambrosio2000functions} (see proof of Proposition \ref{prop:KMinimizers} for adaption to $\Omega$ closed).
+		
+	For the lower bound, let $\mu_1 = \lambda \cdot \mu_2 + \mu_{1,\perp}$ be the Radon-Nikod\'ym decomposition of $\mu_1$ w.r.t.~$\mu_2$. Then have
+	\begin{align*}
+		-\sqrt{\mu_1 \cdot \mu_2}(A) & = - \int_A \sqrt{\lambda}\, \d\mu_2
+			\geq - \left( \int_A \lambda\, \d\mu_2 \cdot \mu_2(A) \right)^{1/2}
+			\geq -\left(\mu_1(A) \cdot \mu_2(A) \right)^{1/2}
+	\end{align*}
+	where the first inequality is due to Jensen's inequality, with equality only if $\lambda$ is constant. The second inequality is only an equality if $\mu_{1,\perp}=0$.
+\end{proof}
+
+
+\begin{proof}[Proof of Theorem \ref{th:static gamma convergence}]
+\textbf{Lim-Sup.}
+For every pair $(\gamma_0,\gamma_1)$ a recovery sequence is given by the constant sequence $(\gamma_0,\gamma_1)_{n\in \N}$. The cases $\gamma_i=0$ for $i=0$ or $1$, and $\gamma_1 \neq \alpha \, \gamma_0$ for every $\alpha>0$ are trivial. Therefore, let now $\gamma_1 = \alpha\,\gamma_0$ for some $\alpha>0$.
+We find
+\begin{align*}
+	J_\delta(\gamma_0,\alpha\,\gamma_0) & = \int_{\Omega^2} 2\,\delta^2 \left[
+		(1+\alpha) - 2 \sqrt{\alpha}\,\trucos(|x-y|/(2\delta)) \right] \d\gamma_0(x,y) \\
+		& \qquad - 2\,\delta^2\,\gamma_0(\Omega^2)\,(1-\sqrt{\alpha})^2 \\
+	\intertext{Now use $\trucos(z) \geq 1-z^2/2$ to find:}
+	& \leq \int_{\Omega^2} 4\,\delta^2\,\sqrt{\alpha} \frac{|x-y|^2}{8\,\delta^2}\, \d\gamma_0(x,y) \\
+	& = J_\infty(\gamma_0,\gamma_1)
+\end{align*}
+
+\textbf{Lim-Inf.} For a sequence of couplings $(\gamma_{0,k},\gamma_{1,k})_{k \in \N}$ converging weakly* to some pair $(\gamma_{0,\infty},\gamma_{1,\infty})$ we now study the sequence of values $J_k(\gamma_{0,k},\gamma_{1,k})$. Note first, that $J_k$ is weakly* l.s.c.~since the integral part is l.s.c.~(cf.~Proposition \ref{prop:KMinimizers}) and the second term is continuous (total masses converge).
+
+Since $\Omega$ is compact, there is some $N_1 \in \N$ such that for $k>N_1$, we have
+\begin{align*}
+	1-z^2/2 \leq \trucos(z) \leq 1-z^2/2+z^4/24 \qquad \text{for} \qquad z=|x-y|/(2\,k),\,x,y \in \Omega\,.
+\end{align*}
+And therefore for $k>N_1$ and any coupling pair, denoting $A \eqdef \sqrt{\gamma_0(\Omega^2)} - \sqrt{\gamma_1(\Omega^2)}$, 
+\begin{align*}
+	J_k(\gamma_0,\gamma_1) & = 2\,k^2 \left(
+	\int_{\Omega^2} \left( \sqrt{\gamma_0(x,y)}-\sqrt{\gamma_1(x,y)} \right)^2 \d x\, \d y
+	- A^2 \right) \nonumber \\
+	& \quad + 4\,k^2\,\int_{\Omega^2} \frac{|x-y|^2}{8\,k^2}\,\sqrt{\gamma_0(x,y)\,\gamma_1(x,y)}\, \d x\, \d y \\
+	& \quad - I \cdot 4\,k^2\,\int_{\Omega^2} \frac{|x-y|^4}{24 \cdot (2\,k)^4} \,\sqrt{\gamma_0(x,y)\,\gamma_1(x,y)}\, \d x\, \d y
+\end{align*}
+for some $I \in [0,1]$.
+
+Since $\Omega$ is bounded, by means of Lemma \ref{lemma:SqrtMeasure1} and since the total masses of $\gamma_{i,k}$, $i=0,1$ are converging towards the total masses of $\gamma_{i,\infty}$ as $k \rightarrow \infty$, there is a constant $C>0$ and some $N_2 \geq N_1$ such that the coefficient for $I$ in the third line can be bounded by $C/k^2$ for $k > N_2$ for when calling with arguments $(\gamma_{0,k},\gamma_{1,k})$.
+
+For the first line we write briefly $2\,k^2\,F(\gamma_0,\gamma_1)$. From Lemma \ref{lemma:SqrtMeasure1} we find that $F$ is weakly* l.s.c., $F\geq0$ and $F(\gamma_0,\gamma_1)=0$ if and only if $(\gamma_0,\gamma_1) \in \mc{S}$ with
+\begin{equation*}
+	\mc{S} = \left\{ (\gamma_0,\gamma_1) \in \mc{M}_+(\Omega^2)^2 \,\colon\, \gamma_0 = 0 \tn{ or } \gamma_1 = 0 \tn{ or } \gamma_1 = \alpha \cdot \gamma_0 \tn{ for some } \alpha > 0 \right\}\,.
+\end{equation*}
+%
+It follows that for $N_2 < k_1 < k_2$ one has
+\begin{align*}
+	J_{k_2}(\gamma_{0,k_2},\gamma_{1,k_2}) & = J_{k_1}(\gamma_{0,k_2},\gamma_{1,k_2}) + 2\,(k_2^2-k_1^2)\,F(\gamma_{0,k_2},\gamma_{1,k_2}) + I \cdot C/k_1^2
+\end{align*}
+for some $I \in [-1,1]$. Now consider the joint limit:
+\begin{align*}
+	\liminf_{k \rightarrow \infty} J_k(\gamma_{0,k},\gamma_{1,k}) & \geq \liminf_{k \rightarrow \infty} J_{k_1}(\gamma_{0,k},\gamma_{1,k}) + \liminf_{k \rightarrow \infty} 2(k^2 - k_1^2)\,F(\gamma_{0,k},\gamma_{1,k}) - C/k_1^2 \\
+	& \geq J_{k_1}(\gamma_{0,\infty},\gamma_{1,\infty}) + 2(k_2^2 - k_1^2)\,F(\gamma_{0,\infty},\gamma_{1,\infty}) - C/k_1^2
+\end{align*}
+for any $N_2 < k_1 < k_2$ (by using weak* l.s.c.~of $J_{k_1}$ and $F$ and non-negativity of $F$). Since $J_{k_1} > - \infty$ and $k_2$ can be chosen arbitrarily large, we find
+\begin{equation*}
+	\liminf_{k \rightarrow \infty} J_k(\gamma_{0,k},\gamma_{1,k}) = \infty \quad \text{for} \quad (\gamma_{0,\infty},\gamma_{1,\infty}) \notin \mc{S}\,.
+\end{equation*}
+By reasoning analogous to the lim-sup case (adding the $z^4$ term in the $\trucos$-expansion to get a lower bound and bounding its value as above) we find:
+\begin{equation*}
+	\liminf_{k \rightarrow \infty} J_k(\gamma_{0,k},\gamma_{1,k}) \geq J_\infty(\gamma_{0,\infty},\gamma_{1,\infty}) \quad \text{for} \quad (\gamma_{0,\infty},\gamma_{1,\infty}) \in \mc{S}\,.
+%	\qedhere  %% BUG with ARMA style
+\end{equation*}
+\end{proof}

@@ -1,0 +1,207 @@
+% !TEX root = ../EntropicNumeric.tex
+\section{Appendix}
+
+\subsection{Reminders on Convex Analysis}
+\label{sec:ApxConvex}
+Let $E$ and $E^*$ be \textit{topologically paired} vector spaces i.e.\ vector spaces assigned with locally convex Hausdorff topology such that all continuous linear functionals on each space can be identified with the elements of the other. The pairing between those spaces is the bilinear form $\langle \cdot , \cdot \rangle : E \times E^* \to \RR$. The convex conjugate of a function $f:E\to \RR \cup \{+\infty\}$ is defined for each $y\in E^*$ by
+\eq{
+f^*(y) \eqdef \sup_{x\in E}\; \langle x, y \rangle - f(x) \, .
+}
+The subdifferential operator is defined at a point $x\in E$ as
+\eq{
+\partial f (x) \eqdef \left\{ y \in E^* ; f(x')-f(x) \geq \langle y, x'-x \rangle \text{ for all $x'\in E$}\right\}
+}
+and is empty if $f(x)=\infty$. Those definitions admit their natural counterparts for functions defined on $E^*$. %The pairing at stake in the following is that between the Banach space $\Lun (T)$ with the strong topology and $\Linf(T)$ with the weak* topology.
+
+\begin{theorem}[Fenchel-Rockafellar \cite{rockafellar1967duality}]
+\label{thm_FR}
+Let $(E,E^*)$ and $(F,F^*)$ be two couples of topologically paired spaces. Let $A : E \to F$ be a continuous linear operator and $A^*:F^* \to E^*$ its adjoint. Let $f$ and $g$ be lower semicontinuous and proper convex functions defined on $E$ and $F$ respectively. If there exists $x \in \dom f$ such that $g$ is continuous at $Ax$, then
+\eq{
+\sup_{x \in E} - f(-x) - g(Ax) = \min_{y^* \in F^*} f^*(A^*y^*) + g^*(y^*)
+}
+and the $\min$ is attained. Moreover, if there exists a maximizer $x\in E$ then there exists $y^*\in F^*$ satisfying $Ax \in \partial g^*(y^*)$ and $A^*y^* \in \partial f(-x)$.
+\end{theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iffalse
+\subsection{Convex Integrands}
+\label{sec:ApxIntegrands}
+Let $(T,\d t)$ be a $\sigma$-finite measure space. The following is an equivalent definition of normality for convex functions.
+\begin{proposition}[Normal convex integrand]
+\label{charac_normal_integrand}
+An extended-real valued function $f$ defined on $T \times \RR$ is a \textit{normal convex integrand} if and only if $f(t,x)$ is proper, convex and l.s.c.\ in $x$ for each $t$, and if there exists a countable collection $U$ of measurable functions $u$ from $T$ to $\RR$ having the following properties:\\
+\indent (i) for each $u\in U$, $f(t,u(t))$ is measurable in $t$;\\
+\indent (ii) for each $t$, $\{ u(t) ; u\in U\} \cap \dom f(t,\cdot)$ is dense in $\dom f(t,\cdot)$.
+\end{proposition}
+The important properties of such integrands is that, if $f$ is a normal convex integrand, then $f(t, u(t))$ is measurable in $t$ for every $u : T\to \RR^n$ measurable, $f^* (=f^*(t,\cdot) )$ is also a normal convex integrand and, as soon as there exists a feasible $u_0\in \Lun(T)$, $I_f(u) \eqdef \int_T f(t,u(t)) \d t$ is a well defined convex functional on $\Lun (T)$ with unambiguous values in $\RR \cup {+ \infty}$. 
+
+%
+The following results can be found in \cite{rockafellar1976integral}.
+%
+\begin{theorem}[minimization interchange]
+\label{thm_mininterchange}
+Let $f$ be a normal convex integrand. It holds
+\eq{
+\inf_{u\in \Lun(T)^n} \int_T f(t,u(t))\d t = \int_T \left\{ \inf_{u\in \RR^n} f(t,u) \right\} \d t
+}
+whenever the first infimum is not $\infty$. Moreover, one has
+\eq{
+\bar{u} \in \argmin_{u\in \Lun(T)^n} I_f (u) \Leftrightarrow \bar{u}(t) \in \argmin_{u\in \RR^n} f(t,u) \text{ $[\d t]$ a.e.}
+}
+\end{theorem}
+%
+\begin{theorem}[reduced minimization]
+\label{thm_reducedmin}
+Let $g: T \times (\RR^n\times \RR^m) \to \RR \cup \{\infty\}$ be a normal convex integrand such that for all $t\in T$,
+\eq{
+f(t,x) \eqdef \inf_{u\in \RR^m} g(t,x,u)
+}
+is a lsc function of $x$, and the infimum defining it is attained. Then, if $U$ is a decomposable linear space of measurable $\RR^m$-valued functions, for arbitrary functional $J$,
+\eq{
+\inf_{x\in \Lun(T)^n,u\in U} J(x) + I_g(x,u) \qandq \inf_{x\in \Lun(t)^n} J(x) + I_f(x)
+}
+are equivalent problems as long as if $J(x) + I_g(x,u)<\infty$ for some $x$ then $u\in U$.
+\end{theorem}
+%
+A sufficient condition for having $f$ lsc in $x$ is given in \cite[prop. 2R]{rockafellar1976integral} and is fulfilled in our case [when $\phi'_\infty >0$] and $R$ lower bounded. \todo{Make this assumption everywhere?} Also, our space $U$ is the space of measurable functions so this condition disappears.
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Properties of Divergence Functionals}
+\label{sec:ApxDivergences}
+
+Here we collect a few results on divergences functionals when they are defined on functions as in \eqref{eq_divergencefunctions} (as opposed to Section \ref{sec_divergencefunc} where they are defined between measures).
+%
+\begin{proposition}\label{prop_divergnormalint}
+Let $\varphi$ be a nonnegative entropy function as in Definition \ref{def_entropy} and $(X,\d x)$ a measured space. Then $(u,v)\in \Lun(X)^2 \mapsto \Diverg_\phi(u|v)$ is an admissible integral functional (in the sense of Definition \ref{def_integralfunctional}) which is positively $1$-homogeneous, convex and weakly lower semicontinuous. Moreover, $\Diverg_\phi^*= \iota_{B_\phi}$ with $B_\phi = \{(a,b)\in\RR^2 ; b \leq -\phi^*(a)\}$.
+\end{proposition}
+%
+\begin{proof}
+As a preliminary, remark that for $(u,v)\in \RR^2$,
+\eq{
+\ol{\Diverg}^*(u|v) = \sup_{a,b\in \RR_+} \begin{cases}
+b(u\cdot a/b + v - \phi(a/b)) & \text{if $b>0$}\\
+a(u-\phi'_\infty) & \text{otherwise}
+\end{cases}
+ = 
+\begin{cases}
+0 & \text{if $v\leq \phi^*(u)$}\\
+\infty & \text{otherwise.}
+\end{cases}
+}
+Now, the function $(x,u,v)\in X\times\RR^2 \mapsto \ol{\Diverg}_\phi(u,v)$ defined in \eqref{eq_divergencefunctions} is a normal integrand since it does not depend on $x$. Moreover, there exists feasible points for $\Diverg_\phi$ (take $v\in \Lun(X)$ and $u=\alpha v$ where $\alpha\in \dom \phi$) and for the integral functional associated to $\ol{\Diverg}^*_\phi$ (given its expression above). The conclusion follows by \cite[Theorem 3C]{rockafellar1976integral}. %For the experssion of the conjugate, see~\cite{LieroMielkeSavareLong} for more details.
+\end{proof}
+%
+\begin{proposition}
+\label{prop_integralconj}
+Let $(X,\d x)$ be a measured space, $v \in \Lun_+(X)$ and $\phi$ a nonnegative entropy function as in Definition \ref{def_entropy}. Then $\Diverg_\phi(\cdot|v)$ is a proper, weakly lower semicontinuous convex function on $\Lun(X)$ and its convex conjugate is given, for $a \in \Linf(X)$, by
+\begin{equation*}
+\Diverg^*_\phi ( a | v) \eqdef  \int_X \phi^*(a(x)) v(x) \d x + \int_X \iota_{\leq \phi'_\infty}(a(x)) \d x
+\end{equation*}
+where $\phi^*$ is the convex conjugate of $\phi$.
+
+Moreover, the subdifferential $\partial \Diverg_\phi (\cdot|v)$ at a point $u\in \Lun(X)$ is the set of functions $a\in \Linf(X)$ such that $\phi'_\infty-a$ is nonnegative and such that, for a.e.\ $x$ where $v(x)>0$, $a(x)\in \partial \phi(u(x)/v(x))$ .
+
+Similarly, the subdifferential $\partial \Diverg^*_\phi (\cdot|v)$ at a point $a\in \Linf(X)$ bounded above by $\phi'_\infty$ is the set of nonnegative functions $u\in \Lun(X)$ such that, for a.e.\ $x$, $u(x)\in \partial \phi^*(a(x)) v(x)$ if $v(x)>0$ and $u(x) = 0$ if $v(x)=0$ and $a(x)<\phi'_\infty$.
+\end{proposition}
+
+\begin{proof}
+By \cite[Proposition 14.45c]{rockafellar2009variational}, $(x,u)\in X\times \RR \mapsto \ol{\Diverg}_\phi(u|v(x))$ is a normal integrand. Then  \cite[Theorem 3C]{rockafellar1976integral} and Corollaries apply and conjugation and subdifferentiation can be performed pointwise.
+\end{proof}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%ù%%
+\subsection{Proof of the Iterates for the Barycenter Problems}
+\label{sec:AppendixBarycenterIterates}
+We explain below how to derive the expression for $h$ which are given in Table \ref{prop_estimatebary}, by applying Proposition \ref{prop_barycenter_general}. Assume that $(s_i)_{i=1}^n\in \RR^n\geq0$ is given. 
+
+\paragraph{Case $\Diverg_\phi = \iota_{\{=\}}$.}
+This case is simple because solving \eqref{eq_prox_barycenter}  boils down to solving the one dimensional problem $\min_h \sum \alpha_k \ol{\KL}(h|s_k)$, which is direct with first order optimality conditions.
+
+\paragraph{Case $\Diverg_\phi = \lambda \KL$.}
+First remark that the assumption of Proposition \ref{prop_barycenter_general} is satisfied and that $h=0$ if and only if for all $k$, $s_k=0$ (otherwise, the joint subdifferential is empty). 
+Since $\phi$ is smooth, its joint subdifferential is a singleton $\partial \ol{\KL}(\tilde{s}|h) = \{(\log(\tilde{s}/h), 1-\tilde{s}/h) \}$ if $\tilde{s},h>0$. Also, since $\ol{\KL}(0|h)=h+ \iota_{[0,\infty[}(h)$, one has $\partial_2 \ol{\KL}(0,h) = \{1\}$ if $h>0$. Thus, optimality conditions in Proposition \ref{prop_barycenter_general} yields the system
+\eq{
+\begin{cases}
+\log \frac{\tilde{s}_k}{h} = \frac\epsilon\la \log \frac{s_k}{\tilde{s}_k} & \text{if $s_k>0$,} \\
+\tilde{s}_k = 0 & \text{if $s_k=0$,} \\
+\sum \alpha_k (1-\frac{\tilde{s}_k}{h}) = 0\, .
+\end{cases}
+}
+
+\paragraph{Case $\Diverg_\phi = \lambda \TV$.}
+By Proposition \ref{prop_divergnormalint}, one has $\ol{\Diverg}_{\phi_{\TV}}(\tilde{s}|h) = \sup_{(a,b)\in B} a\cdot x + b\cdot y $ with $B = \{ (a,b)\in \RR^2\, ; \, a\leq1, \, b\leq 1, \, a+b\leq 0 \}$. The set of points in $B$ at which this supremum is attained is easy to see graphically and gives the set $\partial \ol{\Diverg}_{\phi_{\TV}}(\tilde{s}|h)$. With the notations of Proposition \ref{prop_barycenter_general}, one has with $a_k=\frac\epsilon\la \log \frac{s_k}{\tilde{s}_k}$,
+\begin{align*}
+(1)\; \tilde{s}_k > h > 0 &\Leftrightarrow -b_k=a_k=1 &
+(2)\;  h > \tilde{s}_k > 0 &\Leftrightarrow -b_k=a_k=-1 \\
+(3)\; \tilde{s}_k = h > 0 &\Leftrightarrow -b_k=a_k\in [-1,1] &
+(4)\; h > \tilde{s}_k = 0&\Leftrightarrow  b_k = 1 \\
+(5)\; \tilde{s}_k > h = 0 &\Leftrightarrow a_k = 1 \text{ and } b_k\leq-1 &
+(6)\; \tilde{s}_k = h = 0 &\Leftrightarrow b_k \leq 1 \, .
+\end{align*}
+Let us first deal with the case $h=0$ (cases (5) and (6)). Condition $\sum \alpha_k b_k=0$ from Proposition \ref{prop_barycenter_general} says that it is the case if and only if $\sum_{k\notin I_+} \alpha_k \geq \sum_{k \in I_+} \alpha_k$. 
+%
+Now assume that $h>0$. If $\tilde{s}_k>0$ (cases (1), (2) and (3)) then $b_k$ can be expressed as $\max ( -1 , \min ( 1 , \frac{\epsilon}{\lambda } \log \frac{h}{s_k}))$ otherwise $b_k=1$. The implicit expression given for $h$ is thus the condition $\sum \alpha_k b_k =0$.
+
+\paragraph{Case $\Diverg_\phi = \RG_{[\beta_1, \beta_2]}$.}
+In this case, $\ol{\Diverg}_\phi$ is the support function of $ B= \{ (a,b)\in \RR^2\, ; \,\text{for } i\in \{1,2\}, b\leq -\beta_i \cdot a\} $. With the notations of Proposition \ref{prop_barycenter_general}, one has with $a_k=\frac\epsilon\la \log \frac{s_k}{\tilde{s}_k}$, 
+\begin{align*}
+(1)\; 0 < \beta_1 h < \tilde{s}_k < \beta_2 h &\Leftrightarrow a_k = b_k = 0 &
+(2)\; 0 < \beta_1 h = \tilde{s}_k &\Leftrightarrow b_k = -\beta_1 a_k \\
+(3)\; 0 < \beta_2 h = \tilde{s}_k & \Leftrightarrow b_k = -\beta_2 a_k &
+(4)\; 0 = h = \tilde{s}_k & \Leftrightarrow (b_k , a_k) \in B \, .
+\end{align*}
+If $s_k=0$ for some $k\in \{1, \dots, n\}$ then $h=0$ (this is the only feasible point). Otherwise, $h>0$ and the condition $\sum \alpha_k b_k = 0$ gives the implicit equation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMMENTED
+\iffalse
+\subsection[The KL Proximal Operator]{The $\KL$ Proximal Operator}
+
+\begin{defn}[Proximal operator]
+The proximal operator with respect to a $\phi$- divergence is the set valued map $\Lun(T) \to \Lun (T)$ defined as 
+\eq{
+\label{eq_proxdens}
+	\prox^{\Diverg_\phi}_F(v) \eqdef
+	\begin{cases}
+	 \uargmin{u \in L^1(T) } F(u) + \Diverg_\phi(u|v) &\text{if the problem is feasible}, \\
+	 \emptyset & \text{otherwise.}
+	 \end{cases}
+}
+\end{defn}
+
+\begin{proposition}
+\label{prop_existenceprox}
+Suppose that $T$ is of finite measure and that $\phi$ is a superlinear entropy function (i.e.\ $\phi'_\infty = + \infty$).
+Let $F : \Lun(T) \to \RR \cup \{+ \infty\}$ be convex and weakly l.s.c.\ and let $v\in \Lun(T)$. Assume that one of the following conditions holds:\\
+\indent (i) there exists $u_0 \in \dom F \cap \dom \Diverg_\phi (\cdot | v) $ and $F$ is lower-bounded; \\
+\indent (ii) there exists $u_0 \in \interop \dom F \cap  \dom \Diverg_\phi(\cdot | v)$.\\
+Then $\prox^{\Diverg_\phi}_F (v)$ is not empty.
+If moreover $\phi$ is strictly convex, then $\prox^{\Diverg_\phi}_F (v)$ is a singleton.
+\end{proposition}
+
+\begin{proof}
+ By lower-semicontinuity of $F$ and $D_\phi(\cdot|v)$, the set
+\eq{
+S \eqdef \{ u \in \Lun (T); \,  \Diverg_\phi(u|v) + F(u) \leq  \Diverg_\phi(u_0|v) + F(u_0) \}\, .
+}
+is nonempty and weakly closed. 
+%
+Also, under condition (i), if $c$ is a lower bound for $F$, $S \subset \{ u \in \Lun (T); \,  \Diverg_\phi(u|v) \leq \Diverg_\phi(u_0|v) + F(u_0)-c\}$. Under condition (ii), if $a_0 \in \partial F(u_0)$ (such an $a_0$ exists since $u_0 \in \interop \dom F$), then $S \subset \{ u \in \Lun (T); \,  \Diverg_\phi(u|v) + \langle a_0, u \rangle \leq \Diverg_\phi(u_0|v) + \langle a_0, u_0 \rangle \}$. 
+%
+But since $\phi'_\infty = +\infty$, the domain of the conjugate $\phi^*$ is $\RR$: in this context, \cite[Corollary 4.1]{rockafellar1968integrals} states that the convex set
+\eq{
+\left\{ u \in \Lun (T) ; \, \Diverg_\phi(u|v) + \langle a,u \rangle \leq \alpha \right\}
+}
+is weakly compact for any $a\in \Linf (T)$ and any real number $\alpha$. So, in either case, $S$ is a closed subset of a compact and thus itself compact. Consequently, any minimizing sequence in $S$ admits a weak cluster point which is a minimizer by weak lower semicontinuity.
+
+If $\phi$ is strictly convex, $\Diverg_\phi(\cdot| v)$ also is and the minimum is unique.
+\end{proof}
+\fi
+% END COMMENTED
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

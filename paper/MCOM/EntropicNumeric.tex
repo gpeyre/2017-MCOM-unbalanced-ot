@@ -1,0 +1,103 @@
+\documentclass{mcom-l}
+
+
+% Be sure to use PDF Latex
+\pdfoutput=1
+
+% to use low-res images. 
+\newcommand{\CompressedVersion}[2]{#1}
+
+% hyperref, really useful, can deactivate if it causes problems
+\usepackage[colorlinks=true, linkcolor=blue,citecolor=blue, urlcolor=blue]{hyperref}
+
+\usepackage[latin1]{inputenc}
+\usepackage{mystyle,amssymb,dsfont,amsmath,mathtools}
+%\usepackage{showlabels}
+
+
+% \newcommand{\qedhere}{\qed}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{proposition}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{xca}[theorem]{Exercise}
+
+\renewcommand{\paragraph}[1]{\subsubsection{#1}}
+
+
+
+
+% \newtheorem*{assumptions}{Assumptions}
+\newtheorem{assumptions}{Assumptions}{\bfseries}{\rmfamily}
+ 
+ 
+\graphicspath{{./images-low/}}
+ 
+
+\begin{document}
+
+\title[Scaling Algorithms for Unbalanced Optimal Transport Problems]{Scaling Algorithms for\\Unbalanced Optimal Transport Problems}
+
+%\author{Lenaic~Chizat \and Gabriel~Peyr\'e \and Bernhard~Schmitzer \and Fran\c cois-Xavier~Vialard}
+%\institute{CEREMADE, CNRS, Universit\'e Paris-Dauphine \\
+%	Project team Mokaplan, INRIA \\
+%             \email{\{chizar,peyre,schmitzer,vialard\}@ceremade.dauphine.fr} }
+
+\author[L. Chizat]{L\'ena\"ic Chizat}
+\address{CEREMADE, CNRS, Universit\'e Paris-Dauphine, INRIA Project team Mokaplan}
+\curraddr{}
+\email{\{chizar,schmitzer,vialard\}@ceremade.dauphine.fr}
+\thanks{}
+
+\author[G. Peyr\'e]{Gabriel~Peyr\'e}
+\address{CNRS and DMA, \'Ecole Normale Sup\'erieure, INRIA Project team Mokaplan}
+\curraddr{}
+\email{gabriel.peyre@ens.fr}
+\thanks{}
+
+
+\author[B. Schmitzer]{Bernhard~Schmitzer}
+
+\author[F-X. Vialard]{Fran\c cois-Xavier~Vialard}
+
+
+%    \subjclass is required.
+\subjclass[2010]{Primary: 90C25, secondary: 65K10, 68U10}
+
+% 90C25 : convex programming
+% 65K10 : numerical analysis : Optimization
+% 68U10 : image processing
+
+\date{}
+
+\dedicatory{}
+
+\input{sections/abstract}
+
+\maketitle
+
+
+\input{sections/intro}
+\input{sections/OTproblems}
+\input{sections/algorithm_cont}
+\input{sections/algorithm_discr}
+\input{sections/application_UOT}
+\input{sections/application_bary}
+\input{sections/application_GF}
+\input{sections/conclusion}
+\appendix
+\input{sections/appendix}
+
+
+
+\bibliographystyle{amsplain}
+\bibliography{EntropicNumeric}
+
+
+\end{document}
+
